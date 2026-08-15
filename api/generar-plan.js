@@ -28,12 +28,11 @@ export default async function handler(req, res) {
     - Unidad: ${unidad || 'No especificada'}
     - Contenido/Tema: ${contenido || 'No especificado'}
     - Indicador de logro: ${indicador || 'Autogenerado según el contenido'}
-    - Criterios de evaluación -> Conceptual: ${conceptual}, Procedimental: ${procedimental}, Actitudinal: ${actitudinal}
-    - Adecuación curricular: ${adequacion || 'Ninguna'}
+    - Criterios de evaluación -> Conceptual: ${conceptual || 'Autogenerado'}, Procedimental: ${procedimental || 'Autogenerado'}, Actitudinal: ${actitudinal || 'Autogenerado'}
+    - Adecuación curricular: ${adecuacion || 'Ninguna'}
 
     Redacta el plan con un lenguaje profesional docente adecuado para Nicaragua, detallando las actividades pedagógicas claras para cada momento de la clase. Devuelve el resultado formateado en HTML limpio (con etiquetas h3, p, ul, li, strong) listo para mostrarse en pantalla.`;
 
-    // Petición directa por HTTP POST a la API oficial de Gemini 1.5 Flash
     const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: {
