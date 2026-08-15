@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
     Redacta el plan con un lenguaje profesional docente adecuado para Nicaragua, detallando las actividades pedagógicas claras para cada momento de la clase. Devuelve el resultado formateado en HTML limpio (con etiquetas h3, p, ul, li, strong) listo para mostrarse en pantalla.`;
 
-    // Usamos la versión estable 'v1' y el modelo 'gemini-1.5-flash'
+    // Apuntamos correctamente al modelo económico y rápido gemini-1.5-flash con la versión v1
     const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: {
