@@ -1,15 +1,7 @@
 {
   "name": "el-profe-nica-505",
   "version": "1.0.0",
-  "description": "Generador automático de planes diarios para docentes en Nicaragua",
-  "main": "index.js",
-  "scripts": {
-    "start": "vercel dev"
-  },
   "dependencies": {
-    "@google/generative-ai": "^0.21.0"
-  },
-  "engines": {
-    "node": "24.x"
+    "@google/generative-ai": "0.11.1"
   }
 }
