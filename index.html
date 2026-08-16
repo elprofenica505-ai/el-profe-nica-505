@@ -6,8 +6,6 @@
     <title>El Profe Nica 505 - Generador Inteligente de Planes de Clase</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Librería Marked.js para renderizar texto bonito tipo chat -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.js"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
 
@@ -53,7 +51,7 @@
                         <h3 class="text-sm font-bold text-rose-300 uppercase tracking-wide">Sin la herramienta</h3>
                     </div>
                     <p class="text-xs text-slate-400 leading-relaxed">
-                        Horas redactando momentos metodológicos, criterios de evaluación, adecuaciones y buscando mallas curriculares del MINED... ¡ESTA ES TU SOLUCIÓN!
+                        Horas redactando momentos metodológicos, criterios de evaluación y adecuaciones curriculares... ¡ESTA ES TU SOLUCIÓN!
                     </p>
                 </div>
 
@@ -247,15 +245,15 @@
         </footer>
     </div>
 
-    <!-- Estilos de Visualización Tipo Chat/Markdown -->
+    <!-- Estilos limpios y profesionales para el texto -->
     <style>
-        .markdown-output h3 { font-size: 1.1rem; font-weight: bold; color: #60a5fa; margin-top: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid #334155; padding-bottom: 0.25rem; }
-        .markdown-output h4 { font-size: 1rem; font-weight: bold; color: #93c5fd; margin-top: 0.75rem; margin-bottom: 0.25rem; }
-        .markdown-output p { margin-bottom: 0.75rem; line-height: 1.6; color: #e2e8f0; }
-        .markdown-output ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 0.75rem; color: #cbd5e1; }
-        .markdown-output li { margin-bottom: 0.35rem; }
-        .markdown-output strong { color: #f8fafc; font-weight: bold; }
-        .markdown-output blockquote { border-left: 4px solid #3b82f6; padding-left: 1rem; margin-left: 0; margin-right: 0; color: #94a3b8; font-style: italic; background: rgba(59, 130, 246, 0.05); padding-top: 0.5rem; padding-bottom: 0.5rem; border-radius: 0 0.5rem 0.5rem 0; }
+        .plan-estilizado {
+            line-height: 1.7;
+            color: #e2e8f0;
+        }
+        .plan-estilizado p {
+            margin-bottom: 0.75rem;
+        }
     </style>
 
     <script type="module">
@@ -334,8 +332,8 @@
             const actitudinal = document.getElementById('crit-actitudinal')?.value.trim() || '';
             const adecuacion = document.getElementById('adecuacion')?.value || 'Ninguna';
 
-            // Instrucción estricta adjunta para asegurar el cumplimiento del formato MINED
-            const contenidoConFormatoMined = `[INSTRUCCIÓN OBLIGATORIA PARA LA IA: Actúa estrictamente como especialista curricular del Ministerio de Educación de Nicaragua (MINED). Genera el plan ajustado rigurosamente a las mallas curriculares actualizadas de Nicaragua para la asignatura "${asignatura}" de "${grado}". Si no existe una especificación única para esta asignatura, utiliza y rellena de forma profesional e impecable el siguiente formato oficial general del MINED:
+            // Instrucción estricta para garantizar que la IA devuelva el formato exacto del MINED de Nicaragua
+            const contenidoConFormatoMined = `[INSTRUCCIÓN OBLIGATORIA PARA LA IA: Actúa estrictamente como especialista curricular del Ministerio de Educación de Nicaragua (MINED). Genera el plan ajustado rigurosamente a las mallas curriculares actualizadas de Nicaragua para la asignatura "${asignatura}" de "${grado}". Utiliza y rellena de forma profesional, detallada y formal el siguiente formato oficial exacto:
 
 Plan Diario Asignatura: ${asignatura}
 Fecha: ${fecha}
@@ -393,7 +391,14 @@ Adecuación Curricular: ${adecuacion}]`;
                 let textoPlan = data.plan || '';
                 textoPlan = textoPlan.replace(/```markdown/g, '').replace(/```html/g, '').replace(/```/g, '').trim();
 
-                const contenidoHtmlBonito = marked.parse(textoPlan);
+                // Función nativa segura: convierte saltos de línea y resalta en negrita automáticamente sin librerías externas
+                const textoBonito = textoPlan
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-blue-400 font-bold">$1</strong>')
+                    .replace(/\*(.*?):/g, '<br><strong class="text-blue-300">$1:</strong>')
+                    .replace(/\n/g, '<br>');
 
                 planesDisponibles--;
                 const contadorEl = document.getElementById('contador-planes');
@@ -413,8 +418,8 @@ Adecuación Curricular: ${adecuacion}]`;
                                 <button onclick="nuevoPlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition w-full sm:w-auto">✨ Nuevo</button>
                             </div>
                         </div>
-                        <div id="cuerpo-plan-resultado" class="markdown-output bg-slate-900/90 p-6 rounded-xl border border-slate-700 text-sm leading-relaxed overflow-x-auto shadow-inner">
-                            ${contenidoHtmlBonito}
+                        <div id="cuerpo-plan-resultado" class="plan-estilizado bg-slate-950/90 p-6 rounded-xl border border-slate-700 text-sm leading-relaxed overflow-x-auto shadow-inner">
+                            ${textoBonito}
                         </div>
                     `;
 
