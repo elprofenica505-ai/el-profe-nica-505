@@ -9,7 +9,7 @@
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
 
-    <!-- ================= VISTA 1: LANDING PAGE DE BIENVENIDA ================= -->
+    <!-- ================= VISTA 1: LANDING PAGE ================= -->
     <div id="vista-landing" class="min-h-screen flex flex-col justify-between p-4 sm:p-6 bg-gradient-to-br from-blue-950 via-slate-900 to-slate-950">
         <header class="max-w-5xl mx-auto w-full flex justify-between items-center py-4">
             <h1 class="text-lg sm:text-xl font-black tracking-wider text-blue-400 flex items-center gap-2">
@@ -31,7 +31,7 @@
                 </h2>
                 
                 <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                    Genera al instante tus planes diarios estructurados al formato local oficial del MINED, sin complicaciones de redactar prompts.
+                    Genera al instante tus planes diarios estructurados al formato local oficial del MINED con una redacción impecable, profesional y seria.
                 </p>
 
                 <div class="pt-2 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -51,7 +51,7 @@
                         <h3 class="text-sm font-bold text-rose-300 uppercase tracking-wide">Sin la herramienta</h3>
                     </div>
                     <p class="text-xs text-slate-400 leading-relaxed">
-                        Horas redactando momentos metodológicos, criterios de evaluación y adecuaciones curriculares... ¡ESTA ES TU SOLUCIÓN!
+                        Horas redactando momentos metodológicos, criterios y adecuaciones curriculares... ¡Esta es tu solución definitiva!
                     </p>
                 </div>
 
@@ -61,7 +61,7 @@
                         <h3 class="text-sm font-bold text-blue-300 uppercase tracking-wide">Con El Profe Nica 505</h3>
                     </div>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Genera automáticamente planes adaptados a las normativas vigentes del Ministerio de Educación de Nicaragua.
+                        Planes listos, redactados con la máxima calidad y adaptados a las normativas vigentes del MINED.
                     </p>
                 </div>
             </div>
@@ -72,7 +72,7 @@
         </footer>
     </div>
 
-    <!-- ================= VISTA 2: LOGIN / ACCESO ================= -->
+    <!-- ================= VISTA 2: LOGIN ================= -->
     <div id="vista-auth" class="min-h-screen flex items-center justify-center p-4 hidden">
         <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-xl max-w-md w-full">
             <div class="text-center mb-6">
@@ -99,7 +99,7 @@
         </div>
     </div>
 
-    <!-- ================= VISTA 3: ACTIVACIÓN / SUSCRIPCIÓN ================= -->
+    <!-- ================= VISTA 3: SUSCRIPCIÓN ================= -->
     <div id="vista-suscripcion" class="min-h-screen flex items-center justify-center p-4 hidden">
         <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-xl max-w-lg w-full">
             <div class="text-center mb-6">
@@ -135,7 +135,7 @@
         </div>
     </div>
 
-    <!-- ================= VISTA 4: GENERADOR DE PLANES ================= -->
+    <!-- ================= VISTA 4: GENERADOR ================= -->
     <div id="vista-generador" class="min-h-screen flex flex-col justify-between hidden">
         <header class="bg-slate-800 border-b border-slate-700 py-3 px-6 shadow-md sticky top-0 z-50">
             <div class="max-w-4xl mx-auto flex justify-between items-center">
@@ -150,7 +150,7 @@
                 <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
                     <span>📝</span> Plan Diario Oficial MINED:
                 </h2>
-                <p class="text-xs text-slate-400 mb-6">Selecciona los datos. La IA aplicará estrictamente el formato oficial del MINED de Nicaragua con sus 4 momentos metodológicos según la malla curricular.</p>
+                <p class="text-xs text-slate-400 mb-6">Selecciona los datos. La IA estructurará el plan con calidad profesional y redacción impecable.</p>
                 
                 <form id="form-plan" class="space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -203,8 +203,8 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Indicador de logro: <span class="text-blue-400 font-normal">(Opcional - La IA lo genera según malla curricular)</span></label>
-                        <textarea id="indicador" rows="2" placeholder="Describe o deja en blanco para autogenerar..." class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Indicador de logro: <span class="text-blue-400 font-normal">(Opcional)</span></label>
+                        <textarea id="indicador" rows="2" placeholder="Autogenerado por la IA..." class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
                     </div>
 
                     <div>
@@ -226,8 +226,8 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Adecuación curricular para niños con las dificultades:</label>
-                        <input type="text" id="adecuacion" placeholder="Atención a dificultades específicas..." class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" value="Ninguna">
+                        <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Adecuación curricular:</label>
+                        <input type="text" id="adecuacion" placeholder="Atención a necesidades educativas..." class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" value="Ninguna">
                     </div>
 
                     <button type="submit" id="btn-generar" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3.5 rounded-xl text-sm transition shadow-lg flex justify-center items-center gap-2">
@@ -245,15 +245,6 @@
         </footer>
     </div>
 
-    <!-- Estilos de lectura -->
-    <style>
-        .plan-estilizado {
-            line-height: 1.7;
-            color: #e2e8f0;
-            white-space: pre-wrap; /* Respeta los saltos de línea de la IA de forma limpia */
-        }
-    </style>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
@@ -268,7 +259,6 @@
         };
 
         const app = initializeApp(firebaseConfig);
-
         let planesDisponibles = 8;
 
         window.mostrarVista = function(idVista) {
@@ -289,7 +279,6 @@
         document.getElementById('btn-activar').addEventListener('click', () => {
             const codigo = document.getElementById('input-codigo').value.trim();
             const mensajeError = document.getElementById('mensaje-error-codigo');
-            
             if (codigo === "" || codigo.length < 5) {
                 mensajeError.classList.remove('hidden');
             } else {
@@ -315,7 +304,7 @@
             const btnGenerar = document.getElementById('btn-generar');
             if (btnGenerar) {
                 btnGenerar.disabled = true;
-                btnGenerar.textContent = "Generando plan oficial MINED con IA...";
+                btnGenerar.textContent = "Generando plan oficial MINED...";
             }
 
             const asignatura = document.getElementById('asignatura')?.value || '';
@@ -330,8 +319,10 @@
             const actitudinal = document.getElementById('crit-actitudinal')?.value.trim() || '';
             const adecuacion = document.getElementById('adecuacion')?.value || 'Ninguna';
 
-            // Instrucción estricta para garantizar formato exacto del MINED
-            const contenidoConFormatoMined = `[INSTRUCCIÓN OBLIGATORIA PARA LA IA: Actúa estrictamente como especialista curricular del Ministerio de Educación de Nicaragua (MINED). Genera el plan ajustado rigurosamente a las mallas curriculares actualizadas de Nicaragua para la asignatura "${asignatura}" de "${grado}". Rellena de forma profesional, detallada y formal el siguiente formato oficial exacto:
+            // Instrucción estricta para garantizar un formato limpio, serio y estructurado en texto/Markdown
+            const contenidoConFormatoMined = `Actúa estrictamente como especialista curricular del Ministerio de Educación de Nicaragua (MINED). Genera un plan de clase profesional, impecable y completo para la asignatura "${asignatura}" de "${grado}", correspondiente a la unidad "${unidad}" sobre el tema "${tema}".
+
+El plan DEBE seguir rigurosamente el formato oficial de Nicaragua con sus cuatro momentos metodológicos y usar tablas limpias en texto o viñetas ordenadas cuando se requiera estructurar actividades o desglosar momentos, EVITANDO por completo descripciones textuales aburridas o etiquetas de programación feas. Utiliza la siguiente estructura exacta:
 
 Plan Diario Asignatura: ${asignatura}
 Fecha: ${fecha}
@@ -341,45 +332,36 @@ Nombre y número de Unidad: ${unidad}
 Indicador de logro: ${indicador || '[Autogenerado según malla curricular oficial]'}
 Contenido: ${tema}
 
-I. Criterios de Evaluación
-*Conceptual: ${conceptual || '[Autogenerado]'}
-*Procedimental: ${procedimental || '[Autogenerado]'}
-*Actitudinal: ${actitudinal || '[Autogenerado]'}
+### I. Criterios de Evaluación
+* Conceptual: ${conceptual || '[Autogenerado]'}
+* Procedimental: ${procedimental || '[Autogenerado]'}
+* Actitudinal: ${actitudinal || '[Autogenerado]'}
 
-II. Actividades de Inicio
-Saludo de bienvenida: [Redactar bienvenida motivadora]
-Oración a Dios: [Redactar oración escolar pertinente]
-Entonar el Himno Nacional: [Entonar Himno Nacional de Nicaragua]
-Dinámica para recordar tema anterior: [Actividad rompehielos o recordatorio]
-Revisión de tarea y asistencia: [Verificación de compromisos previos]
-Dar a conocer el tema e indicador: [Presentación clara del objetivo]
+### II. Actividades de Inicio
+* Saludo de bienvenida y motivación.
+* Oración a Dios y entonación del Himno Nacional de Nicaragua.
+* Dinámica de activación de conocimientos previos.
+* Revisión de tareas y asistencia.
+* Presentación clara del tema y del indicador de logro.
 
-III. Actividades de Desarrollo
-[Desarrollo metodológico detallado paso a paso alineado al MINED]
+### III. Actividades de Desarrollo
+(Presenta el contenido metodológico detallado paso a paso, alineado a las normativas del MINED, redactado con la máxima claridad y profesionalismo).
 
-IV. Actividades de Culminación y Evaluación
-Culminación: [Consolidación y conclusiones del tema]
-Evaluación: [Estrategia de comprobación del aprendizaje]
-Tarea: [Asignación para el hogar]
+### IV. Actividades de Culminación y Evaluación
+* Culminación: Consolidación y conclusiones del tema.
+* Evaluación: Estrategia de verificación del aprendizaje.
+* Tarea para el hogar: Asignación clara.
 
-Adecuación Curricular: ${adecuacion}]`;
+### V. Adecuación Curricular
+* ${adecuacion}`;
 
             try {
                 const response = await fetch('/api/generar-plan', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        asignatura, 
-                        grado, 
-                        fecha, 
-                        tiempo, 
-                        unidad, 
-                        contenido: contenidoConFormatoMined, 
-                        indicador, 
-                        conceptual, 
-                        procedimental, 
-                        actitudinal, 
-                        adecuacion 
+                        asignatura, grado, fecha, tiempo, unidad, 
+                        contenido: contenidoConFormatoMined, indicador, conceptual, procedimental, actitudinal, adecuacion 
                     })
                 });
 
@@ -388,7 +370,7 @@ Adecuación Curricular: ${adecuacion}]`;
 
                 let textoPlan = data.plan || '';
                 
-                // Limpieza total de bloques de código markdown o html si la IA los manda
+                // Limpiamos cualquier bloque de código markdown suelto si la IA lo envía por error
                 textoPlan = textoPlan.replace(/```[a-z]*/g, '').replace(/```/g, '').trim();
 
                 planesDisponibles--;
@@ -398,25 +380,25 @@ Adecuación Curricular: ${adecuacion}]`;
                 const contenedor = document.getElementById('contenedor-resultados');
                 if (contenedor) {
                     const card = document.createElement('div');
-                    card.className = "bg-slate-800 border border-blue-500/50 p-6 rounded-2xl shadow-2xl space-y-4";
+                    card.className = "bg-slate-800 border border-blue-500/50 p-6 rounded-2xl shadow-2xl space-y-4 text-slate-100";
                     card.innerHTML = `
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-700 pb-4 gap-3">
-                            <span class="text-xs font-black text-blue-400 uppercase tracking-wider flex items-center gap-1"><span>🇳🇮</span> Plan Oficial MINED: ${asignatura} (${grado})</span>
-                            <div class="flex flex-wrap gap-2 w-full sm:w-auto">
-                                <button onclick="copiarTexto(this)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs px-3 py-1.5 rounded-lg font-medium transition flex-1 sm:flex-none">Copiar</button>
-                                <button onclick="descargarWord(this)" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition flex-1 sm:flex-none">Word (.doc)</button>
-                                <button onclick="descargarPDF()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition flex-1 sm:flex-none">Imprimir / PDF</button>
-                                <button onclick="nuevoPlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition w-full sm:w-auto">✨ Nuevo</button>
+                        <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-700 pb-4 gap-3">
+                            <span class="text-xs font-black text-blue-400 uppercase tracking-wider">🇳🇮 Plan Oficial MINED: ${asignatura} (${grado})</span>
+                            <div class="flex gap-2">
+                                <button onclick="copiarTexto(this)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs px-3 py-1.5 rounded-lg font-medium transition">Copiar</button>
+                                <button onclick="descargarWord(this)" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">Word (.doc)</button>
+                                <button onclick="descargarPDF()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">Imprimir</button>
+                                <button onclick="nuevoPlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">✨ Nuevo</button>
                             </div>
                         </div>
-                        <div id="cuerpo-plan-resultado" class="plan-estilizado bg-slate-950/90 p-6 rounded-xl border border-slate-700 text-sm shadow-inner overflow-x-auto"></div>
+                        <div id="cuerpo-plan-resultado" class="bg-slate-950/90 p-6 rounded-xl border border-slate-700 text-sm leading-relaxed whitespace-pre-wrap font-sans"></div>
                     `;
 
                     contenedor.innerHTML = '';
                     contenedor.appendChild(card);
                     
-                    // Asignamos de forma segura como texto plano formateado para evitar códigos extraños
-                    document.getElementById('cuerpo-plan-resultado').textContent = textoPlan;
+                    // Asignamos como texto plano con innerText para garantizar limpieza absoluta y lectura impecable
+                    document.getElementById('cuerpo-plan-resultado').innerText = textoPlan;
 
                     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                 }
@@ -442,8 +424,6 @@ Adecuación Curricular: ${adecuacion}]`;
         window.descargarWord = function(btn) {
             const el = document.getElementById('cuerpo-plan-resultado');
             const textoLimpio = el ? el.innerText : '';
-            
-            // Creamos un documento Word respetando saltos de línea limpios
             const contenidoHtmlWord = textoLimpio.replace(/\n/g, '<br>');
             const plantillaWord = `
                 <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
