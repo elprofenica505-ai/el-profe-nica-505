@@ -16,7 +16,8 @@ export default async function handler(req, res) {
     
     const prompt = `Actúa como asesor pedagógico del MINED Nicaragua. Genera un plan diario de primaria (4 momentos: Exploración, Construcción, Aplicación, Valoración). Asignatura: ${asignatura}, Grado: ${grado}, Contenido: ${contenido}. Indicador: ${indicador}. Criterios: ${conceptual}, ${procedimental}, ${actitudinal}. Adecuación: ${adecuacion}. Responde en HTML limpio.`;
 
-    const modelo = process.env.GEMINI_MODEL || "gemini-1.5-flash";
+    // Usamos un modelo actual y económico compatible con la API
+    const modelo = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`;
 
     const geminiResponse = await fetch(url, {
