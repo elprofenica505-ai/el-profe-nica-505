@@ -3,303 +3,401 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Profe Nica 505 - Generador de Planes Diarios</title>
+    <title>El Profe Nica 505 - Generador Inteligente de Planes de Clase</title>
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
 
-    <!-- Header -->
-    <header class="bg-slate-800 border-b border-slate-700 py-4 px-6 shadow-md flex justify-between items-center">
-        <h1 class="text-xl font-bold text-sky-400">🇳🇮 El Profe Nica 505</h1>
-        <div id="estado-licencia" class="text-sm bg-slate-700 px-3 py-1 rounded-full text-slate-300">
-            Verificando licencia...
-        </div>
-    </header>
+    <!-- ================= VISTA 1: LANDING PAGE DE BIENVENIDA ================= -->
+    <div id="vista-landing" class="min-h-screen flex flex-col justify-between p-4 sm:p-6 bg-gradient-to-br from-blue-950 via-slate-900 to-slate-950">
+        <header class="max-w-5xl mx-auto w-full flex justify-between items-center py-4">
+            <h1 class="text-lg sm:text-xl font-black tracking-wider text-blue-400 flex items-center gap-2">
+                <span>🇳🇮</span> EL PROFE NICA 505
+            </h1>
+            <button onclick="mostrarVista('vista-auth')" class="text-xs sm:text-sm bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl font-semibold transition shadow-lg shadow-blue-600/20">
+                Iniciar Sesión
+            </button>
+        </header>
 
-    <!-- Main Container -->
-    <main class="max-w-4xl mx-auto p-6 w-full flex-grow">
-        <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-xl">
-            <h2 class="text-lg font-semibold mb-4 text-sky-300 border-b border-slate-700 pb-2">Plan Diario de Clase (Formato Oficial)</h2>
+        <main class="max-w-5xl mx-auto w-full my-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-7 text-center lg:text-left space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-bold uppercase tracking-wider">
+                    <span>⚡</span> Inteligencia Artificial para Docentes
+                </div>
+                
+                <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+                    Menos estrés con los papeles, <span class="text-blue-400">más tiempo para ti y tu familia.</span>
+                </h2>
+                
+                <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    Genera al instante tus planes diarios estructurados al formato local oficial, sin complicaciones de redactar prompts.
+                </p>
+
+                <div class="pt-2 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <button onclick="mostrarVista('vista-auth')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-base px-8 py-4 rounded-xl shadow-xl shadow-blue-600/30 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                        <span>🚀</span> Probar Gratis (8 Planes)
+                    </button>
+                    <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica,%20deseo%20saber%20más%20información." target="_blank" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-base px-6 py-4 rounded-xl border border-slate-700 transition flex items-center justify-center gap-2">
+                        <span>💬</span> Contactar por WhatsApp
+                    </a>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 space-y-4">
+                <div class="bg-slate-800/80 border border-rose-500/30 p-5 rounded-2xl shadow-lg relative overflow-hidden backdrop-blur-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center text-rose-400 text-sm font-bold">❌</span>
+                        <h3 class="text-sm font-bold text-rose-300 uppercase tracking-wide">Sin la herramienta</h3>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Horas escribiendo indicadores, competencias y redactando actividades, información, estrategias, metodología, adecuación curricular... ¡ALTO! ESTA ES TU MEJOR SOLUCIÓN
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-r from-blue-900/40 to-slate-800/80 border border-blue-500/40 p-5 rounded-2xl shadow-xl relative overflow-hidden backdrop-blur-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 text-sm font-bold">✨</span>
+                        <h3 class="text-sm font-bold text-blue-300 uppercase tracking-wide">Con El Profe Nica 505</h3>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Seleccionas la materia y la unidad en menús desplegables y la IA redacta el plan de clase estructurado.
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center text-xs text-slate-500 py-4 border-t border-slate-800/60 max-w-5xl mx-auto w-full">
+            El Profe Nica 505 &copy; Plataforma para el Docente de Vocación de Nicaragua.
+        </footer>
+    </div>
+
+    <!-- ================= VISTA 2: LOGIN / ACCESO ================= -->
+    <div id="vista-auth" class="min-h-screen flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-xl max-w-md w-full">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-white">Acceso de Docentes</h3>
+                <p class="text-xs text-slate-400 mt-1">Ingresa para continuar</p>
+            </div>
             
-            <form id="form-plan" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Fecha:</label>
-                        <input type="date" id="fecha" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Tiempo:</label>
-                        <input type="text" id="tiempo" value="45 minutos" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" required>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Asignatura:</label>
-                        <select id="asignatura" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white">
-                            <option value="Lengua y Literatura">Lengua y Literatura</option>
-                            <option value="Matemáticas">Matemáticas</option>
-                            <option value="Ciencias Naturales">Ciencias Naturales</option>
-                            <option value="Estudios Sociales">Estudios Sociales</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Grado:</label>
-                        <select id="grado" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white">
-                            <option value="1er Grado">1er Grado</option>
-                            <option value="2do Grado">2do Grado</option>
-                            <option value="3er Grado">3er Grado</option>
-                            <option value="4to Grado">4to Grado</option>
-                            <option value="5to Grado">5to Grado</option>
-                            <option value="6to Grado">6to Grado</option>
-                        </select>
-                    </div>
-                </div>
-
+            <form id="form-auth" class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium mb-1">Nombre y Número de Unidad:</label>
-                    <input type="text" id="unidad" placeholder="Ej: Unidad 2: Leamos cuentos maravillosos" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" required>
+                    <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Correo Electrónico:</label>
+                    <input type="email" id="auth-email" placeholder="profe@correo.com" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
                 </div>
-
                 <div>
-                    <label class="block text-sm font-medium mb-1">Tema / Contenido:</label>
-                    <input type="text" id="tema" placeholder="Ej: Estructura del cuento" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" required>
+                    <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Contraseña:</label>
+                    <input type="password" id="auth-password" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
                 </div>
-
-                <div>
-                    <label class="block text-sm font-medium mb-1">Indicador de Logro:</label>
-                    <input type="text" id="indicador" placeholder="Ej: Identifica inicio, nudo y desenlace en textos cortos" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white" required>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium mb-1">Adecuación Curricular (Opcional):</label>
-                    <input type="text" id="adecuacion" placeholder="Ej: Ninguna / Apoyo visual para estudiante con dificultad visual" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white">
-                </div>
-
-                <button type="submit" id="btn-generar" class="w-full bg-sky-600 hover:bg-sky-500 font-semibold py-3 px-4 rounded-lg transition-all shadow-lg cursor-pointer">
-                    ✨ Generar Plan Diario Oficial
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3 rounded-lg text-sm transition shadow-md">
+                    Ingresar
                 </button>
             </form>
+            <div class="text-center mt-4">
+                <button onclick="mostrarVista('vista-landing')" class="text-xs text-slate-400 hover:text-white transition">&larr; Volver al inicio</button>
+            </div>
         </div>
+    </div>
 
-        <!-- Resultado -->
-        <div id="resultado-container" class="mt-8 bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-xl hidden">
-            <h3 class="text-lg font-semibold mb-3 text-emerald-400">Plan Generado con Éxito:</h3>
-            <div id="contenido-plan" class="bg-slate-900 p-4 rounded-lg whitespace-pre-wrap text-sm text-slate-200 border border-slate-700"></div>
-            <button onclick="copiarPlan()" class="mt-4 bg-emerald-600 hover:bg-emerald-500 text-sm font-medium py-2 px-4 rounded-lg transition-all">
-                📋 Copiar al Portapapeles
-            </button>
-        </div>
-    </main>
+    <!-- ================= VISTA 3: ACTIVACIÓN / SUSCRIPCIÓN ================= -->
+    <div id="vista-suscripcion" class="min-h-screen flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-xl max-w-lg w-full">
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-white">🔑 Activación de Licencia</h3>
+                <p class="text-xs text-slate-400 mt-1">Ingresa tu código o prueba la herramienta gratis</p>
+            </div>
 
-    <!-- Modal de Activación de Código -->
-    <div id="modal-activacion" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 max-w-md w-full shadow-2xl">
-            <h3 class="text-xl font-bold text-amber-400 mb-2">🔑 Ingresa tu Código de Activación</h3>
-            <p class="text-sm text-slate-300 mb-4">Para continuar disfrutando de tus planes diarios ilimitados, ingresa el código proporcionado vía WhatsApp.</p>
-            <input type="text" id="input-codigo" placeholder="Ej: PROFENICA-XXXX" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white uppercase mb-4 font-mono">
-            <button onclick="activarCodigo()" class="w-full bg-amber-600 hover:bg-amber-500 font-semibold py-2.5 px-4 rounded-lg transition-all">
-                Activar Licencia
+            <div class="mb-6 bg-slate-900/60 p-4 rounded-xl border border-slate-700/50">
+                <label class="block text-xs font-bold text-blue-400 uppercase mb-2">¿Tienes un código de activación?</label>
+                <div class="flex gap-2">
+                    <input type="text" id="input-codigo" placeholder="PNI-505-XXXX" class="bg-slate-900 border border-slate-700 px-3 py-2 rounded-lg text-sm flex-grow text-white uppercase focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button id="btn-activar" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-lg text-sm transition">Activar</button>
+                </div>
+                <p id="mensaje-error-codigo" class="text-xs text-red-400 mt-2 hidden">Código no válido. Escríbenos por WhatsApp para solicitar uno.</p>
+            </div>
+
+            <div class="relative flex py-2 items-center mb-4">
+                <div class="flex-grow border-t border-slate-700"></div>
+                <span class="flex-shrink mx-4 text-slate-500 text-xs uppercase font-bold">O adquiérelo por WhatsApp</span>
+                <div class="flex-grow border-t border-slate-700"></div>
+            </div>
+
+            <div class="space-y-3 mb-6">
+                <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica,%20deseo%20adquirir%20la%20Suscripción%20Mensual%20de%20$3%20a%20$5." target="_blank" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-medium p-3 rounded-xl text-sm transition flex justify-between items-center px-4 shadow-md">
+                    <span>💬 Solicitar Plan Mensual</span>
+                    <span class="text-xs bg-emerald-800 px-2 py-1 rounded font-bold">WhatsApp</span>
+                </a>
+            </div>
+
+            <button id="btn-prueba-gratis" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2.5 rounded-xl text-xs transition border border-slate-600">
+                🚀 Usar Prueba Gratis (8 planes disponibles)
             </button>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="text-center py-4 text-xs text-slate-500 border-t border-slate-800">
-        El Profe Nica 505 &copy; 2026 - Creado para Docentes de Educación Primaria en Nicaragua.
-    </footer>
+    <!-- ================= VISTA 4: GENERADOR DE PLANES ================= -->
+    <div id="vista-generador" class="min-h-screen flex flex-col justify-between hidden">
+        <header class="bg-slate-800 border-b border-slate-700 py-3 px-6 shadow-md sticky top-0 z-50">
+            <div class="max-w-4xl mx-auto flex justify-between items-center">
+                <h1 class="text-sm font-bold tracking-wide text-blue-400">🇳🇮 El Profe Nica 505</h1>
+                <span id="badge-estado" class="text-xs bg-blue-950 text-blue-300 border border-blue-800 px-3 py-1 rounded-full font-medium">Prueba Gratis: <span id="contador-planes">8</span>/8 planes</span>
+            </div>
+        </header>
 
-    <!-- Script Principal Frontend -->
-    <script>
-        // Configuración de Firebase (Reemplaza con tus credenciales reales)
+        <main class="max-w-4xl mx-auto p-4 sm:p-6 w-full flex-grow space-y-6">
+            
+            <section class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-lg">
+                <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                    <span>📝</span> Plan Diario Asignatura:
+                </h2>
+                <p class="text-xs text-slate-400 mb-6">Selecciona las opciones requeridas. La IA estructurará el plan respetando los criterios pedagógicos oficiales.</p>
+                
+                <form id="form-plan" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Grado: *</label>
+                            <select id="grado" class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                                <option value="">Selecciona el grado...</option>
+                                <option value="1er Grado">1er Grado</option>
+                                <option value="2do Grado">2do Grado</option>
+                                <option value="3er Grado">3er Grado</option>
+                                <option value="4to Grado">4to Grado</option>
+                                <option value="5to Grado">5to Grado</option>
+                                <option value="6to Grado">6to Grado</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Asignatura: *</label>
+                            <select id="asignatura" class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                                <option value="">Selecciona asignatura...</option>
+                                <option value="Lengua y Literatura">Lengua y Literatura</option>
+                                <option value="Matemáticas">Matemáticas</option>
+                                <option value="Ciencias Naturales">Ciencias Naturales</option>
+                                <option value="Estudios Sociales">Estudios Sociales</option>
+                                <option value="Aprender, Emprender, Prosperar (AEP)">AEP</option>
+                                <option value="Creciendo en Valores">Creciendo en Valores</option>
+                                <option value="Educación Física">Educación Física</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Fecha: *</label>
+                            <input type="date" id="fecha" class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Tiempo: *</label>
+                            <input type="text" id="tiempo" placeholder="Ej: 90 minutos" class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Nombre y número de Unidad: *</label>
+                        <input type="text" id="unidad" placeholder="Ej: Unidad II: Geometría plana" class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Tema / Contenido: *</label>
+                        <input type="text" id="tema" placeholder="Ej: Cálculo del área de cuadriláteros" class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Indicador de logro: <span class="text-blue-400 font-normal">(Opcional - La IA lo genera si se deja vacío)</span></label>
+                        <textarea id="indicador" rows="2" placeholder="Describe o deja en blanco para autogenerar..." class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 uppercase mb-2">Criterios de evaluación:</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-900/40 p-4 rounded-xl border border-slate-700/50">
+                            <div>
+                                <label class="block text-[11px] font-bold text-blue-400 uppercase mb-1">*Conceptual:</label>
+                                <input type="text" id="crit-conceptual" placeholder="Autogenerado" class="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-blue-400 uppercase mb-1">*Procedimental:</label>
+                                <input type="text" id="crit-procedimental" placeholder="Autogenerado" class="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-blue-400 uppercase mb-1">*Actitudinal:</label>
+                                <input type="text" id="crit-actitudinal" placeholder="Autogenerado" class="w-full bg-slate-900 border border-slate-700 p-2 rounded text-xs text-white focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Adecuación curricular para niños con las dificultades:</label>
+                        <input type="text" id="adecuacion" placeholder="Atención a dificultades específicas..." class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" value="Ninguna">
+                    </div>
+
+                    <button type="submit" id="btn-generar" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3.5 rounded-xl text-sm transition shadow-lg flex justify-center items-center gap-2">
+                        ✨ Generar Plan Diario
+                    </button>
+                </form>
+            </section>
+
+            <div id="contenedor-resultados" class="space-y-4"></div>
+
+        </main>
+
+        <footer class="text-center py-4 text-xs text-slate-500 border-t border-slate-800 mt-12">
+            El Profe Nica 505 &copy; 2026.
+        </footer>
+    </div>
+
+    <!-- Script Principal Frontend y Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+
         const firebaseConfig = {
-            apiKey: "TU_FIREBASE_API_KEY",
-            authDomain: "tu-proyecto.firebaseapp.com",
-            projectId: "tu-proyecto",
-            storageBucket: "tu-proyecto.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123:web:abc"
+            apiKey: "AIzaSyCw6yFNbF8hahrjFSlRzflzkOwmqVr0JUY",
+            authDomain: "el-profe-nica-505.firebaseapp.com",
+            databaseURL: "https://el-profe-nica-505-default-rtdb.firebaseio.com",
+            projectId: "el-profe-nica-505",
+            storageBucket: "el-profe-nica-505.firebasestorage.app",
+            messagingSenderId: "834224420925",
+            appId: "1:834224420925:web:90e1eced789cc5ea0dd254"
         };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        const app = initializeApp(firebaseConfig);
 
-        // Identificador de dispositivo único local
-        let deviceId = localStorage.getItem('profe_nica_device_id');
-        if (!deviceId) {
-            deviceId = 'dev_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
-            localStorage.setItem('profe_nica_device_id', deviceId);
-        }
+        // Contador de prueba gratuita
+        let planesDisponibles = 8;
 
-        let userCode = localStorage.getItem('profe_nica_code') || 'FREE_TRIAL';
+        window.mostrarVista = function(idVista) {
+            document.getElementById('vista-landing').classList.add('hidden');
+            document.getElementById('vista-auth').classList.add('hidden');
+            document.getElementById('vista-suscripcion').classList.add('hidden');
+            document.getElementById('vista-generador').classList.add('hidden');
 
-        window.addEventListener('DOMContentLoaded', async () => {
-            await verificarLicenciaYUso();
+            document.getElementById(idVista).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        };
+
+        document.getElementById('form-auth').addEventListener('submit', (e) => {
+            e.preventDefault();
+            mostrarVista('vista-suscripcion');
         });
 
-        async function verificarLicenciaYUso() {
-            const estadoEl = document.getElementById('estado-licencia');
-            if (userCode === 'FREE_TRIAL') {
-                let trialCount = parseInt(localStorage.getItem('profe_nica_trial') || '0');
-                if (trialCount >= 8) {
-                    estadoEl.innerHTML = '<span class="text-rose-400 font-bold">Prueba gratuita agotada</span>';
-                    document.getElementById('modal-activacion').classList.remove('hidden');
-                } else {
-                    estadoEl.innerHTML = `<span class="text-sky-400 font-medium">Prueba Gratis: ${8 - trialCount} planes restantes</span>`;
-                }
+        document.getElementById('btn-activar').addEventListener('click', () => {
+            const codigo = document.getElementById('input-codigo').value.trim();
+            const mensajeError = document.getElementById('mensaje-error-codigo');
+            
+            if (codigo === "" || codigo.length < 5) {
+                mensajeError.classList.remove('hidden');
             } else {
-                // Validar código en Firestore
-                try {
-                    const doc = await db.collection('codigos').doc(userCode).get();
-                    if (!doc.exists) {
-                        localStorage.removeItem('profe_nica_code');
-                        userCode = 'FREE_TRIAL';
-                        location.reload();
-                        return;
-                    }
-                    const data = doc.data();
-                    if (data.deviceId && data.deviceId !== deviceId) {
-                        alert('Este código ya está vinculado a otro dispositivo.');
-                        localStorage.removeItem('profe_nica_code');
-                        location.reload();
-                        return;
-                    }
-                    estadoEl.innerHTML = `<span class="text-emerald-400 font-bold">Licencia Activa (${data.planesUsados || 0}/240 mes)</span>`;
-                } catch (e) {
-                    console.error("Error verificando licencia:", e);
-                }
+                mensajeError.classList.add('hidden');
+                document.getElementById('badge-estado').textContent = "Licencia Activa (8 Diarios / 240 Mes)";
+                mostrarVista('vista-generador');
             }
-        }
+        });
 
-        async function activarCodigo() {
-            const codigoInput = document.getElementById('input-codigo').value.trim().toUpperCase();
-            if (!codigoInput) return alert('Ingresa un código válido.');
-
-            try {
-                const docRef = db.collection('codigos').doc(codigoInput);
-                const doc = await docRef.get();
-
-                if (!doc.exists) {
-                    return alert('El código ingresado no existe o es inválido.');
-                }
-
-                const data = doc.data();
-                if (data.usado && data.deviceId !== deviceId) {
-                    return alert('Este código ya fue activado en otro teléfono o navegador.');
-                }
-
-                await docRef.update({
-                    usado: true,
-                    deviceId: deviceId,
-                    ultimaActividad: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                localStorage.setItem('profe_nica_code', codigoInput);
-                alert('¡Licencia activada con éxito!');
-                location.reload();
-            } catch (e) {
-                alert('Error al activar el código: ' + e.message);
-            }
-        }
+        document.getElementById('btn-prueba-gratis').addEventListener('click', () => {
+            mostrarVista('vista-generador');
+        });
 
         document.getElementById('form-plan').addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            // Validar límites antes de enviar
-            if (userCode === 'FREE_TRIAL') {
-                let trialCount = parseInt(localStorage.getItem('profe_nica_trial') || '0');
-                if (trialCount >= 8) {
-                    document.getElementById('modal-activacion').classList.remove('hidden');
-                    return;
-                }
+            
+            if (planesDisponibles <= 0) {
+                alert("Has consumido tus 8 planes de prueba. Adquiere tu suscripción para continuar.");
+                mostrarVista('vista-suscripcion');
+                return;
             }
 
-            const btn = document.getElementById('btn-generar');
-            btn.disabled = true;
-            btn.innerText = '🤖 Generando plan oficial...';
+            const btnGenerar = document.getElementById('btn-generar');
+            btnGenerar.disabled = true;
+            btnGenerar.textContent = "Generando plan pedagógico con IA...";
 
-            const fecha = document.getElementById('fecha').value;
-            const tiempo = document.getElementById('tiempo').value;
             const asignatura = document.getElementById('asignatura').value;
             const grado = document.getElementById('grado').value;
+            const fecha = document.getElementById('fecha').value;
+            const tiempo = document.getElementById('tiempo').value;
             const unidad = document.getElementById('unidad').value;
             const tema = document.getElementById('tema').value;
-            const indicador = document.getElementById('indicador').value;
-            const adecuacion = document.getElementById('adecuacion').value || 'Ninguna';
-
-            const promptEstructurado = `
-Actúa como un especialista en pedagogía del Ministerio de Educación de Nicaragua (MINED). 
-Genera un Plan Diario de Clase estricto y profesional cumpliendo exactamente con el siguiente formato requerido:
-
-Plan Diario Asignatura: ${asignatura}
-Fecha: ${fecha}
-Tiempo: ${tiempo}
-Grado: ${grado}
-Nombre y número de Unidad: ${unidad}
-Tema / Contenido: ${tema}
-Indicador de logro: ${indicador}
-Criterios de evaluación: 
-*Conceptual: 
-*Procedimental: 
-*Actitudinal: 
-Actividades de inicio: 
-Actividades de desarrollo: 
-Actividades de Culminación: 
-Actividades de evaluación: 
-Tarea: 
-Adecuación curricular para niños con las dificultades: ${adecuacion}
-
-Redacta contenido pedagógico de alta calidad, realista para aulas de primaria en Nicaragua.
-            `.trim();
+            const indicador = document.getElementById('indicador').value.trim();
+            const conceptual = document.getElementById('crit-conceptual').value.trim();
+            const procedimental = document.getElementById('crit-procedimental').value.trim();
+            const actitudinal = document.getElementById('crit-actitudinal').value.trim();
+            const adecuacion = document.getElementById('adecuacion').value;
 
             try {
                 const response = await fetch('/api/generar-plan', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contenido: promptEstructurado })
+                    body: JSON.stringify({ asignatura, grado, fecha, tiempo, unidad, contenido: tema, indicador, conceptual, procedimental, actitudinal, adecuacion })
                 });
 
                 const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Error al conectar con la IA');
 
-                if (!response.ok) {
-                    throw new Error(data.error || 'Error al comunicarse con el servidor.');
-                }
+                planesDisponibles--;
+                document.getElementById('contador-planes').textContent = planesDisponibles;
 
-                // Mostrar resultado
-                document.getElementById('contenido-plan').innerText = data.plan;
-                document.getElementById('resultado-container').classList.remove('hidden');
-                document.getElementById('resultado-container').scrollIntoView({ behavior: 'smooth' });
+                const contenedor = document.getElementById('contenedor-resultados');
+                const card = document.createElement('div');
+                card.className = "bg-slate-800 border border-blue-500/40 p-6 rounded-2xl shadow-xl space-y-4";
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-700 pb-3 gap-2">
+                        <span class="text-xs font-bold text-blue-400 uppercase">📄 Plan Generado: ${asignatura} (${grado})</span>
+                        <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+                            <button onclick="copiarTexto(this)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs px-3 py-1.5 rounded-lg font-medium transition flex-1 sm:flex-none">Copiar</button>
+                            <button onclick="descargarWord(this)" class="bg-blue-700 hover:bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition flex-1 sm:flex-none">Word (.doc)</button>
+                            <button onclick="descargarPDF()" class="bg-indigo-700 hover:bg-indigo-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition flex-1 sm:flex-none">PDF</button>
+                            <button onclick="nuevoPlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition w-full sm:w-auto">✨ Nuevo Plan</button>
+                        </div>
+                    </div>
+                    <div id="cuerpo-plan-resultado" class="bg-slate-900 p-4 rounded-xl border border-slate-700 text-xs text-slate-200 whitespace-pre-line font-mono leading-relaxed">${data.plan}</div>
+                `;
 
-                // Incrementar contador local o en Firebase
-                if (userCode === 'FREE_TRIAL') {
-                    let trialCount = parseInt(localStorage.getItem('profe_nica_trial') || '0') + 1;
-                    localStorage.setItem('profe_nica_trial', trialCount);
-                } else {
-                    const docRef = db.collection('codigos').doc(userCode);
-                    await docRef.update({
-                        planesUsados: firebase.firestore.FieldValue.increment(1)
-                    });
-                }
-
-                await verificarLicenciaYUso();
+                contenedor.innerHTML = '';
+                contenedor.appendChild(card);
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 
             } catch (error) {
-                alert('Error al generar el plan: ' + error.message);
+                alert("Error al generar: " + error.message);
             } finally {
-                btn.disabled = false;
-                btn.innerText = '✨ Generar Plan Diario Oficial';
+                btnGenerar.disabled = false;
+                btnGenerar.textContent = "✨ Generar Plan Diario";
             }
         });
 
-        function copiarPlan() {
-            const texto = document.getElementById('contenido-plan').innerText;
-            navigator.clipboard.writeText(texto);
-            alert('¡Plan copiado al portapapeles con éxito!');
-        }
+        window.copiarTexto = function(btn) {
+            const contenido = document.getElementById('cuerpo-plan-resultado').textContent;
+            navigator.clipboard.writeText(contenido);
+            btn.textContent = "¡Copiado!";
+            setTimeout(() => btn.textContent = "Copiar", 2000);
+        };
+
+        window.descargarWord = function(btn) {
+            const contenido = document.getElementById('cuerpo-plan-resultado').textContent;
+            const blob = new Blob(['\ufeff' + contenido], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Plan_Diario_Clase.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            btn.textContent = "¡Descargado!";
+            setTimeout(() => btn.textContent = "Word (.doc)", 2000);
+        };
+
+        window.descargarPDF = function() {
+            window.print();
+        };
+
+        window.nuevoPlan = function() {
+            document.getElementById('unidad').value = '';
+            document.getElementById('tema').value = '';
+            document.getElementById('indicador').value = '';
+            document.getElementById('crit-conceptual').value = '';
+            document.getElementById('crit-procedimental').value = '';
+            document.getElementById('crit-actitudinal').value = '';
+            document.getElementById('adecuacion').value = 'Ninguna';
+            document.getElementById('contenedor-resultados').innerHTML = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
     </script>
 </body>
 </html>
