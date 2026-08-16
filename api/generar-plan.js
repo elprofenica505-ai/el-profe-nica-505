@@ -1,6 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req, res) {
+    // Asegurar que siempre respondemos con cabecera JSON
+    res.setHeader('Content-Type', 'application/json');
+
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Método no permitido' });
     }
@@ -12,20 +15,25 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Falta el contenido del plan.' });
         }
 
-        // Inicializar la API de Gemini usando la variable de entorno de Vercel
-        const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            return res.status(500).json({ error: 'La llave GEMINI_API_KEY no está configurada en el servidor.' });
+        }
+
+        const ai = new GoogleGenAI({ apiKey: apiKey });
 
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: contenido,
         });
 
-        const planGenerado = response.text;
+        // Validar que la respuesta contenga texto
+        const planGenerado = response.text || "No se pudo generar el contenido.";
 
         return res.status(200).json({ plan: planGenerado });
 
     } catch (error) {
-        console.error("Error al conectar con Gemini:", error);
-        return res.status(500).json({ error: 'Error interno al generar el plan con la IA.' });
+        console.error("Error crítico en serverless:", error);
+        return res.status(500).json({ error: 'Error del servidor: ' + (error.message || error) });
     }
 }
