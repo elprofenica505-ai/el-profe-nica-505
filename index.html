@@ -6,6 +6,8 @@
     <title>El Profe Nica 505 - Generador Inteligente de Planes de Clase</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Librería Marked.js para renderizar texto bonito tipo chat -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.js"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
 
@@ -23,7 +25,7 @@
         <main class="max-w-5xl mx-auto w-full my-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div class="lg:col-span-7 text-center lg:text-left space-y-6">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-bold uppercase tracking-wider">
-                    <span>⚡</span> Inteligencia Artificial para Docentes
+                    <span>⚡</span> Formatos Oficiales MINED Nicaragua
                 </div>
                 
                 <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
@@ -31,7 +33,7 @@
                 </h2>
                 
                 <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                    Genera al instante tus planes diarios estructurados al formato local oficial, sin complicaciones de redactar prompts.
+                    Genera al instante tus planes diarios estructurados al formato local oficial del MINED, sin complicaciones de redactar prompts.
                 </p>
 
                 <div class="pt-2 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -51,7 +53,7 @@
                         <h3 class="text-sm font-bold text-rose-300 uppercase tracking-wide">Sin la herramienta</h3>
                     </div>
                     <p class="text-xs text-slate-400 leading-relaxed">
-                        Horas escribiendo indicadores, competencias y redactando actividades, información, estrategias, metodología, adecuación curricular... ¡ALTO! ESTA ES TU MEJOR SOLUCIÓN
+                        Horas redactando momentos metodológicos, criterios de evaluación, adecuaciones y buscando mallas curriculares del MINED... ¡ESTA ES TU SOLUCIÓN!
                     </p>
                 </div>
 
@@ -61,7 +63,7 @@
                         <h3 class="text-sm font-bold text-blue-300 uppercase tracking-wide">Con El Profe Nica 505</h3>
                     </div>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Seleccionas la materia y la unidad en menús desplegables y la IA redacta el plan de clase estructurado.
+                        Genera automáticamente planes adaptados a las normativas vigentes del Ministerio de Educación de Nicaragua.
                     </p>
                 </div>
             </div>
@@ -123,7 +125,7 @@
             </div>
 
             <div class="space-y-3 mb-6">
-                <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica,%20deseo%20adquirir%20la%20Suscripción%20Mensual%20de%20$3%20a%20$5." target="_blank" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-medium p-3 rounded-xl text-sm transition flex justify-between items-center px-4 shadow-md">
+                <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica,%20deseo%20adquirir%20la%20Suscripción%20Mensual." target="_blank" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-medium p-3 rounded-xl text-sm transition flex justify-between items-center px-4 shadow-md">
                     <span>💬 Solicitar Plan Mensual</span>
                     <span class="text-xs bg-emerald-800 px-2 py-1 rounded font-bold">WhatsApp</span>
                 </a>
@@ -148,9 +150,9 @@
             
             <section class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-lg">
                 <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
-                    <span>📝</span> Plan Diario Asignatura:
+                    <span>📝</span> Plan Diario Oficial MINED:
                 </h2>
-                <p class="text-xs text-slate-400 mb-6">Selecciona las opciones requeridas. La IA estructurará el plan respetando los criterios pedagógicos oficiales.</p>
+                <p class="text-xs text-slate-400 mb-6">Selecciona los datos. La IA aplicará estrictamente el formato oficial del MINED de Nicaragua con sus 4 momentos metodológicos según la malla curricular.</p>
                 
                 <form id="form-plan" class="space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -203,7 +205,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Indicador de logro: <span class="text-blue-400 font-normal">(Opcional - La IA lo genera si se deja vacío)</span></label>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Indicador de logro: <span class="text-blue-400 font-normal">(Opcional - La IA lo genera según malla curricular)</span></label>
                         <textarea id="indicador" rows="2" placeholder="Describe o deja en blanco para autogenerar..." class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
                     </div>
 
@@ -231,7 +233,7 @@
                     </div>
 
                     <button type="submit" id="btn-generar" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3.5 rounded-xl text-sm transition shadow-lg flex justify-center items-center gap-2">
-                        ✨ Generar Plan Diario
+                        ✨ Generar Plan Diario MINED
                     </button>
                 </form>
             </section>
@@ -245,7 +247,17 @@
         </footer>
     </div>
 
-    <!-- Script Principal Frontend y Firebase -->
+    <!-- Estilos de Visualización Tipo Chat/Markdown -->
+    <style>
+        .markdown-output h3 { font-size: 1.1rem; font-weight: bold; color: #60a5fa; margin-top: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid #334155; padding-bottom: 0.25rem; }
+        .markdown-output h4 { font-size: 1rem; font-weight: bold; color: #93c5fd; margin-top: 0.75rem; margin-bottom: 0.25rem; }
+        .markdown-output p { margin-bottom: 0.75rem; line-height: 1.6; color: #e2e8f0; }
+        .markdown-output ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 0.75rem; color: #cbd5e1; }
+        .markdown-output li { margin-bottom: 0.35rem; }
+        .markdown-output strong { color: #f8fafc; font-weight: bold; }
+        .markdown-output blockquote { border-left: 4px solid #3b82f6; padding-left: 1rem; margin-left: 0; margin-right: 0; color: #94a3b8; font-style: italic; background: rgba(59, 130, 246, 0.05); padding-top: 0.5rem; padding-bottom: 0.5rem; border-radius: 0 0.5rem 0.5rem 0; }
+    </style>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
@@ -307,7 +319,7 @@
             const btnGenerar = document.getElementById('btn-generar');
             if (btnGenerar) {
                 btnGenerar.disabled = true;
-                btnGenerar.textContent = "Generando plan pedagógico con IA...";
+                btnGenerar.textContent = "Generando plan oficial MINED con IA...";
             }
 
             const asignatura = document.getElementById('asignatura')?.value || '';
@@ -322,15 +334,66 @@
             const actitudinal = document.getElementById('crit-actitudinal')?.value.trim() || '';
             const adecuacion = document.getElementById('adecuacion')?.value || 'Ninguna';
 
+            // Instrucción estricta adjunta para asegurar el cumplimiento del formato MINED
+            const contenidoConFormatoMined = `[INSTRUCCIÓN OBLIGATORIA PARA LA IA: Actúa estrictamente como especialista curricular del Ministerio de Educación de Nicaragua (MINED). Genera el plan ajustado rigurosamente a las mallas curriculares actualizadas de Nicaragua para la asignatura "${asignatura}" de "${grado}". Si no existe una especificación única para esta asignatura, utiliza y rellena de forma profesional e impecable el siguiente formato oficial general del MINED:
+
+Plan Diario Asignatura: ${asignatura}
+Fecha: ${fecha}
+Tiempo: ${tiempo}
+Grado: ${grado}
+Nombre y número de Unidad: ${unidad}
+Indicador de logro: ${indicador || '[Autogenerado según malla curricular oficial]'}
+Contenido: ${tema}
+
+I. Criterios de Evaluación
+*Conceptual: ${conceptual || '[Autogenerado]'}
+*Procedimental: ${procedimental || '[Autogenerado]'}
+*Actitudinal: ${actitudinal || '[Autogenerado]'}
+
+II. Actividades de Inicio
+Saludo de bienvenida: [Redactar bienvenida motivadora]
+Oración a Dios: [Redactar oración escolar pertinente]
+Entonar el Himno Nacional: [Entonar Himno Nacional de Nicaragua]
+Dinámica para recordar tema anterior: [Actividad rompehielos o recordatorio]
+Revisión de tarea y asistencia: [Verificación de compromisos previos]
+Dar a conocer el tema e indicador: [Presentación clara del objetivo]
+
+III. Actividades de Desarrollo
+[Desarrollo metodológico detallado paso a paso alineado al MINED]
+
+IV. Actividades de Culminación y Evaluación
+Culminación: [Consolidación y conclusiones del tema]
+Evaluación: [Estrategia de comprobación del aprendizaje]
+Tarea: [Asignación para el hogar]
+
+Adecuación Curricular: ${adecuacion}]`;
+
             try {
                 const response = await fetch('/api/generar-plan', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ asignatura, grado, fecha, tiempo, unidad, contenido: tema, indicador, conceptual, procedimental, actitudinal, adecuacion })
+                    body: JSON.stringify({ 
+                        asignatura, 
+                        grado, 
+                        fecha, 
+                        tiempo, 
+                        unidad, 
+                        contenido: contenidoConFormatoMined, 
+                        indicador, 
+                        conceptual, 
+                        procedimental, 
+                        actitudinal, 
+                        adecuacion 
+                    })
                 });
 
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Error al conectar con la IA');
+
+                let textoPlan = data.plan || '';
+                textoPlan = textoPlan.replace(/```markdown/g, '').replace(/```html/g, '').replace(/```/g, '').trim();
+
+                const contenidoHtmlBonito = marked.parse(textoPlan);
 
                 planesDisponibles--;
                 const contadorEl = document.getElementById('contador-planes');
@@ -339,18 +402,20 @@
                 const contenedor = document.getElementById('contenedor-resultados');
                 if (contenedor) {
                     const card = document.createElement('div');
-                    card.className = "bg-slate-800 border border-blue-500/40 p-6 rounded-2xl shadow-xl space-y-4";
+                    card.className = "bg-slate-800 border border-blue-500/50 p-6 rounded-2xl shadow-2xl space-y-4";
                     card.innerHTML = `
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-700 pb-3 gap-2">
-                            <span class="text-xs font-bold text-blue-400 uppercase">📄 Plan Generado: ${asignatura} (${grado})</span>
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-700 pb-4 gap-3">
+                            <span class="text-xs font-black text-blue-400 uppercase tracking-wider flex items-center gap-1"><span>🇳🇮</span> Plan Oficial MINED: ${asignatura} (${grado})</span>
                             <div class="flex flex-wrap gap-2 w-full sm:w-auto">
                                 <button onclick="copiarTexto(this)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs px-3 py-1.5 rounded-lg font-medium transition flex-1 sm:flex-none">Copiar</button>
-                                <button onclick="descargarWord(this)" class="bg-blue-700 hover:bg-blue-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition flex-1 sm:flex-none">Word (.doc)</button>
-                                <button onclick="descargarPDF()" class="bg-indigo-700 hover:bg-indigo-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition flex-1 sm:flex-none">PDF</button>
-                                <button onclick="nuevoPlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition w-full sm:w-auto">✨ Nuevo Plan</button>
+                                <button onclick="descargarWord(this)" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition flex-1 sm:flex-none">Word (.doc)</button>
+                                <button onclick="descargarPDF()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition flex-1 sm:flex-none">Imprimir / PDF</button>
+                                <button onclick="nuevoPlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition w-full sm:w-auto">✨ Nuevo</button>
                             </div>
                         </div>
-                        <div id="cuerpo-plan-resultado" class="bg-slate-900 p-4 rounded-xl border border-slate-700 text-xs text-slate-200 leading-relaxed overflow-x-auto">${data.plan}</div>
+                        <div id="cuerpo-plan-resultado" class="markdown-output bg-slate-900/90 p-6 rounded-xl border border-slate-700 text-sm leading-relaxed overflow-x-auto shadow-inner">
+                            ${contenidoHtmlBonito}
+                        </div>
                     `;
 
                     contenedor.innerHTML = '';
@@ -363,7 +428,7 @@
             } finally {
                 if (btnGenerar) {
                     btnGenerar.disabled = false;
-                    btnGenerar.textContent = "✨ Generar Plan Diario";
+                    btnGenerar.textContent = "✨ Generar Plan Diario MINED";
                 }
             }
         });
@@ -378,12 +443,20 @@
 
         window.descargarWord = function(btn) {
             const el = document.getElementById('cuerpo-plan-resultado');
-            const contenido = el ? el.innerHTML : '';
-            const blob = new Blob(['\ufeff' + contenido], { type: 'application/msword' });
+            const contenidoHtml = el ? el.innerHTML : '';
+            const plantillaWord = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='[http://www.w3.org/TR/REC-html40](http://www.w3.org/TR/REC-html40)'>
+                <head><meta charset='utf-8'><title>Plan Diario MINED</title></head>
+                <body style='font-family:Arial, sans-serif; font-size:11pt; color:#333;'>
+                    ${contenidoHtml}
+                </body>
+                </html>
+            `;
+            const blob = new Blob(['\ufeff' + plantillaWord], { type: 'application/msword' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'Plan_Diario_Clase.doc';
+            a.download = 'Plan_Diario_MINED_ProfeNica505.doc';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
