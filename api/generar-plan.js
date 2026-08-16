@@ -1,38 +1,28 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
 export default async function handler(req, res) {
-    // Configuración de cabeceras para evitar problemas de CORS
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    if (req.method !== 'POST') return res.status(405).end();
 
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Método no permitido' });
-    }
+    const { contenido } = req.body;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     try {
-        const { contenido } = req.body;
-        const apiKey = process.env.GEMINI_API_KEY;
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: contenido }] }]
+            })
+        });
 
-        if (!apiKey) {
-            return res.status(500).json({ error: 'Falta configurar GEMINI_API_KEY en Vercel.' });
+        const data = await response.json();
+
+        if (data.error) {
+            throw new Error(data.error.message);
         }
 
-        const genAI = new GoogleGenerativeAI(apiKey);
-        
-        // ESTA ES LA DEFINICIÓN ESTÁNDAR QUE NO DEBE DAR ERROR 404
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-        const result = await model.generateContent(contenido);
-        const text = result.response.text();
-
-        return res.status(200).json({ plan: text });
+        const planGenerado = data.candidates[0].content.parts[0].text;
+        return res.status(200).json({ plan: planGenerado });
 
     } catch (error) {
-        return res.status(500).json({ error: 'Error de IA: ' + error.message });
+        return res.status(500).json({ error: error.message });
     }
 }
