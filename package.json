@@ -1,7 +1,7 @@
 {
   "name": "el-profe-nica-505",
   "version": "1.0.0",
-  "dependencies": {
-    "@google/generative-ai": "0.11.1"
+  "engines": {
+    "node": "20.x"
   }
 }
