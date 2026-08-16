@@ -21,7 +21,8 @@ export default async function handler(req, res) {
         }
 
         const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        // Usamos la versión exacta del modelo que la API v1beta reconoce sin error 404
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-002" });
 
         const result = await model.generateContent(contenido);
         const response = await result.response;
