@@ -245,14 +245,12 @@
         </footer>
     </div>
 
-    <!-- Estilos limpios y profesionales para el texto -->
+    <!-- Estilos de lectura -->
     <style>
         .plan-estilizado {
             line-height: 1.7;
             color: #e2e8f0;
-        }
-        .plan-estilizado p {
-            margin-bottom: 0.75rem;
+            white-space: pre-wrap; /* Respeta los saltos de línea de la IA de forma limpia */
         }
     </style>
 
@@ -332,8 +330,8 @@
             const actitudinal = document.getElementById('crit-actitudinal')?.value.trim() || '';
             const adecuacion = document.getElementById('adecuacion')?.value || 'Ninguna';
 
-            // Instrucción estricta para garantizar que la IA devuelva el formato exacto del MINED de Nicaragua
-            const contenidoConFormatoMined = `[INSTRUCCIÓN OBLIGATORIA PARA LA IA: Actúa estrictamente como especialista curricular del Ministerio de Educación de Nicaragua (MINED). Genera el plan ajustado rigurosamente a las mallas curriculares actualizadas de Nicaragua para la asignatura "${asignatura}" de "${grado}". Utiliza y rellena de forma profesional, detallada y formal el siguiente formato oficial exacto:
+            // Instrucción estricta para garantizar formato exacto del MINED
+            const contenidoConFormatoMined = `[INSTRUCCIÓN OBLIGATORIA PARA LA IA: Actúa estrictamente como especialista curricular del Ministerio de Educación de Nicaragua (MINED). Genera el plan ajustado rigurosamente a las mallas curriculares actualizadas de Nicaragua para la asignatura "${asignatura}" de "${grado}". Rellena de forma profesional, detallada y formal el siguiente formato oficial exacto:
 
 Plan Diario Asignatura: ${asignatura}
 Fecha: ${fecha}
@@ -389,16 +387,9 @@ Adecuación Curricular: ${adecuacion}]`;
                 if (!response.ok) throw new Error(data.error || 'Error al conectar con la IA');
 
                 let textoPlan = data.plan || '';
-                textoPlan = textoPlan.replace(/```markdown/g, '').replace(/```html/g, '').replace(/```/g, '').trim();
-
-                // Función nativa segura: convierte saltos de línea y resalta en negrita automáticamente sin librerías externas
-                const textoBonito = textoPlan
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;")
-                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-blue-400 font-bold">$1</strong>')
-                    .replace(/\*(.*?):/g, '<br><strong class="text-blue-300">$1:</strong>')
-                    .replace(/\n/g, '<br>');
+                
+                // Limpieza total de bloques de código markdown o html si la IA los manda
+                textoPlan = textoPlan.replace(/```[a-z]*/g, '').replace(/```/g, '').trim();
 
                 planesDisponibles--;
                 const contadorEl = document.getElementById('contador-planes');
@@ -418,13 +409,15 @@ Adecuación Curricular: ${adecuacion}]`;
                                 <button onclick="nuevoPlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition w-full sm:w-auto">✨ Nuevo</button>
                             </div>
                         </div>
-                        <div id="cuerpo-plan-resultado" class="plan-estilizado bg-slate-950/90 p-6 rounded-xl border border-slate-700 text-sm leading-relaxed overflow-x-auto shadow-inner">
-                            ${textoBonito}
-                        </div>
+                        <div id="cuerpo-plan-resultado" class="plan-estilizado bg-slate-950/90 p-6 rounded-xl border border-slate-700 text-sm shadow-inner overflow-x-auto"></div>
                     `;
 
                     contenedor.innerHTML = '';
                     contenedor.appendChild(card);
+                    
+                    // Asignamos de forma segura como texto plano formateado para evitar códigos extraños
+                    document.getElementById('cuerpo-plan-resultado').textContent = textoPlan;
+
                     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                 }
 
@@ -448,12 +441,15 @@ Adecuación Curricular: ${adecuacion}]`;
 
         window.descargarWord = function(btn) {
             const el = document.getElementById('cuerpo-plan-resultado');
-            const contenidoHtml = el ? el.innerHTML : '';
+            const textoLimpio = el ? el.innerText : '';
+            
+            // Creamos un documento Word respetando saltos de línea limpios
+            const contenidoHtmlWord = textoLimpio.replace(/\n/g, '<br>');
             const plantillaWord = `
-                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='[http://www.w3.org/TR/REC-html40](http://www.w3.org/TR/REC-html40)'>
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
                 <head><meta charset='utf-8'><title>Plan Diario MINED</title></head>
                 <body style='font-family:Arial, sans-serif; font-size:11pt; color:#333;'>
-                    ${contenidoHtml}
+                    ${contenidoHtmlWord}
                 </body>
                 </html>
             `;
