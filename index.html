@@ -656,67 +656,161 @@
 
             let resultado = String(texto || "").trim();
 
-            // Quita bloques de código Markdown si la IA los agregó.
+            // Eliminar bloques de código Markdown que la IA pueda agregar
             resultado = resultado
                 .replace(/^```(?:html|markdown|md|text)?\s*/i, "")
                 .replace(/\s*```$/i, "")
                 .trim();
 
-            // Si la API devuelve HTML escapado (&lt;html&gt;, &lt;h1&gt;, etc.),
-            // lo convertimos nuevamente a HTML real antes de procesarlo.
-            if (/&lt;!?[a-z]/i.test(resultado)) {
+            // Convertir HTML escapado a texto real
+            // Ejemplo: &lt;div&gt;Hola&lt;/div&gt;
+            if (/&lt;\s*\/?\s*[a-z][^&]*&gt;/i.test(resultado)) {
                 const decoder = document.createElement("textarea");
                 decoder.innerHTML = resultado;
                 resultado = decoder.value.trim();
             }
 
-            return resultado
-                .replace(/\r\n/g, "\n")
-                .replace(/\r/g, "\n")
-                .replace(/[ \t]+\n/g, "\n")
-                .replace(/\n{3,}/g, "\n\n")
-                .trim();
-        }
-
-        function convertirPlan(texto) {
-
-            let resultado = limpiarRespuestaIA(texto);
-            let html;
-
-            /*
-             * Si la IA devuelve un documento HTML completo, NO lo mostramos
-             * como texto ni lo pasamos por marked. Extraemos únicamente
-             * lo que está dentro de <body>.
-             */
-            const esDocumentoHTML =
+            // Si la IA devuelve un documento HTML completo,
+            // extraemos únicamente el contenido visible del body.
+            if (
                 /<!doctype\s+html/i.test(resultado) ||
-                /<html(?:\s[^>]*)?>/i.test(resultado);
-
-            const pareceHTML =
-                /</?(table|thead|tbody|tr|th|td|h1|h2|h3|ul|ol|li|p|div|strong|blockquote|br)(?:\s[^>]*)?>/i
-                    .test(resultado);
-
-            if (esDocumentoHTML) {
+                /<html(?:\s[^>]*)?>/i.test(resultado)
+            ) {
                 const documento = new DOMParser().parseFromString(
                     resultado,
                     "text/html"
                 );
 
-                html = documento.body
-                    ? documento.body.innerHTML
-                    : resultado;
-            } else if (pareceHTML) {
-                html = resultado;
-            } else {
-                // Lo normal en este proyecto: la IA devuelve Markdown.
-                html = marked.parse(resultado, {
-                    gfm: true,
-                    breaks: true
-                });
+                if (documento.body) {
+                    resultado = documento.body.innerHTML;
+                }
             }
 
+            // Convertir etiquetas HTML comunes a Markdown limpio.
+            resultado = resultado
+
+                // Títulos
+                .replace(/<h1[^>]*>([\s\S]*?)<\/h1>/gi, "\n# $1\n")
+                .replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, "\n## $1\n")
+                .replace(/<h3[^>]*>([\s\S]*?)<\/h3>/gi, "\n### $1\n")
+
+                // Negritas
+                .replace(/<(strong|b)[^>]*>([\s\S]*?)<\/\1>/gi, "**$2**")
+
+                // Cursivas
+                .replace(/<(em|i)[^>]*>([\s\S]*?)<\/\1>/gi, "*$2*")
+
+                // Saltos de línea
+                .replace(/<br\s*\/?>/gi, "\n")
+
+                // Párrafos
+                .replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, "$1\n\n")
+
+                // Listas
+                .replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, "- $1\n")
+                .replace(/<\/?(ul|ol)[^>]*>/gi, "\n")
+
+                // Divisiones
+                .replace(/<div[^>]*>/gi, "")
+                .replace(/<\/div>/gi, "\n")
+
+                // Spans
+                .replace(/<span[^>]*>/gi, "")
+                .replace(/<\/span>/gi, "");
+
+            /*
+             * IMPORTANTE:
+             * Eliminamos cualquier etiqueta HTML que haya quedado.
+             * De esta manera jamás aparecerá algo como:
+             *
+             * <div>
+             * <strong>
+             * <table>
+             * <br>
+             *
+             * dentro del texto visible.
+             */
+            resultado = resultado.replace(/<\/?[a-z][^>]*>/gi, "");
+
+            // Decodificar entidades HTML
+            const decoderFinal = document.createElement("textarea");
+            decoderFinal.innerHTML = resultado;
+            resultado = decoderFinal.value;
+
+            // Limpieza de espacios y saltos excesivos
+            resultado = resultado
+                .replace(/\r\n/g, "\n")
+                .replace(/\r/g, "\n")
+                .replace(/[ \t]+\n/g, "\n")
+                .replace(/\n{3,}/g, "\n\n")
+                .trim();
+
+            return resultado;
+        }
+
+
+        function convertirPlan(texto) {
+
+            const resultado = limpiarRespuestaIA(texto);
+
+            if (!resultado) {
+                return "<p>No se recibió contenido de la IA.</p>";
+            }
+
+            /*
+             * La IA debe entregar Markdown.
+             *
+             * marked convierte:
+             *
+             * # Título
+             * ## Sección
+             * **Negrita**
+             * - Lista
+             * | Tabla |
+             *
+             * en HTML visual para mostrarlo bonito.
+             */
+
+            const html = marked.parse(resultado, {
+                gfm: true,
+                breaks: true
+            });
+
+            /*
+             * DOMPurify permite únicamente HTML seguro.
+             * Esto evita scripts, eventos y elementos peligrosos.
+             */
             return DOMPurify.sanitize(html, {
-                USE_PROFILES: { html: true }
+                USE_PROFILES: {
+                    html: true
+                },
+
+                FORBID_TAGS: [
+                    "script",
+                    "iframe",
+                    "object",
+                    "embed",
+                    "form",
+                    "input",
+                    "button",
+                    "textarea",
+                    "select",
+                    "style"
+                ],
+
+                FORBID_ATTR: [
+                    "onclick",
+                    "onload",
+                    "onerror",
+                    "onmouseover",
+                    "onmouseenter",
+                    "onfocus",
+                    "onchange",
+                    "onsubmit",
+                    "style"
+                ],
+
+                ALLOW_UNKNOWN_PROTOCOLS: false
             });
         }
 
