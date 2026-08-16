@@ -1,3 +1,5 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 export default async function handler(req, res) {
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.setHeader('Cache-Control', 'no-store');
@@ -18,37 +20,21 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: 'Falta configurar GEMINI_API_KEY en Vercel.' });
         }
 
-        const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        const genAI = new GoogleGenerativeAI(apiKey);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        const respuestaGemini = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: contenido }]
-                }]
-            })
-        });
+        const result = await model.generateContent(contenido);
+        const response = await result.response;
+        const text = response.text();
 
-        const data = await respuestaGemini.json();
-
-        if (!respuestaGemini.ok) {
-            const mensajeError = data.error?.message || 'Error desconocido en la API de Gemini.';
-            return res.status(500).json({ error: mensajeError });
-        }
-
-        const planGenerado = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (!planGenerado) {
+        if (!text) {
             return res.status(500).json({ error: 'La IA no devolvió contenido válido.' });
         }
 
-        return res.status(200).json({ plan: planGenerado });
+        return res.status(200).json({ plan: text });
 
     } catch (error) {
-        console.error("Error crítico en serverless:", error);
-        return res.status(500).json({ error: 'Error interno del servidor: ' + error.message });
+        console.error("Error crítico con la librería de Gemini:", error);
+        return res.status(500).json({ error: 'Error interno: ' + error.message });
     }
 }
