@@ -5,42 +5,53 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Método no permitido." });
 
-  try {
+  intentar {
     const apiKey = process.env.GEMINI_API_KEY;
 
-    if (!apiKey) {
-      return res.status(500).json({ error: "GEMINI_API_KEY no está configurada en Vercel (Settings > Environment Variables)." });
+    si (!apiKey) {
+      return res.status(500).json({ error: "GEMINI_API_KEY no está configurado en Vercel (Configuración > Variables de entorno)." });
     }
 
     const { asignatura, grado, unidad, contenido, indicador, conceptual, procedimental, actitudinal, adecuacion } = req.body || {};
 
-    const prompt = `Actúa como asesor pedagógico del MINED Nicaragua. Genera un plan diario de primaria (4 momentos: Exploración, Construcción, Aplicación, Valoración). 
-    Asignatura: ${asignatura}, Grado: ${grado}, Contenido: ${contenido}. 
-    Indicador: ${indicador}. Criterios: ${conceptual}, ${procedimental}, ${actitudinal}. Adecuación: ${adecuacion}.
+    const Prompt = `Actúa como asesor pedagógico del MINED Nicaragua. Genera un plan diario de primaria (4 momentos: Exploración, Construcción, Aplicación, Valoración).
+    Asignatura: ${asignatura}, Grado: ${grado}, Contenido: ${contenido}.
+    Indicador: ${indicador}. Criterios: ${conceptual}, ${procedimental}, ${actitudinal}. Adecuación: ${adecuación}.
     Responde en HTML limpio.`;
 
-    const modelo = process.env.GEMINI_MODEL || "gemini-2.5-flash";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`;
+    // MODELO ECONÓMICO: "gemini-flash-lite-latest" es un alias que Google actualiza
+    // automáticamente al modelo Flash-Lite más reciente y barato disponible.
+    // AsÃ evitamos que el modelo se "retire" de golpe como pasó con gemini-2.5-flash-lite
+    // (que Google descontinúa el 16 de octubre de 2026).
+    const modelo = process.env.GEMINI_MODEL || "gemini-flash-lite-latest";
+    const url = `https://generativelanguage.googleapis.com/v1beta2/interactions`;
 
     const geminiResponse = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }]
+      método: "POST",
+      encabezados: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey
+      },
+      cuerpo: JSON.stringify({
+        modelo: modelo,
+        entrada: solicitud
       })
     });
 
     const data = await geminiResponse.json();
 
-    if (!geminiResponse.ok) {
-      const mensajeGoogle = data?.error?.message || "Error desconocido de la API de Google.";
-      console.error("Error en la API de Google:", data);
+    si (!geminiResponse.ok) {
+      const mensajeGoogle = datos?.error?.mensaje || "Error desconocido de la API de Google.";
+      console.error("Error en la API de Google:", datos);
       return res.status(500).json({ error: `Error de Gemini: ${mensajeGoogle}` });
     }
 
-    const texto = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!texto) {
-      console.error("Respuesta de Gemini sin contenido:", data);
+    // La API de Interacciones devuelve un objeto "steps" en vez de "candidates".
+    const pasoRespuesta = data?.steps?.find(step => step.type === "model_output");
+    const texto = pasoRespuesta?.content?.find(c => c.type === "text")?.text;
+
+    si (!texto) {
+      console.error("Respuesta de Gemini sin contenido:", datos);
       return res.status(500).json({ error: "Gemini no devolvió contenido (puede haber sido bloqueado por seguridad).", detalle: data });
     }
 
