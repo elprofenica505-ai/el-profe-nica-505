@@ -309,6 +309,7 @@
             btnGenerar.disabled = true;
             btnGenerar.textContent = "Generando plan pedagógico con IA...";
 
+            // CORREGIDO: se usa getElementById en todos los campos (antes decía document.A)
             const asignatura = document.getElementById('asignatura').value;
             const grado = document.getElementById('grado').value;
             const fecha = document.getElementById('fecha').value;
@@ -326,7 +327,8 @@
                 const response = await fetch('/api/generar-plan', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ asignatura, grado, fecha, tiempo, unidad, tema, indicador, conceptual, procedimental, actitudinal, adecuacion })
+                    // CORREGIDO: se envía "contenido" (no "tema") para coincidir con lo que espera generar-plan.js
+                    body: JSON.stringify({ asignatura, grado, fecha, tiempo, unidad, contenido: tema, indicador, conceptual, procedimental, actitudinal, adecuacion })
                 });
 
                 const data = await response.json();
