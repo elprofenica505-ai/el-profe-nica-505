@@ -261,7 +261,6 @@
 
         const app = initializeApp(firebaseConfig);
 
-        // Contador de prueba gratuita
         let planesDisponibles = 8;
 
         window.mostrarVista = function(idVista) {
@@ -309,7 +308,6 @@
             btnGenerar.disabled = true;
             btnGenerar.textContent = "Generando plan pedagógico con IA...";
 
-            // CORREGIDO: se usa getElementById en todos los campos (antes decía document.A)
             const asignatura = document.getElementById('asignatura').value;
             const grado = document.getElementById('grado').value;
             const fecha = document.getElementById('fecha').value;
@@ -323,11 +321,9 @@
             const adecuacion = document.getElementById('adecuacion').value;
 
             try {
-                // Llamada segura a nuestra API Serverless en Vercel
                 const response = await fetch('/api/generar-plan', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    // CORREGIDO: se envía "contenido" (no "tema") para coincidir con lo que espera generar-plan.js
                     body: JSON.stringify({ asignatura, grado, fecha, tiempo, unidad, contenido: tema, indicador, conceptual, procedimental, actitudinal, adecuacion })
                 });
 
@@ -350,7 +346,7 @@
                             <button onclick="nuevoPlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition w-full sm:w-auto">✨ Nuevo Plan</button>
                         </div>
                     </div>
-                    <div id="cuerpo-plan-resultado" class="bg-slate-900 p-4 rounded-xl border border-slate-700 text-xs text-slate-200 whitespace-pre-line font-mono leading-relaxed">${data.plan}</div>
+                    <div id="cuerpo-plan-resultado" class="bg-slate-900 p-4 rounded-xl border border-slate-700 text-xs text-slate-200 leading-relaxed overflow-x-auto">${data.plan}</div>
                 `;
 
                 contenedor.innerHTML = '';
@@ -366,14 +362,16 @@
         });
 
         window.copiarTexto = function(btn) {
-            const contenido = document.getElementById('cuerpo-plan-resultado').textContent;
+            const el = document.getElementById('cuerpo-plan-resultado');
+            const contenido = el ? el.innerText : '';
             navigator.clipboard.writeText(contenido);
             btn.textContent = "¡Copiado!";
             setTimeout(() => btn.textContent = "Copiar", 2000);
         };
 
         window.descargarWord = function(btn) {
-            const contenido = document.getElementById('cuerpo-plan-resultado').textContent;
+            const el = document.getElementById('cuerpo-plan-resultado');
+            const contenido = el ? el.innerHTML : '';
             const blob = new Blob(['\ufeff' + contenido], { type: 'application/msword' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
