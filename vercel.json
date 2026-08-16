@@ -1,6 +1,3 @@
 {
-  "version": 2,
-  "rewrites": [
-    { "source": "/api/generar-plan", "destination": "/api/generar-plan.js" }
-  ]
+  "version": 2
 }
