@@ -1,7 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
-
 export default async function handler(req, res) {
-    // Asegurar que siempre respondemos con cabecera JSON
     res.setHeader('Content-Type', 'application/json');
 
     if (req.method !== 'POST') {
@@ -17,23 +14,36 @@ export default async function handler(req, res) {
 
         const apiKey = process.env.GEMINI_API_KEY;
         if (!apiKey) {
-            return res.status(500).json({ error: 'La llave GEMINI_API_KEY no está configurada en el servidor.' });
+            return res.status(500).json({ error: 'Falta configurar GEMINI_API_KEY en Vercel.' });
         }
 
-        const ai = new GoogleGenAI({ apiKey: apiKey });
+        // Llamada directa por REST API oficial a Gemini
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: contenido,
+        const respuestaGemini = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: contenido }]
+                }]
+            })
         });
 
-        // Validar que la respuesta contenga texto
-        const planGenerado = response.text || "No se pudo generar el contenido.";
+        const data = await respuestaGemini.json();
+
+        if (!respuestaGemini.ok) {
+            throw new Error(data.error?.message || 'Error al comunicarse con la API de Gemini.');
+        }
+
+        const planGenerado = data.candidates?.[0]?.content?.parts?.[0]?.text || "No se pudo extraer el contenido.";
 
         return res.status(200).json({ plan: planGenerado });
 
     } catch (error) {
-        console.error("Error crítico en serverless:", error);
-        return res.status(500).json({ error: 'Error del servidor: ' + (error.message || error) });
+        console.error("Error en serverless:", error);
+        return res.status(500).json({ error: 'Error del servidor: ' + error.message });
     }
 }
