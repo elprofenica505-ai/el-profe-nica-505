@@ -14,8 +14,8 @@ if (!getApps().length) {
 const db = getFirestore();
 
 function generarCodigo() {
-  const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ"; // sin I, O para evitar confusión visual
-  const numeros = "23456789"; // sin 0, 1 para evitar confusión visual
+  const letras = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const numeros = "23456789";
 
   let parte = "";
   for (let i = 0; i < 4; i++) {
@@ -33,10 +33,11 @@ function generarCodigo() {
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Método no permitido." });
 
-  // Protección: solo tú puedes generar códigos, usando una clave secreta tuya
-  const { claveAdmin, cantidad } = req.body || {};
+  // Autenticación profesional leyendo desde los Headers
+  const claveAdmin = req.headers["admin-secret"];
+  const { cantidad } = req.body || {};
 
-  if (claveAdmin !== process.env.ADMIN_SECRET) {
+  if (!claveAdmin || claveAdmin !== process.env.ADMIN_SECRET) {
     return res.status(403).json({ error: "No autorizado." });
   }
 
