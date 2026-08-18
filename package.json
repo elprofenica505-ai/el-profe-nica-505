@@ -1,0 +1,8 @@
+{
+  "name": "el-profe-nica-505",
+  "version": "1.0.0",
+  "description": "Plataforma educativa El Profe Nica 505",
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}
