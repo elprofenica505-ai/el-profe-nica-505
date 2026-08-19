@@ -589,6 +589,9 @@
         import {
             initializeApp
         } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+        import {
+            getFirestore, doc, getDoc, setDoc, updateDoc, increment
+        } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCw6yFNbF8hahrjFSlRzflzkOwmqVr0JUY",
@@ -600,7 +603,8 @@
             appId: "1:834224420925:web:90e1eced789cc5ea0dd254"
         };
 
-        initializeApp(firebaseConfig);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
         let planesDisponibles = 8;
         let licenciaActiva = false;
@@ -806,7 +810,7 @@
                 }
 
                 licenciaActiva = true;
-                planesDisponibles = 9999; // Licencia mensual ilimitada o activa
+                planesDisponibles = 9999;
 
                 $("badge-estado").innerHTML =
                     `Licencia Activa (${escaparHTML(nombreDocente)}): <span id="contador-planes">${data.diasRestantes}</span> días restantes`;
@@ -822,15 +826,45 @@
             }
         });
 
-        $("btn-prueba-gratis").addEventListener("click", function(evento) {
+        /*
+         * CONTROL DE PRUEBA GRATIS VINCULADO A FIREBASE
+         */
+        $("btn-prueba-gratis").addEventListener("click", async function(evento) {
             evento.preventDefault();
-            licenciaActiva = false;
-            planesDisponibles = 8;
+            const deviceId = obtenerDeviceId();
+            const docRef = doc(db, "pruebas_gratis", deviceId);
 
-            $("badge-estado").innerHTML =
-                'Prueba Gratis: <span id="contador-planes">8</span>/8 planes';
+            try {
+                const docSnap = await getDoc(docRef);
 
-            window.mostrarVista("vista-generador");
+                if (docSnap.exists()) {
+                    const datos = docSnap.data();
+                    planesDisponibles = datos.planesRestantes;
+                } else {
+                    // Si es la primera vez que entra este dispositivo, inicializamos con 8 planes en Firestore
+                    await setDoc(docRef, { planesRestantes: 8, createdAt: new Date() });
+                    planesDisponibles = 8;
+                }
+
+                if (planesDisponibles <= 0) {
+                    alert("Ya has consumido tus 8 planes gratuitos de prueba en este dispositivo. Adquiere una licencia para continuar.");
+                    window.mostrarVista("vista-suscripcion");
+                    return;
+                }
+
+                licenciaActiva = false;
+                $("badge-estado").innerHTML =
+                    `Prueba Gratis: <span id="contador-planes">${planesDisponibles}</span>/8 planes`;
+
+                window.mostrarVista("vista-generador");
+
+            } catch (error) {
+                console.error("Error al verificar prueba gratis:", error);
+                // Fallback local en caso de error de red
+                licenciaActiva = false;
+                planesDisponibles = 8;
+                window.mostrarVista("vista-generador");
+            }
         });
 
         /*
@@ -995,6 +1029,11 @@ Reglas obligatorias:
 
                 if (!licenciaActiva) {
                     planesDisponibles--;
+                    // Actualizar el contador directamente en Firestore para este dispositivo
+                    const deviceId = obtenerDeviceId();
+                    const docRef = doc(db, "pruebas_gratis", deviceId);
+                    await updateDoc(docRef, { planesRestantes: planesDisponibles });
+
                     const contador = $("contador-planes");
                     if (contador) {
                         contador.textContent = planesDisponibles;
