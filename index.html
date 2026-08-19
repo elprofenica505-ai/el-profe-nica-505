@@ -259,19 +259,19 @@
         </footer>
     </div>
 
-    <!-- ================= VISTA LOGIN / REGISTRO ================= -->
+    <!-- ================= VISTA LOGIN ================= -->
 
     <div id="vista-auth" class="min-h-screen flex items-center justify-center p-4 hidden">
 
         <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-xl max-w-md w-full">
 
             <div class="text-center mb-6">
-                <h3 id="auth-titulo" class="text-2xl font-bold text-white">
+                <h3 class="text-2xl font-bold text-white">
                     Acceso de Docentes
                 </h3>
 
-                <p id="auth-subtitulo" class="text-xs text-slate-400 mt-1">
-                    Ingresa con tu correo y contraseña
+                <p class="text-xs text-slate-400 mt-1">
+                    Ingresa para continuar
                 </p>
             </div>
 
@@ -302,23 +302,15 @@
                 </div>
 
                 <button type="submit"
-                        id="btn-auth-submit"
                         class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3 rounded-lg text-sm transition">
                     Ingresar
                 </button>
             </form>
 
-            <div class="text-center mt-4 space-y-2">
-                <button type="button"
-                        onclick="cambiarModoAuth()"
-                        id="btn-cambiar-modo"
-                        class="text-xs text-blue-400 hover:underline block w-full">
-                    ¿No tienes cuenta? Regístrate aquí
-                </button>
-
+            <div class="text-center mt-4">
                 <button type="button"
                         onclick="mostrarVista('vista-landing')"
-                        class="text-xs text-slate-400 hover:text-white transition block w-full">
+                        class="text-xs text-slate-400 hover:text-white transition">
                     &larr; Volver al inicio
                 </button>
             </div>
@@ -438,21 +430,6 @@
 
                 <form id="form-plan" class="space-y-4">
 
-                    <!-- SELECCIÓN DE NIVEL EDUCATIVO -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 uppercase mb-1">
-                            Nivel Educativo: *
-                        </label>
-                        <select id="nivelEducativo"
-                                required
-                                class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                onchange="actualizarGradosYAsignaturas()">
-                            <option value="">Selecciona el nivel...</option>
-                            <option value="primaria">Primaria</option>
-                            <option value="secundaria">Secundaria</option>
-                        </select>
-                    </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                         <div>
@@ -463,7 +440,13 @@
                             <select id="grado"
                                     required
                                     class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                                <option value="">Selecciona primero el nivel...</option>
+                                <option value="">Selecciona el grado...</option>
+                                <option value="1er Grado">1er Grado</option>
+                                <option value="2do Grado">2do Grado</option>
+                                <option value="3er Grado">3er Grado</option>
+                                <option value="4to Grado">4to Grado</option>
+                                <option value="5to Grado">5to Grado</option>
+                                <option value="6to Grado">6to Grado</option>
                             </select>
                         </div>
 
@@ -475,7 +458,14 @@
                             <select id="asignatura"
                                     required
                                     class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                                <option value="">Selecciona primero el nivel...</option>
+                                <option value="">Selecciona asignatura...</option>
+                                <option value="Lengua y Literatura">Lengua y Literatura</option>
+                                <option value="Matemáticas">Matemáticas</option>
+                                <option value="Ciencias Naturales">Ciencias Naturales</option>
+                                <option value="Estudios Sociales">Estudios Sociales</option>
+                                <option value="Aprender, Emprender, Prosperar (AEP)">AEP</option>
+                                <option value="Creciendo en Valores">Creciendo en Valores</option>
+                                <option value="Educación Física">Educación Física</option>
                             </select>
                         </div>
                     </div>
@@ -602,9 +592,6 @@
         import {
             getFirestore, doc, getDoc, setDoc, updateDoc, increment
         } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-        import {
-            getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword
-        } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCw6yFNbF8hahrjFSlRzflzkOwmqVr0JUY",
@@ -618,66 +605,11 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app);
 
         let planesDisponibles = 8;
         let licenciaActiva = false;
-        let esRegistro = false;
 
-        // Datos para los menús desplegables dependientes de Primaria y Secundaria
-        const datosNivel = {
-            primaria: {
-                grados: ["Primer Grado", "Segundo Grado", "Tercer Grado", "Cuarto Grado", "Quinto Grado", "Sexto Grado"],
-                asignaturas: [
-                    "Lengua y Literatura",
-                    "Matemáticas",
-                    "Ciencias Sociales",
-                    "Ciencias Naturales",
-                    "Educación Física",
-                    "Derecho y Dignidad de la Mujer",
-                    "Aprender Emprender y Prosperar",
-                    "Taller de Arte y Cultura",
-                    "Creciendo en Valores"
-                ]
-            },
-            secundaria: {
-                grados: ["Séptimo Grado", "Octavo Grado", "Noveno Grado", "Décimo Grado", "Undécimo Grado"],
-                asignaturas: [
-                    "Lengua y Literatura",
-                    "Matemática",
-                    "Ciencias Sociales",
-                    "Historia",
-                    "Geografía",
-                    "Ciencias Naturales",
-                    "Física",
-                    "Química",
-                    "Biología",
-                    "Creciendo en Valores",
-                    "Derechos y Dignidad de la Mujer",
-                    "Educación Física y Práctica Deportiva",
-                    "Talleres de Arte y Cultura"
-                ]
-            }
-        };
-
-        window.actualizarGradosYAsignaturas = function() {
-            const nivel = $("nivelEducativo").value;
-            const selectGrado = $("grado");
-            const selectAsignatura = $("asignatura");
-
-            selectGrado.innerHTML = '<option value="">Selecciona el grado...</option>';
-            selectAsignatura.innerHTML = '<option value="">Selecciona asignatura...</option>';
-
-            if (nivel && datosNivel[nivel]) {
-                datosNivel[nivel].grados.forEach(g => {
-                    selectGrado.innerHTML += `<option value="${g}">${g}</option>`;
-                });
-                datosNivel[nivel].asignaturas.forEach(a => {
-                    selectAsignatura.innerHTML += `<option value="${a}">${a}</option>`;
-                });
-            }
-        };
-
+        // Obtener o crear un identificador de dispositivo único guardado en el navegador
         function obtenerDeviceId() {
             let deviceId = localStorage.getItem("profe_nica_device_id");
             if (!deviceId) {
@@ -723,26 +655,6 @@
             window.scrollTo(0, 0);
         };
 
-        window.cambiarModoAuth = function() {
-            esRegistro = !esRegistro;
-            const titulo = $("auth-titulo");
-            const subtitulo = $("auth-subtitulo");
-            const botonSubmit = $("btn-auth-submit");
-            const botonModo = $("btn-cambiar-modo");
-
-            if (esRegistro) {
-                titulo.textContent = "Crear Cuenta Nueva";
-                subtitulo.textContent = "Regístrate con tu correo y contraseña";
-                botonSubmit.textContent = "Registrarse";
-                botonModo.textContent = "¿Ya tienes cuenta? Inicia sesión";
-            } else {
-                titulo.textContent = "Acceso de Docentes";
-                subtitulo.textContent = "Ingresa con tu correo y contraseña";
-                botonSubmit.textContent = "Ingresar";
-                botonModo.textContent = "¿No tienes cuenta? Regístrate aquí";
-            }
-        };
-
         function colocarFechaActual() {
             const campoFecha = $("fecha");
             if (!campoFecha.value) {
@@ -762,79 +674,527 @@
 
             resultado = resultado
                 .replace(/^```(?:html|markdown|md|text)?\s*/i, "")
-                .replace(/\s*```$/, "");
+                .replace(/\s*```$/i, "")
+                .trim();
+
+            if (/&lt;\s*\/?\s*[a-z][^&]*&gt;/i.test(resultado)) {
+                const decoder = document.createElement("textarea");
+                decoder.innerHTML = resultado;
+                resultado = decoder.value.trim();
+            }
+
+            if (
+                /<!doctype\s+html/i.test(resultado) ||
+                /<html(?:\s[^>]*)?>/i.test(resultado)
+            ) {
+                const documento = new DOMParser().parseFromString(
+                    resultado,
+                    "text/html"
+                );
+                if (documento.body) {
+                    resultado = documento.body.innerHTML;
+                }
+            }
+
+            resultado = resultado
+                .replace(/<h1[^>]*>([\s\S]*?)<\/h1>/gi, "\n# $1\n")
+                .replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, "\n## $1\n")
+                .replace(/<h3[^>]*>([\s\S]*?)<\/h3>/gi, "\n### $1\n")
+                .replace(/<(strong|b)[^>]*>([\s\S]*?)<\/\1>/gi, "**$2**")
+                .replace(/<(em|i)[^>]*>([\s\S]*?)<\/\1>/gi, "*$2*")
+                .replace(/<br\s*\/?>/gi, "\n")
+                .replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, "$1\n\n")
+                .replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, "- $1\n")
+                .replace(/<\/?(ul|ol)[^>]*>/gi, "\n")
+                .replace(/<div[^>]*>/gi, "")
+                .replace(/<\/div>/gi, "\n")
+                .replace(/<span[^>]*>/gi, "")
+                .replace(/<\/span>/gi, "");
+
+            resultado = resultado.replace(/<\/?[a-z][^>]*>/gi, "");
+
+            const decoderFinal = document.createElement("textarea");
+            decoderFinal.innerHTML = resultado;
+            resultado = decoderFinal.value;
+
+            resultado = resultado
+                .replace(/\r\n/g, "\n")
+                .replace(/\r/g, "\n")
+                .replace(/[ \t]+\n/g, "\n")
+                .replace(/\n{3,}/g, "\n\n")
+                .trim();
 
             return resultado;
         }
 
-        // Event listener principal para generar el plan
-        document.addEventListener("DOMContentLoaded", () => {
-            colocarFechaActual();
+        function convertirPlan(texto) {
+            const resultado = limpiarRespuestaIA(texto);
+            if (!resultado) {
+                return "<p>No se recibió contenido de la IA.</p>";
+            }
 
-            const formPlan = $("form-plan");
-            if (formPlan) {
-                formPlan.addEventListener("submit", async (e) => {
-                    e.preventDefault();
+            const html = marked.parse(resultado, {
+                gfm: true,
+                breaks: true
+            });
 
-                    const btnGenerar = $("btn-generar");
-                    const contenedorResultados = $("contenedor-resultados");
+            return DOMPurify.sanitize(html, {
+                USE_PROFILES: {
+                    html: true
+                },
+                FORBID_TAGS: [
+                    "script", "iframe", "object", "embed", "form", "input", "button", "textarea", "select", "style"
+                ],
+                FORBID_ATTR: [
+                    "onclick", "onload", "onerror", "onmouseover", "onmouseenter", "onfocus", "onchange", "onsubmit", "style"
+                ],
+                ALLOW_UNKNOWN_PROTOCOLS: false
+            });
+        }
 
-                    const datosPlan = {
-                        nivel: $("nivelEducativo").value,
-                        grado: $("grado").value,
-                        asignatura: $("asignatura").value,
-                        fecha: $("fecha").value,
-                        tiempo: $("tiempo").value,
-                        unidad: $("unidad").value,
-                        contenido: $("tema").value,
-                        indicador: $("indicador").value,
-                        conceptual: $("crit-conceptual").value,
-                        procedimental: $("crit-procedimental").value,
-                        actitudinal: $("crit-actitudinal").value,
-                        adecuacion: $("adecuacion").value
-                    };
+        $("form-auth").addEventListener("submit", function(evento) {
+            evento.preventDefault();
+            const email = $("auth-email").value.trim();
+            const password = $("auth-password").value.trim();
 
-                    btnGenerar.disabled = true;
-                    btnGenerar.textContent = "Generando plan...";
+            if (!email || !password) {
+                alert("Completa tu correo y contraseña.");
+                return;
+            }
 
-                    try {
-                        const respuesta = await fetch("/api/generar-plan", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(datosPlan)
-                        });
+            window.mostrarVista("vista-suscripcion");
+        });
 
-                        const resultadoJson = await respuesta.json();
+        /*
+         * ACTIVAR LICENCIA CONECTADA A LA API DE FIREBASE.
+         */
+        $("btn-activar").addEventListener("click", async function(evento) {
+            evento.preventDefault();
 
-                        if (!respuesta.ok) {
-                            throw new Error(resultadoJson.error || "Error al generar el plan.");
-                        }
+            const codigo = $("input-codigo").value.trim();
+            const nombreDocente = $("input-nombre-docente").value.trim();
+            const mensaje = $("mensaje-error-codigo");
 
-                        const textoLimpio = limpiarRespuestaIA(resultadoJson.plan);
-                        const htmlRenderizado = marked.parse(textoLimpio);
-                        const htmlSeguro = DOMPurify.sanitize(htmlRenderizado);
+            if (!nombreDocente) {
+                mensaje.textContent = "Por favor, ingresa tu nombre completo.";
+                mensaje.classList.remove("hidden");
+                return;
+            }
 
-                        contenedorResultados.innerHTML = `
-                            <div class="plan-document shadow-xl border border-slate-200">
-                                <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-200">
-                                    <span class="text-xs font-bold text-slate-500 uppercase">Plan Generado</span>
-                                    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition">
-                                        🖨️ Imprimir / Guardar PDF
-                                    </button>
-                                </div>
-                                ${htmlSeguro}
-                            </div>
-                        `;
+            if (codigo.length < 3) {
+                mensaje.textContent = "Escribe un código válido.";
+                mensaje.classList.remove("hidden");
+                return;
+            }
 
-                    } catch (error) {
-                        alert("Ocurrió un error: " + error.message);
-                    } finally {
-                        btnGenerar.disabled = false;
-                        btnGenerar.textContent = "✨ Generar Plan Diario";
-                    }
+            mensaje.classList.add("hidden");
+            const btnActivar = $("btn-activar");
+            btnActivar.disabled = true;
+            btnActivar.textContent = "Verificando...";
+
+            try {
+                const response = await fetch("/api/activar-codigo", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        codigo: codigo,
+                        deviceId: obtenerDeviceId(),
+                        nombreDocente: nombreDocente
+                    })
                 });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || "No se pudo activar el código.");
+                }
+
+                licenciaActiva = true;
+                planesDisponibles = 9999;
+
+                $("badge-estado").innerHTML =
+                    `Licencia Activa (${escaparHTML(nombreDocente)}): <span id="contador-planes">${data.diasRestantes}</span> días restantes`;
+
+                window.mostrarVista("vista-generador");
+
+            } catch (error) {
+                mensaje.textContent = error.message;
+                mensaje.classList.remove("hidden");
+            } finally {
+                btnActivar.disabled = false;
+                btnActivar.textContent = "Activar";
             }
         });
+
+        /*
+         * CONTROL DE PRUEBA GRATIS VINCULADO A FIREBASE
+         */
+        $("btn-prueba-gratis").addEventListener("click", async function(evento) {
+            evento.preventDefault();
+            const deviceId = obtenerDeviceId();
+            const docRef = doc(db, "pruebas_gratis", deviceId);
+
+            try {
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const datos = docSnap.data();
+                    planesDisponibles = datos.planesRestantes;
+                } else {
+                    // Si es la primera vez que entra este dispositivo, inicializamos con 8 planes en Firestore
+                    await setDoc(docRef, { planesRestantes: 8, createdAt: new Date() });
+                    planesDisponibles = 8;
+                }
+
+                if (planesDisponibles <= 0) {
+                    alert("Ya has consumido tus 8 planes gratuitos de prueba en este dispositivo. Adquiere una licencia para continuar.");
+                    window.mostrarVista("vista-suscripcion");
+                    return;
+                }
+
+                licenciaActiva = false;
+                $("badge-estado").innerHTML =
+                    `Prueba Gratis: <span id="contador-planes">${planesDisponibles}</span>/8 planes`;
+
+                window.mostrarVista("vista-generador");
+
+            } catch (error) {
+                console.error("Error al verificar prueba gratis:", error);
+                // Fallback local en caso de error de red
+                licenciaActiva = false;
+                planesDisponibles = 8;
+                window.mostrarVista("vista-generador");
+            }
+        });
+
+        /*
+         * GENERAR PLAN.
+         */
+        $("form-plan").addEventListener("submit", async function(evento) {
+            evento.preventDefault();
+
+            if (!licenciaActiva && planesDisponibles <= 0) {
+                alert("Has consumido tus planes disponibles de prueba.");
+                window.mostrarVista("vista-suscripcion");
+                return;
+            }
+
+            const boton = $("btn-generar");
+            const textoOriginal = boton.innerHTML;
+
+            boton.disabled = true;
+            boton.innerHTML = "⏳ Generando plan...";
+
+            const asignatura = $("asignatura").value;
+            const grado = $("grado").value;
+            const fecha = $("fecha").value;
+            const tiempo = $("tiempo").value.trim();
+            const unidad = $("unidad").value.trim();
+            const tema = $("tema").value.trim();
+            const indicador = $("indicador").value.trim();
+            const conceptual = $("crit-conceptual").value.trim();
+            const procedimental = $("crit-procedimental").value.trim();
+            const actitudinal = $("crit-actitudinal").value.trim();
+            const adecuacion = $("adecuacion").value.trim() || "Ninguna";
+
+            const contenido = `
+Actúa como especialista en planificación didáctica de educación primaria.
+
+Genera un plan diario completo, profesional, claro y útil para el docente.
+
+Datos:
+
+Asignatura: ${asignatura}
+Grado: ${grado}
+Fecha: ${fecha}
+Tiempo: ${tiempo}
+Unidad: ${unidad}
+Tema: ${tema}
+Indicador: ${indicador || "Generarlo de acuerdo con el tema"}
+Criterio conceptual: ${conceptual || "Generarlo de acuerdo con el tema"}
+Criterio procedimental: ${procedimental || "Generarlo de acuerdo con el tema"}
+Criterio actitudinal: ${actitudinal || "Generarlo de acuerdo con el tema"}
+Adecuación curricular: ${adecuacion}
+
+Utiliza exactamente esta estructura:
+
+# PLAN DIARIO
+
+**Asignatura:** ${asignatura}  
+**Fecha:** ${fecha}  
+**Tiempo:** ${tiempo}  
+**Grado:** ${grado}  
+**Nombre y número de unidad:** ${unidad}  
+**Contenido:** ${tema}  
+**Indicador de logro:** Escribe un indicador observable y relacionado con el tema.
+
+## I. CRITERIOS DE EVALUACIÓN
+
+| Tipo | Criterio |
+|---|---|
+| Conceptual | Escribe el criterio conceptual |
+| Procedimental | Escribe el criterio procedimental |
+| Actitudinal | Escribe el criterio actitudinal |
+
+## II. ACTIVIDADES DE INICIO
+
+Incluye de 3 a 5 actividades ordenadas:
+- Motivación.
+- Exploración de conocimientos previos.
+- Presentación del tema.
+- Presentación del indicador de logro.
+
+## III. ACTIVIDADES DE DESARROLLO
+
+Describe paso a paso:
+- La mediación docente.
+- La participación de los estudiantes.
+- Ejemplos relacionados con el tema.
+- Preguntas de comprensión.
+- Trabajo individual, en parejas o en equipos cuando sea pertinente.
+
+## IV. ACTIVIDADES DE CULMINACIÓN Y EVALUACIÓN
+
+Incluye:
+- Consolidación.
+- Conclusiones.
+- Estrategia de evaluación.
+- Evidencias de aprendizaje.
+- Instrumento de evaluación sugerido.
+
+## V. TAREA PARA EL HOGAR
+
+Escribe una tarea clara y relacionada con el contenido.
+
+## VI. ADECUACIÓN CURRICULAR
+
+${adecuacion}
+
+## VII. RECURSOS
+
+Escribe una lista breve de materiales.
+
+Reglas obligatorias:
+
+- Devuelve únicamente el plan.
+- Devuelve Markdown limpio.
+- No utilices etiquetas HTML.
+- No escribas <ul>, <li>, <strong>, <table>, <tr>, <td>, <div> ni <br>.
+- No utilices bloques de código.
+- No agregues explicaciones antes o después.
+- Usa títulos con # y ##.
+- Usa viñetas con guiones.
+- Usa la tabla Markdown indicada.
+- Escribe en español claro y profesional.
+- No inventes leyes ni citas oficiales.
+`;
+
+            try {
+                const respuesta = await fetch("/api/generar-plan", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        asignatura,
+                        grado,
+                        fecha,
+                        tiempo,
+                        unidad,
+                        tema,
+                        contenido,
+                        indicador,
+                        conceptual,
+                        procedimental,
+                        actitudinal,
+                        adecuacion
+                    })
+                });
+
+                const data = await respuesta.json();
+
+                if (!respuesta.ok) {
+                    throw new Error(
+                        data.error || "No se pudo conectar con la IA."
+                    );
+                }
+
+                const textoLimpio = limpiarRespuestaIA(data.plan);
+
+                if (!textoLimpio) {
+                    throw new Error("La IA devolvió un plan vacío.");
+                }
+
+                const htmlPlan = convertirPlan(textoLimpio);
+
+                if (!licenciaActiva) {
+                    planesDisponibles--;
+                    // Actualizar el contador directamente en Firestore para este dispositivo
+                    const deviceId = obtenerDeviceId();
+                    const docRef = doc(db, "pruebas_gratis", deviceId);
+                    await updateDoc(docRef, { planesRestantes: planesDisponibles });
+
+                    const contador = $("contador-planes");
+                    if (contador) {
+                        contador.textContent = planesDisponibles;
+                    }
+                }
+
+                const contenedor = $("contenedor-resultados");
+                const tarjeta = document.createElement("div");
+
+                tarjeta.className =
+                    "bg-slate-800 border border-blue-500/50 p-4 sm:p-6 rounded-2xl shadow-2xl space-y-4";
+
+                tarjeta.innerHTML = `
+                    <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-700 pb-4 gap-3">
+
+                        <span class="text-xs font-black text-blue-400 uppercase tracking-wider text-center">
+                            🇳🇮 Plan generado:
+                            ${escaparHTML(asignatura)}
+                            -
+                            ${escaparHTML(grado)}
+                        </span>
+
+                        <div class="flex flex-wrap justify-center gap-2">
+
+                            <button type="button"
+                                    onclick="copiarTexto(this)"
+                                    class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs px-3 py-1.5 rounded-lg font-medium transition">
+                                Copiar
+                            </button>
+
+                            <button type="button"
+                                    onclick="descargarWord(this)"
+                                    class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">
+                                Word (.doc)
+                            </button>
+
+                            <button type="button"
+                                    onclick="descargarPDF()"
+                                    class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">
+                                Imprimir
+                            </button>
+
+                            <button type="button"
+                                    onclick="nuevoPlan()"
+                                    class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">
+                                Nuevo
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="cuerpo-plan-resultado"
+                         class="plan-document">
+                        ${htmlPlan}
+                    </div>
+                `;
+
+                contenedor.innerHTML = "";
+                contenedor.appendChild(tarjeta);
+
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: "smooth"
+                });
+
+            } catch (error) {
+                console.error(error);
+                alert("Error al generar el plan: " + error.message);
+            } finally {
+                boton.disabled = false;
+                boton.innerHTML = textoOriginal;
+            }
+        });
+
+        window.copiarTexto = function(boton) {
+            const resultado = $("cuerpo-plan-resultado");
+            if (!resultado) {
+                alert("No hay ningún plan para copiar.");
+                return;
+            }
+
+            navigator.clipboard.writeText(resultado.innerText)
+                .then(function() {
+                    boton.textContent = "¡Copiado!";
+                    setTimeout(function() {
+                        boton.textContent = "Copiar";
+                    }, 2000);
+                })
+                .catch(function() {
+                    alert("No se pudo copiar automáticamente.");
+                });
+        };
+
+        window.descargarWord = function(boton) {
+            const resultado = $("cuerpo-plan-resultado");
+            if (!resultado) {
+                alert("No hay ningún plan para descargar.");
+                return;
+            }
+
+            const documento = `
+                <html>
+                <head>
+                    <meta charset="utf-8">
+                    <style>
+                        body { font-family: Arial, sans-serif; color: #1e293b; font-size: 11pt; line-height: 1.5; }
+                        h1 { color: #075985; text-align: center; }
+                        h2 { color: #075985; background: #e0f2fe; padding: 8px; border-left: 5px solid #0284c7; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th { background: #075985; color: white; padding: 8px; border: 1px solid #999; }
+                        td { padding: 8px; border: 1px solid #999; }
+                    </style>
+                </head>
+                <body>
+                    ${resultado.innerHTML}
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob(["" + documento], { type: "application/msword" });
+            const url = URL.createObjectURL(blob);
+            const enlace = document.createElement("a");
+
+            enlace.href = url;
+            enlace.download = "Plan_Diario_Profe_Nica_505.doc";
+
+            document.body.appendChild(enlace);
+            enlace.click();
+            document.body.removeChild(enlace);
+
+            URL.revokeObjectURL(url);
+
+            boton.textContent = "¡Descargado!";
+            setTimeout(function() {
+                boton.textContent = "Word (.doc)";
+            }, 2000);
+        };
+
+        window.descargarPDF = function() {
+            window.print();
+        };
+
+        window.nuevoPlan = function() {
+            $("unidad").value = "";
+            $("tema").value = "";
+            $("indicador").value = "";
+            $("crit-conceptual").value = "";
+            $("crit-procedimental").value = "";
+            $("crit-actitudinal").value = "";
+            $("adecuacion").value = "Ninguna";
+            $("contenedor-resultados").innerHTML = "";
+
+            colocarFechaActual();
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        };
+
+        colocarFechaActual();
+
     </script>
 </body>
 </html>
