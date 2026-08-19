@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>El Profe Nica 505 - Generador Inteligente de Planes de Clase</title>
 
     <!-- Tailwind -->
@@ -113,15 +112,12 @@
                 padding: 18px;
                 font-size: 13px;
             }
-
             .plan-document h1 {
                 font-size: 20px;
             }
-
             .plan-document h2 {
                 font-size: 15px;
             }
-
             .plan-document table {
                 display: block;
                 overflow-x: auto;
@@ -132,18 +128,15 @@
             body {
                 background: white !important;
             }
-
             body > * {
                 display: none !important;
             }
-
             #vista-generador,
             #vista-generador main,
             #contenedor-resultados,
             #contenedor-resultados > div {
                 display: block !important;
             }
-
             #vista-generador header,
             #vista-generador footer,
             #form-plan,
@@ -151,7 +144,6 @@
             #contenedor-resultados > div > div:first-child {
                 display: none !important;
             }
-
             .plan-document {
                 border: none !important;
                 box-shadow: none !important;
@@ -164,93 +156,54 @@
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen">
 
     <!-- ================= VISTA LANDING ================= -->
-
-    <div id="vista-landing"
-         class="min-h-screen flex flex-col justify-between p-4 sm:p-6 bg-gradient-to-br from-blue-950 via-slate-900 to-slate-950">
-
+    <div id="vista-landing" class="min-h-screen flex flex-col justify-between p-4 sm:p-6 bg-gradient-to-br from-blue-950 via-slate-900 to-slate-950">
         <header class="max-w-5xl mx-auto w-full flex justify-between items-center py-4">
-
             <h1 class="text-lg sm:text-xl font-black tracking-wider text-blue-400 flex items-center gap-2">
                 <span>🇳🇮</span> EL PROFE NICA 505
             </h1>
-
-            <button type="button"
-                    onclick="mostrarVista('vista-auth')"
-                    class="text-xs sm:text-sm bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl font-semibold transition shadow-lg shadow-blue-600/20">
+            <button type="button" onclick="mostrarVista('vista-auth')" class="text-xs sm:text-sm bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl font-semibold transition shadow-lg shadow-blue-600/20">
                 Iniciar Sesión
             </button>
         </header>
 
         <main class="max-w-5xl mx-auto w-full my-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-
             <div class="lg:col-span-7 text-center lg:text-left space-y-6">
-
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-bold uppercase tracking-wider">
                     <span>⚡</span> Herramienta para docentes
                 </div>
-
                 <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
                     Menos estrés con los papeles,
                     <span class="text-blue-400">más tiempo para ti y tu familia.</span>
                 </h2>
-
                 <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl mx-auto lg:mx-0">
                     Genera planes diarios organizados, claros y profesionales para apoyar tu trabajo docente.
                 </p>
-
                 <div class="pt-2 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-
-                    <button type="button"
-                            onclick="mostrarVista('vista-auth')"
-                            class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-base px-8 py-4 rounded-xl shadow-xl shadow-blue-600/30 transition flex items-center justify-center gap-2">
+                    <button type="button" onclick="mostrarVista('vista-auth')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-base px-8 py-4 rounded-xl shadow-xl shadow-blue-600/30 transition flex items-center justify-center gap-2">
                         <span>🚀</span> Probar Gratis
                     </button>
-
-                    <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica,%20deseo%20saber%20más%20información."
-                       target="_blank"
-                       class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-base px-6 py-4 rounded-xl border border-slate-700 transition flex items-center justify-center gap-2">
+                    <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica,%20deseo%20saber%20más%20información." target="_blank" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-base px-6 py-4 rounded-xl border border-slate-700 transition flex items-center justify-center gap-2">
                         <span>💬</span> Contactar por WhatsApp
                     </a>
-
                 </div>
             </div>
 
             <div class="lg:col-span-5 space-y-4">
-
                 <div class="bg-slate-800/80 border border-rose-500/30 p-5 rounded-2xl shadow-lg">
-
                     <div class="flex items-center gap-3 mb-2">
-                        <span class="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center text-rose-400">
-                            ❌
-                        </span>
-
-                        <h3 class="text-sm font-bold text-rose-300 uppercase tracking-wide">
-                            Sin la herramienta
-                        </h3>
+                        <span class="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center text-rose-400">❌</span>
+                        <h3 class="text-sm font-bold text-rose-300 uppercase tracking-wide">Sin la herramienta</h3>
                     </div>
-
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        Horas redactando actividades, criterios y adecuaciones curriculares.
-                    </p>
+                    <p class="text-xs text-slate-400 leading-relaxed">Horas redactando actividades, criterios y adecuaciones curriculares.</p>
                 </div>
 
                 <div class="bg-gradient-to-r from-blue-900/40 to-slate-800/80 border border-blue-500/40 p-5 rounded-2xl shadow-xl">
-
                     <div class="flex items-center gap-3 mb-2">
-                        <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">
-                            ✨
-                        </span>
-
-                        <h3 class="text-sm font-bold text-blue-300 uppercase tracking-wide">
-                            Con El Profe Nica 505
-                        </h3>
+                        <span class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400">✨</span>
+                        <h3 class="text-sm font-bold text-blue-300 uppercase tracking-wide">Con El Profe Nica 505</h3>
                     </div>
-
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Planes ordenados, claros y listos para revisar, copiar o imprimir.
-                    </p>
+                    <p class="text-xs text-slate-300 leading-relaxed">Planes ordenados, claros y listos para revisar, copiar o imprimir.</p>
                 </div>
-
             </div>
         </main>
 
@@ -259,66 +212,37 @@
         </footer>
     </div>
 
-    <!-- ================= VISTA LOGIN / REGISTRO (CON FIREBASE AUTH) ================= -->
-
+    <!-- ================= VISTA LOGIN / REGISTRO ================= -->
     <div id="vista-auth" class="min-h-screen flex items-center justify-center p-4 hidden">
-
         <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-xl max-w-md w-full">
-
             <div class="text-center mb-6">
-                <h3 id="auth-titulo" class="text-2xl font-bold text-white">
-                    Acceso de Docentes
-                </h3>
-
-                <p id="auth-subtitulo" class="text-xs text-slate-400 mt-1">
-                    Ingresa con tu correo y contraseña
-                </p>
+                <h3 id="auth-titulo" class="text-2xl font-bold text-white">Acceso de Docentes</h3>
+                <p id="auth-subtitulo" class="text-xs text-slate-400 mt-1">Ingresa con tu correo y contraseña</p>
             </div>
 
             <form id="form-auth" class="space-y-4">
-
                 <div>
-                    <label class="block text-xs font-bold text-slate-300 uppercase mb-1">
-                        Correo electrónico:
-                    </label>
-
-                    <input type="email"
-                           id="auth-email"
-                           placeholder="profe@correo.com"
-                           class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                           required>
+                    <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Correo electrónico:</label>
+                    <input type="email" id="auth-email" placeholder="profe@correo.com" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-300 uppercase mb-1">
-                        Contraseña:
-                    </label>
-
-                    <input type="password"
-                           id="auth-password"
-                           placeholder="••••••••"
-                           class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                           required>
+                    <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Contraseña:</label>
+                    <input type="password" id="auth-password" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
                 </div>
 
-                <button type="submit"
-                        id="btn-auth-submit"
-                        class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3 rounded-lg text-sm transition">
+                <p id="auth-mensaje" class="text-xs text-center font-semibold text-rose-400 hidden"></p>
+
+                <button type="submit" id="btn-auth-submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3 rounded-lg text-sm transition">
                     Ingresar
                 </button>
             </form>
 
             <div class="text-center mt-4 space-y-2">
-                <button type="button"
-                        onclick="cambiarModoAuth()"
-                        id="btn-cambiar-modo"
-                        class="text-xs text-blue-400 hover:underline block w-full">
+                <button type="button" onclick="cambiarModoAuth()" id="btn-cambiar-modo" class="text-xs text-blue-400 hover:underline block w-full">
                     ¿No tienes cuenta? Regístrate aquí
                 </button>
-
-                <button type="button"
-                        onclick="mostrarVista('vista-landing')"
-                        class="text-xs text-slate-400 hover:text-white transition block w-full">
+                <button type="button" onclick="mostrarVista('vista-landing')" class="text-xs text-slate-400 hover:text-white transition block w-full">
                     &larr; Volver al inicio
                 </button>
             </div>
@@ -326,128 +250,69 @@
     </div>
 
     <!-- ================= VISTA SUSCRIPCIÓN ================= -->
-
     <div id="vista-suscripcion" class="min-h-screen flex items-center justify-center p-4 hidden">
-
         <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-xl max-w-lg w-full">
-
             <div class="text-center mb-6">
-                <h3 class="text-2xl font-bold text-white">
-                    🔑 Activación de Licencia
-                </h3>
-
-                <p class="text-xs text-slate-400 mt-1">
-                    Ingresa tu nombre y código de activación
-                </p>
+                <h3 class="text-2xl font-bold text-white">🔑 Activación de Licencia</h3>
+                <p class="text-xs text-slate-400 mt-1">Ingresa tu nombre y código de activación</p>
             </div>
 
             <div class="mb-6 bg-slate-900/60 p-4 rounded-xl border border-slate-700/50 space-y-3">
-
                 <div>
-                    <label class="block text-xs font-bold text-blue-400 uppercase mb-1">
-                        Nombre completo del docente: *
-                    </label>
-                    <input type="text"
-                           id="input-nombre-docente"
-                           placeholder="Ej. Juan Carlos Pérez"
-                           class="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <label class="block text-xs font-bold text-blue-400 uppercase mb-1">Nombre completo del docente: *</label>
+                    <input type="text" id="input-nombre-docente" placeholder="Ej. Juan Carlos Pérez" class="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-blue-400 uppercase mb-1">
-                        Código de activación: *
-                    </label>
+                    <label class="block text-xs font-bold text-blue-400 uppercase mb-1">Código de activación: *</label>
                     <div class="flex gap-2">
-                        <input type="text"
-                               id="input-codigo"
-                               placeholder="PNI-505-AB12"
-                               class="bg-slate-900 border border-slate-700 px-3 py-2 rounded-lg text-sm flex-grow text-white uppercase focus:outline-none focus:ring-2 focus:ring-blue-500">
-
-                        <button id="btn-activar"
-                                type="button"
-                                class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-lg text-sm transition">
+                        <input type="text" id="input-codigo" placeholder="PNI-505-AB12" class="bg-slate-900 border border-slate-700 px-3 py-2 rounded-lg text-sm flex-grow text-white uppercase focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button id="btn-activar" type="button" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-lg text-sm transition">
                             Activar
                         </button>
                     </div>
                 </div>
-
-                <p id="mensaje-error-codigo"
-                   class="text-xs text-red-400 mt-2 hidden">
-                    Escribe un código y tu nombre.
-                </p>
+                <p id="mensaje-error-codigo" class="text-xs text-red-400 mt-2 hidden">Escribe un código y tu nombre.</p>
             </div>
 
             <div class="relative flex py-2 items-center mb-4">
                 <div class="flex-grow border-t border-slate-700"></div>
-
-                <span class="flex-shrink mx-4 text-slate-500 text-xs uppercase font-bold">
-                    O adquiérelo por WhatsApp
-                </span>
-
+                <span class="flex-shrink mx-4 text-slate-500 text-xs uppercase font-bold">O adquiérelo por WhatsApp</span>
                 <div class="flex-grow border-t border-slate-700"></div>
             </div>
 
-            <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica,%20deseo%20adquirir%20la%20Suscripción%20Mensual."
-               target="_blank"
-               class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-medium p-3 rounded-xl text-sm transition flex justify-between items-center px-4 shadow-md">
+            <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica,%20deseo%20adquirir%20la%20Suscripción%20Mensual." target="_blank" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-medium p-3 rounded-xl text-sm transition flex justify-between items-center px-4 shadow-md">
                 <span>💬 Solicitar Plan Mensual</span>
-                <span class="text-xs bg-emerald-800 px-2 py-1 rounded font-bold">
-                    WhatsApp
-                </span>
+                <span class="text-xs bg-emerald-800 px-2 py-1 rounded font-bold">WhatsApp</span>
             </a>
 
-            <button id="btn-prueba-gratis"
-                    type="button"
-                    class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2.5 rounded-xl text-xs transition border border-slate-600">
+            <button id="btn-prueba-gratis" type="button" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2.5 rounded-xl text-xs transition border border-slate-600">
                 🚀 Usar Prueba Gratis - 8 planes
             </button>
         </div>
     </div>
 
     <!-- ================= VISTA GENERADOR ================= -->
-
     <div id="vista-generador" class="min-h-screen flex flex-col justify-between hidden">
-
         <header class="bg-slate-800 border-b border-slate-700 py-3 px-6 shadow-md sticky top-0 z-50">
-
             <div class="max-w-4xl mx-auto flex justify-between items-center gap-3">
-
-                <h1 class="text-sm font-bold tracking-wide text-blue-400">
-                    🇳🇮 El Profe Nica 505
-                </h1>
-
-                <span id="badge-estado"
-                      class="text-xs bg-blue-950 text-blue-300 border border-blue-800 px-3 py-1 rounded-full font-medium">
-                    Prueba Gratis:
-                    <span id="contador-planes">8</span>/8 planes
+                <h1 class="text-sm font-bold tracking-wide text-blue-400">🇳🇮 El Profe Nica 505</h1>
+                <span id="badge-estado" class="text-xs bg-blue-950 text-blue-300 border border-blue-800 px-3 py-1 rounded-full font-medium">
+                    Prueba Gratis: <span id="contador-planes">8</span>/8 planes
                 </span>
             </div>
         </header>
 
         <main class="max-w-4xl mx-auto p-4 sm:p-6 w-full flex-grow space-y-6">
-
             <section class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-lg">
-
-                <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
-                    <span>📝</span> Plan Diario
-                </h2>
-
-                <p class="text-xs text-slate-400 mb-6">
-                    Completa los datos y genera un plan bien estructurado.
-                </p>
+                <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2"><span>📝</span> Plan Diario</h2>
+                <p class="text-xs text-slate-400 mb-6">Completa los datos y genera un plan bien estructurado.</p>
 
                 <form id="form-plan" class="space-y-4">
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
                         <div>
-                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">
-                                Grado: *
-                            </label>
-
-                            <select id="grado"
-                                    required
-                                    class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Grado: *</label>
+                            <select id="grado" required class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 <option value="">Selecciona el grado...</option>
                                 <option value="1er Grado">1er Grado</option>
                                 <option value="2do Grado">2do Grado</option>
@@ -457,15 +322,9 @@
                                 <option value="6to Grado">6to Grado</option>
                             </select>
                         </div>
-
                         <div>
-                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">
-                                Asignatura: *
-                            </label>
-
-                            <select id="asignatura"
-                                    required
-                                    class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Asignatura: *</label>
+                            <select id="asignatura" required class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
                                 <option value="">Selecciona asignatura...</option>
                                 <option value="Lengua y Literatura">Lengua y Literatura</option>
                                 <option value="Matemáticas">Matemáticas</option>
@@ -479,23 +338,144 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
                         <div>
-                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">
-                                Fecha: *
-                            </label>
-
-                            <input type="date"
-                                   id="fecha"
-                                   required
-                                   class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Fecha: *</label>
+                            <input type="date" id="fecha" required class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         </div>
-
                         <div>
-                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">
-                                Tiempo: *
-                            </label>
+                            <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Tiempo: *</label>
+                            <input type="text" id="tiempo" placeholder="Ejemplo: 90 minutos" required class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                    </div>
 
-                            <input type="text"
-                                   id="tiempo"
-                                   placeholder="Ejemplo: 90 minutos"
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Nombre y número de Unidad: *</label>
+                        <input type="text" id="unidad" placeholder="Ej. Unidad 1: Conozcamos nuestro cuerpo" required class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Indicador de logro: *</label>
+                        <textarea id="indicador" rows="2" placeholder="Escribe el indicador de logro..." required class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 uppercase mb-1">Criterios de evaluación (Conceptual, Procedimental, Actitudinal): *</label>
+                        <textarea id="criterios" rows="3" placeholder="*Conceptual: ...&#10;*Procedimental: ...&#10;*Actitudinal: ..." required class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+                    </div>
+
+                    <button type="submit" id="btn-generar" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-xl text-sm transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
+                        <span>✨</span> Generar Plan de Clase Inteligente
+                    </button>
+                </form>
+            </section>
+
+            <div id="contenedor-resultados" class="hidden space-y-6">
+                <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-base font-bold text-white flex items-center gap-2"><span>📋</span> Plan Generado</h3>
+                        <div class="flex gap-2">
+                            <button id="btn-copiar" type="button" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold px-3 py-2 rounded-lg transition">Copiar</button>
+                            <button id="btn-imprimir" type="button" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition">Imprimir</button>
+                        </div>
+                    </div>
+                    <div id="resultado-plan" class="plan-document"></div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="text-center text-xs text-slate-500 py-4 border-t border-slate-800">
+            El Profe Nica 505 &copy; Plataforma para el Docente de Nicaragua.
+        </footer>
+    </div>
+
+    <!-- ================= JAVASCRIPT & FIREBASE ================= -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCw6yFNbF8hahrjFS1RzflzkOwmVr0JUY",
+            authDomain: "el-profe-nica-505.firebaseapp.com",
+            databaseURL: "https://el-profe-nica-505-default-rtdb.firebaseio.com",
+            projectId: "el-profe-nica-505",
+            storageBucket: "el-profe-nica-505.firebasestorage.app",
+            messagingSenderId: "83424420925",
+            appId: "1:83424420925:web:90e1eced789cc5ea0dd254"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let esRegistro = false;
+
+        window.mostrarVista = function(idVista) {
+            document.querySelectorAll("div[id^='vista-']").forEach(v => v.classList.add("hidden"));
+            const vista = document.getElementById(idVista);
+            if (vista) vista.classList.remove("hidden");
+        }
+
+        window.cambiarModoAuth = function() {
+            esRegistro = !esRegistro;
+            const titulo = document.getElementById("auth-titulo");
+            const subtitulo = document.getElementById("auth-subtitulo");
+            const btnSubmit = document.getElementById("btn-auth-submit");
+            const btnCambiar = document.getElementById("btn-cambiar-modo");
+
+            if (esRegistro) {
+                titulo.textContent = "Registro de Docentes";
+                subtitulo.textContent = "Crea tu cuenta gratuita";
+                btnSubmit.textContent = "Registrarse";
+                btnCambiar.textContent = "¿Ya tienes cuenta? Inicia sesión aquí";
+            } else {
+                titulo.textContent = "Acceso de Docentes";
+                subtitulo.textContent = "Ingresa con tu correo y contraseña";
+                btnSubmit.textContent = "Ingresar";
+                btnCambiar.textContent = "¿No tienes cuenta? Regístrate aquí";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const formAuth = document.getElementById("form-auth");
+            const mensajeAuth = document.getElementById("auth-mensaje");
+
+            if (formAuth) {
+                formAuth.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById("auth-email").value.trim();
+                    const password = document.getElementById("auth-password").value;
+
+                    if (mensajeAuth) {
+                        mensajeAuth.classList.add("hidden");
+                        mensajeAuth.textContent = "";
+                    }
+
+                    try {
+                        if (esRegistro) {
+                            await createUserWithEmailAndPassword(auth, email, password);
+                            mostrarVista("vista-suscripcion");
+                        } else {
+                            await signInWithEmailAndPassword(auth, email, password);
+                            mostrarVista("vista-generador");
+                        }
+                    } catch (error) {
+                        if (mensajeAuth) {
+                            mensajeAuth.classList.remove("hidden");
+                            let textoError = error.message;
+                            if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                                textoError = "Correo o contraseña incorrectos.";
+                            } else if (error.code === 'auth/email-already-in-use') {
+                                textoError = "Este correo ya está registrado.";
+                            } else if (error.code === 'auth/weak-password') {
+                                textoError = "La contraseña debe tener al menos 6 caracteres.";
+                            }
+                            mensajeAuth.textContent = textoError;
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
