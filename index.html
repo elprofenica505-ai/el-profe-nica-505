@@ -259,7 +259,7 @@
         </footer>
     </div>
 
-    <!-- ================= VISTA LOGIN / REGISTRO (CON FIREBASE AUTH) ================= -->
+    <!-- ================= VISTA LOGIN / REGISTRO ================= -->
 
     <div id="vista-auth" class="min-h-screen flex items-center justify-center p-4 hidden">
 
@@ -438,6 +438,21 @@
 
                 <form id="form-plan" class="space-y-4">
 
+                    <!-- SELECCIÓN DE NIVEL EDUCATIVO -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 uppercase mb-1">
+                            Nivel Educativo: *
+                        </label>
+                        <select id="nivelEducativo"
+                                required
+                                class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                onchange="actualizarGradosYAsignaturas()">
+                            <option value="">Selecciona el nivel...</option>
+                            <option value="primaria">Primaria</option>
+                            <option value="secundaria">Secundaria</option>
+                        </select>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                         <div>
@@ -448,13 +463,7 @@
                             <select id="grado"
                                     required
                                     class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                                <option value="">Selecciona el grado...</option>
-                                <option value="1er Grado">1er Grado</option>
-                                <option value="2do Grado">2do Grado</option>
-                                <option value="3er Grado">3er Grado</option>
-                                <option value="4to Grado">4to Grado</option>
-                                <option value="5to Grado">5to Grado</option>
-                                <option value="6to Grado">6to Grado</option>
+                                <option value="">Selecciona primero el nivel...</option>
                             </select>
                         </div>
 
@@ -466,14 +475,7 @@
                             <select id="asignatura"
                                     required
                                     class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                                <option value="">Selecciona asignatura...</option>
-                                <option value="Lengua y Literatura">Lengua y Literatura</option>
-                                <option value="Matemáticas">Matemáticas</option>
-                                <option value="Ciencias Naturales">Ciencias Naturales</option>
-                                <option value="Estudios Sociales">Estudios Sociales</option>
-                                <option value="Aprender, Emprender, Prosperar (AEP)">AEP</option>
-                                <option value="Creciendo en Valores">Creciendo en Valores</option>
-                                <option value="Educación Física">Educación Física</option>
+                                <option value="">Selecciona primero el nivel...</option>
                             </select>
                         </div>
                     </div>
@@ -600,7 +602,6 @@
         import {
             getFirestore, doc, getDoc, setDoc, updateDoc, increment
         } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-        // NUEVO: Importar autenticación de Firebase
         import {
             getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword
         } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
@@ -617,13 +618,66 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app); // NUEVO: Inicializar sistema de cuentas
+        const auth = getAuth(app);
 
         let planesDisponibles = 8;
         let licenciaActiva = false;
-        let esRegistro = false; // NUEVO: Estado para alternar entre iniciar sesión y registrarse
+        let esRegistro = false;
 
-        // Obtener o crear un identificador de dispositivo único guardado en el navegador
+        // Datos para los menús desplegables dependientes de Primaria y Secundaria
+        const datosNivel = {
+            primaria: {
+                grados: ["Primer Grado", "Segundo Grado", "Tercer Grado", "Cuarto Grado", "Quinto Grado", "Sexto Grado"],
+                asignaturas: [
+                    "Lengua y Literatura",
+                    "Matemáticas",
+                    "Ciencias Sociales",
+                    "Ciencias Naturales",
+                    "Educación Física",
+                    "Derecho y Dignidad de la Mujer",
+                    "Aprender Emprender y Prosperar",
+                    "Taller de Arte y Cultura",
+                    "Creciendo en Valores"
+                ]
+            },
+            secundaria: {
+                grados: ["Séptimo Grado", "Octavo Grado", "Noveno Grado", "Décimo Grado", "Undécimo Grado"],
+                asignaturas: [
+                    "Lengua y Literatura",
+                    "Matemática",
+                    "Ciencias Sociales",
+                    "Historia",
+                    "Geografía",
+                    "Ciencias Naturales",
+                    "Física",
+                    "Química",
+                    "Biología",
+                    "Creciendo en Valores",
+                    "Derechos y Dignidad de la Mujer",
+                    "Educación Física y Práctica Deportiva",
+                    "Talleres de Arte y Cultura"
+                ]
+            }
+        };
+
+        window.actualizarGradosYAsignaturas = function() {
+            const nivel = $("nivelEducativo").value;
+            const selectGrado = $("grado");
+            const selectAsignatura = $("asignatura");
+
+            selectGrado.innerHTML = '<option value="">Selecciona el grado...</option>';
+            selectAsignatura.innerHTML = '<option value="">Selecciona asignatura...</option>';
+
+            if (nivel && datosNivel[nivel]) {
+                datosNivel[nivel].grados.forEach(g => {
+                    selectGrado.innerHTML += `<option value="${g}">${g}</option>`;
+                });
+                datosNivel[nivel].asignaturas.forEach(a => {
+                    selectAsignatura.innerHTML += `<option value="${a}">${a}</option>`;
+                });
+            }
+        };
+
         function obtenerDeviceId() {
             let deviceId = localStorage.getItem("profe_nica_device_id");
             if (!deviceId) {
@@ -669,7 +723,6 @@
             window.scrollTo(0, 0);
         };
 
-        // NUEVO: Función para alternar entre Iniciar Sesión y Crear Cuenta
         window.cambiarModoAuth = function() {
             esRegistro = !esRegistro;
             const titulo = $("auth-titulo");
@@ -709,4 +762,79 @@
 
             resultado = resultado
                 .replace(/^```(?:html|markdown|md|text)?\s*/i, "")
-                .replace(/\s*
+                .replace(/\s*```$/, "");
+
+            return resultado;
+        }
+
+        // Event listener principal para generar el plan
+        document.addEventListener("DOMContentLoaded", () => {
+            colocarFechaActual();
+
+            const formPlan = $("form-plan");
+            if (formPlan) {
+                formPlan.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    const btnGenerar = $("btn-generar");
+                    const contenedorResultados = $("contenedor-resultados");
+
+                    const datosPlan = {
+                        nivel: $("nivelEducativo").value,
+                        grado: $("grado").value,
+                        asignatura: $("asignatura").value,
+                        fecha: $("fecha").value,
+                        tiempo: $("tiempo").value,
+                        unidad: $("unidad").value,
+                        contenido: $("tema").value,
+                        indicador: $("indicador").value,
+                        conceptual: $("crit-conceptual").value,
+                        procedimental: $("crit-procedimental").value,
+                        actitudinal: $("crit-actitudinal").value,
+                        adecuacion: $("adecuacion").value
+                    };
+
+                    btnGenerar.disabled = true;
+                    btnGenerar.textContent = "Generando plan...";
+
+                    try {
+                        const respuesta = await fetch("/api/generar-plan", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(datosPlan)
+                        });
+
+                        const resultadoJson = await respuesta.json();
+
+                        if (!respuesta.ok) {
+                            throw new Error(resultadoJson.error || "Error al generar el plan.");
+                        }
+
+                        const textoLimpio = limpiarRespuestaIA(resultadoJson.plan);
+                        const htmlRenderizado = marked.parse(textoLimpio);
+                        const htmlSeguro = DOMPurify.sanitize(htmlRenderizado);
+
+                        contenedorResultados.innerHTML = `
+                            <div class="plan-document shadow-xl border border-slate-200">
+                                <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-200">
+                                    <span class="text-xs font-bold text-slate-500 uppercase">Plan Generado</span>
+                                    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition">
+                                        🖨️ Imprimir / Guardar PDF
+                                    </button>
+                                </div>
+                                ${htmlSeguro}
+                            </div>
+                        `;
+
+                    } catch (error) {
+                        alert("Ocurrió un error: " + error.message);
+                    } finally {
+                        btnGenerar.disabled = false;
+                        btnGenerar.textContent = "✨ Generar Plan Diario";
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
