@@ -329,33 +329,43 @@
                 </h3>
 
                 <p class="text-xs text-slate-400 mt-1">
-                    Ingresa tu código o prueba la herramienta gratis
+                    Ingresa tu nombre y código de activación
                 </p>
             </div>
 
-            <div class="mb-6 bg-slate-900/60 p-4 rounded-xl border border-slate-700/50">
+            <div class="mb-6 bg-slate-900/60 p-4 rounded-xl border border-slate-700/50 space-y-3">
 
-                <label class="block text-xs font-bold text-blue-400 uppercase mb-2">
-                    ¿Tienes un código de activación?
-                </label>
-
-                <div class="flex gap-2">
-
+                <div>
+                    <label class="block text-xs font-bold text-blue-400 uppercase mb-1">
+                        Nombre completo del docente: *
+                    </label>
                     <input type="text"
-                           id="input-codigo"
-                           placeholder="PNI-505-AB12"
-                           class="bg-slate-900 border border-slate-700 px-3 py-2 rounded-lg text-sm flex-grow text-white uppercase focus:outline-none focus:ring-2 focus:ring-blue-500">
+                           id="input-nombre-docente"
+                           placeholder="Ej. Juan Carlos Pérez"
+                           class="w-full bg-slate-900 border border-slate-700 px-3 py-2 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
 
-                    <button id="btn-activar"
-                            type="button"
-                            class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-lg text-sm transition">
-                        Activar
-                    </button>
+                <div>
+                    <label class="block text-xs font-bold text-blue-400 uppercase mb-1">
+                        Código de activación: *
+                    </label>
+                    <div class="flex gap-2">
+                        <input type="text"
+                               id="input-codigo"
+                               placeholder="PNI-505-AB12"
+                               class="bg-slate-900 border border-slate-700 px-3 py-2 rounded-lg text-sm flex-grow text-white uppercase focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                        <button id="btn-activar"
+                                type="button"
+                                class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 py-2 rounded-lg text-sm transition">
+                            Activar
+                        </button>
+                    </div>
                 </div>
 
                 <p id="mensaje-error-codigo"
                    class="text-xs text-red-400 mt-2 hidden">
-                    Escribe un código.
+                    Escribe un código y tu nombre.
                 </p>
             </div>
 
@@ -593,6 +603,17 @@
         initializeApp(firebaseConfig);
 
         let planesDisponibles = 8;
+        let licenciaActiva = false;
+
+        // Obtener o crear un identificador de dispositivo único guardado en el navegador
+        function obtenerDeviceId() {
+            let deviceId = localStorage.getItem("profe_nica_device_id");
+            if (!deviceId) {
+                deviceId = "dev_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
+                localStorage.setItem("profe_nica_device_id", deviceId);
+            }
+            return deviceId;
+        }
 
         const $ = (id) => document.getElementById(id);
 
@@ -605,11 +626,7 @@
                 .replace(/'/g, "&#039;");
         }
 
-        /*
-         * ESTA FUNCIÓN ES GLOBAL PORQUE EL HTML LA USA EN onclick.
-         */
         window.mostrarVista = function(idVista) {
-
             const vistas = [
                 "vista-landing",
                 "vista-auth",
@@ -619,14 +636,12 @@
 
             vistas.forEach((id) => {
                 const vista = $(id);
-
                 if (vista) {
                     vista.classList.add("hidden");
                 }
             });
 
             const vistaElegida = $(idVista);
-
             if (!vistaElegida) {
                 console.error("Vista no encontrada:", idVista);
                 return;
@@ -638,10 +653,8 @@
 
         function colocarFechaActual() {
             const campoFecha = $("fecha");
-
             if (!campoFecha.value) {
                 const hoy = new Date();
-
                 const fechaLocal = new Date(
                     hoy.getTime() - hoy.getTimezoneOffset() * 60000
                 )
@@ -653,25 +666,19 @@
         }
 
         function limpiarRespuestaIA(texto) {
-
             let resultado = String(texto || "").trim();
 
-            // Eliminar bloques de código Markdown que la IA pueda agregar
             resultado = resultado
                 .replace(/^```(?:html|markdown|md|text)?\s*/i, "")
                 .replace(/\s*```$/i, "")
                 .trim();
 
-            // Convertir HTML escapado a texto real
-            // Ejemplo: &lt;div&gt;Hola&lt;/div&gt;
             if (/&lt;\s*\/?\s*[a-z][^&]*&gt;/i.test(resultado)) {
                 const decoder = document.createElement("textarea");
                 decoder.innerHTML = resultado;
                 resultado = decoder.value.trim();
             }
 
-            // Si la IA devuelve un documento HTML completo,
-            // extraemos únicamente el contenido visible del body.
             if (
                 /<!doctype\s+html/i.test(resultado) ||
                 /<html(?:\s[^>]*)?>/i.test(resultado)
@@ -680,64 +687,32 @@
                     resultado,
                     "text/html"
                 );
-
                 if (documento.body) {
                     resultado = documento.body.innerHTML;
                 }
             }
 
-            // Convertir etiquetas HTML comunes a Markdown limpio.
             resultado = resultado
-
-                // Títulos
                 .replace(/<h1[^>]*>([\s\S]*?)<\/h1>/gi, "\n# $1\n")
                 .replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, "\n## $1\n")
                 .replace(/<h3[^>]*>([\s\S]*?)<\/h3>/gi, "\n### $1\n")
-
-                // Negritas
                 .replace(/<(strong|b)[^>]*>([\s\S]*?)<\/\1>/gi, "**$2**")
-
-                // Cursivas
                 .replace(/<(em|i)[^>]*>([\s\S]*?)<\/\1>/gi, "*$2*")
-
-                // Saltos de línea
                 .replace(/<br\s*\/?>/gi, "\n")
-
-                // Párrafos
                 .replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, "$1\n\n")
-
-                // Listas
                 .replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, "- $1\n")
                 .replace(/<\/?(ul|ol)[^>]*>/gi, "\n")
-
-                // Divisiones
                 .replace(/<div[^>]*>/gi, "")
                 .replace(/<\/div>/gi, "\n")
-
-                // Spans
                 .replace(/<span[^>]*>/gi, "")
                 .replace(/<\/span>/gi, "");
 
-            /*
-             * IMPORTANTE:
-             * Eliminamos cualquier etiqueta HTML que haya quedado.
-             * De esta manera jamás aparecerá algo como:
-             *
-             * <div>
-             * <strong>
-             * <table>
-             * <br>
-             *
-             * dentro del texto visible.
-             */
             resultado = resultado.replace(/<\/?[a-z][^>]*>/gi, "");
 
-            // Decodificar entidades HTML
             const decoderFinal = document.createElement("textarea");
             decoderFinal.innerHTML = resultado;
             resultado = decoderFinal.value;
 
-            // Limpieza de espacios y saltos excesivos
             resultado = resultado
                 .replace(/\r\n/g, "\n")
                 .replace(/\r/g, "\n")
@@ -748,79 +723,33 @@
             return resultado;
         }
 
-
         function convertirPlan(texto) {
-
             const resultado = limpiarRespuestaIA(texto);
-
             if (!resultado) {
                 return "<p>No se recibió contenido de la IA.</p>";
             }
-
-            /*
-             * La IA debe entregar Markdown.
-             *
-             * marked convierte:
-             *
-             * # Título
-             * ## Sección
-             * **Negrita**
-             * - Lista
-             * | Tabla |
-             *
-             * en HTML visual para mostrarlo bonito.
-             */
 
             const html = marked.parse(resultado, {
                 gfm: true,
                 breaks: true
             });
 
-            /*
-             * DOMPurify permite únicamente HTML seguro.
-             * Esto evita scripts, eventos y elementos peligrosos.
-             */
             return DOMPurify.sanitize(html, {
                 USE_PROFILES: {
                     html: true
                 },
-
                 FORBID_TAGS: [
-                    "script",
-                    "iframe",
-                    "object",
-                    "embed",
-                    "form",
-                    "input",
-                    "button",
-                    "textarea",
-                    "select",
-                    "style"
+                    "script", "iframe", "object", "embed", "form", "input", "button", "textarea", "select", "style"
                 ],
-
                 FORBID_ATTR: [
-                    "onclick",
-                    "onload",
-                    "onerror",
-                    "onmouseover",
-                    "onmouseenter",
-                    "onfocus",
-                    "onchange",
-                    "onsubmit",
-                    "style"
+                    "onclick", "onload", "onerror", "onmouseover", "onmouseenter", "onfocus", "onchange", "onsubmit", "style"
                 ],
-
                 ALLOW_UNKNOWN_PROTOCOLS: false
             });
         }
 
-        /*
-         * LOGIN: conserva tu función original de avanzar a suscripción.
-         */
         $("form-auth").addEventListener("submit", function(evento) {
-
             evento.preventDefault();
-
             const email = $("auth-email").value.trim();
             const password = $("auth-password").value.trim();
 
@@ -833,38 +762,69 @@
         });
 
         /*
-         * ACTIVAR LICENCIA.
+         * ACTIVAR LICENCIA CONECTADA A LA API DE FIREBASE.
          */
-        $("btn-activar").addEventListener("click", function(evento) {
-
+        $("btn-activar").addEventListener("click", async function(evento) {
             evento.preventDefault();
 
             const codigo = $("input-codigo").value.trim();
+            const nombreDocente = $("input-nombre-docente").value.trim();
             const mensaje = $("mensaje-error-codigo");
 
-            if (codigo.length < 5) {
+            if (!nombreDocente) {
+                mensaje.textContent = "Por favor, ingresa tu nombre completo.";
+                mensaje.classList.remove("hidden");
+                return;
+            }
+
+            if (codigo.length < 3) {
                 mensaje.textContent = "Escribe un código válido.";
                 mensaje.classList.remove("hidden");
                 return;
             }
 
             mensaje.classList.add("hidden");
+            const btnActivar = $("btn-activar");
+            btnActivar.disabled = true;
+            btnActivar.textContent = "Verificando...";
 
-            planesDisponibles = 240;
+            try {
+                const response = await fetch("/api/activar-codigo", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        codigo: codigo,
+                        deviceId: obtenerDeviceId(),
+                        nombreDocente: nombreDocente
+                    })
+                });
 
-            $("badge-estado").innerHTML =
-                'Licencia activa: <span id="contador-planes">240</span> planes';
+                const data = await response.json();
 
-            window.mostrarVista("vista-generador");
+                if (!response.ok) {
+                    throw new Error(data.error || "No se pudo activar el código.");
+                }
+
+                licenciaActiva = true;
+                planesDisponibles = 9999; // Licencia mensual ilimitada o activa
+
+                $("badge-estado").innerHTML =
+                    `Licencia Activa (${escaparHTML(nombreDocente)}): <span id="contador-planes">${data.diasRestantes}</span> días restantes`;
+
+                window.mostrarVista("vista-generador");
+
+            } catch (error) {
+                mensaje.textContent = error.message;
+                mensaje.classList.remove("hidden");
+            } finally {
+                btnActivar.disabled = false;
+                btnActivar.textContent = "Activar";
+            }
         });
 
-        /*
-         * PRUEBA GRATIS: este botón vuelve a funcionar.
-         */
         $("btn-prueba-gratis").addEventListener("click", function(evento) {
-
             evento.preventDefault();
-
+            licenciaActiva = false;
             planesDisponibles = 8;
 
             $("badge-estado").innerHTML =
@@ -877,11 +837,10 @@
          * GENERAR PLAN.
          */
         $("form-plan").addEventListener("submit", async function(evento) {
-
             evento.preventDefault();
 
-            if (planesDisponibles <= 0) {
-                alert("Has consumido tus planes disponibles.");
+            if (!licenciaActiva && planesDisponibles <= 0) {
+                alert("Has consumido tus planes disponibles de prueba.");
                 window.mostrarVista("vista-suscripcion");
                 return;
             }
@@ -997,7 +956,6 @@ Reglas obligatorias:
 `;
 
             try {
-
                 const respuesta = await fetch("/api/generar-plan", {
                     method: "POST",
                     headers: {
@@ -1035,16 +993,15 @@ Reglas obligatorias:
 
                 const htmlPlan = convertirPlan(textoLimpio);
 
-                planesDisponibles--;
-
-                const contador = $("contador-planes");
-
-                if (contador) {
-                    contador.textContent = planesDisponibles;
+                if (!licenciaActiva) {
+                    planesDisponibles--;
+                    const contador = $("contador-planes");
+                    if (contador) {
+                        contador.textContent = planesDisponibles;
+                    }
                 }
 
                 const contenedor = $("contenedor-resultados");
-
                 const tarjeta = document.createElement("div");
 
                 tarjeta.className =
@@ -1103,25 +1060,16 @@ Reglas obligatorias:
                 });
 
             } catch (error) {
-
                 console.error(error);
-
                 alert("Error al generar el plan: " + error.message);
-
             } finally {
-
                 boton.disabled = false;
                 boton.innerHTML = textoOriginal;
             }
         });
 
-        /*
-         * BOTONES DE RESULTADO.
-         */
         window.copiarTexto = function(boton) {
-
             const resultado = $("cuerpo-plan-resultado");
-
             if (!resultado) {
                 alert("No hay ningún plan para copiar.");
                 return;
@@ -1129,9 +1077,7 @@ Reglas obligatorias:
 
             navigator.clipboard.writeText(resultado.innerText)
                 .then(function() {
-
                     boton.textContent = "¡Copiado!";
-
                     setTimeout(function() {
                         boton.textContent = "Copiar";
                     }, 2000);
@@ -1142,9 +1088,7 @@ Reglas obligatorias:
         };
 
         window.descargarWord = function(boton) {
-
             const resultado = $("cuerpo-plan-resultado");
-
             if (!resultado) {
                 alert("No hay ningún plan para descargar.");
                 return;
@@ -1154,59 +1098,22 @@ Reglas obligatorias:
                 <html>
                 <head>
                     <meta charset="utf-8">
-
                     <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            color: #1e293b;
-                            font-size: 11pt;
-                            line-height: 1.5;
-                        }
-
-                        h1 {
-                            color: #075985;
-                            text-align: center;
-                        }
-
-                        h2 {
-                            color: #075985;
-                            background: #e0f2fe;
-                            padding: 8px;
-                            border-left: 5px solid #0284c7;
-                        }
-
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                        }
-
-                        th {
-                            background: #075985;
-                            color: white;
-                            padding: 8px;
-                            border: 1px solid #999;
-                        }
-
-                        td {
-                            padding: 8px;
-                            border: 1px solid #999;
-                        }
+                        body { font-family: Arial, sans-serif; color: #1e293b; font-size: 11pt; line-height: 1.5; }
+                        h1 { color: #075985; text-align: center; }
+                        h2 { color: #075985; background: #e0f2fe; padding: 8px; border-left: 5px solid #0284c7; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th { background: #075985; color: white; padding: 8px; border: 1px solid #999; }
+                        td { padding: 8px; border: 1px solid #999; }
                     </style>
                 </head>
-
                 <body>
                     ${resultado.innerHTML}
                 </body>
                 </html>
             `;
 
-            const blob = new Blob(
-                ["" + documento],
-                {
-                    type: "application/msword"
-                }
-            );
-
+            const blob = new Blob(["" + documento], { type: "application/msword" });
             const url = URL.createObjectURL(blob);
             const enlace = document.createElement("a");
 
@@ -1220,7 +1127,6 @@ Reglas obligatorias:
             URL.revokeObjectURL(url);
 
             boton.textContent = "¡Descargado!";
-
             setTimeout(function() {
                 boton.textContent = "Word (.doc)";
             }, 2000);
@@ -1231,7 +1137,6 @@ Reglas obligatorias:
         };
 
         window.nuevoPlan = function() {
-
             $("unidad").value = "";
             $("tema").value = "";
             $("indicador").value = "";
