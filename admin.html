@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - El Profe Nica 505</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+        
+        <!-- Encabezado -->
+        <header class="flex flex-col sm:flex-row justify-between items-center bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-lg gap-4">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-black text-blue-400 flex items-center gap-2">
+                    <span>🛡️</span> Panel de Administración de Códigos
+                </h1>
+                <p class="text-xs sm:text-sm text-slate-400 mt-1">
+                    Controla tus licencias, revisa quién las activó y copia códigos rápidamente para WhatsApp.
+                </p>
+            </div>
+            <a href="/" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl transition">
+                &larr; Ir al Generador
+            </a>
+        </header>
+
+        <!-- Estadísticas rápidas -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
+                <p class="text-xs text-slate-400 uppercase font-bold">Total de Códigos</p>
+                <p id="total-codigos" class="text-2xl font-black text-white mt-1">0</p>
+            </div>
+            <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
+                <p class="text-xs text-emerald-400 uppercase font-bold">Disponibles</p>
+                <p id="total-disponibles" class="text-2xl font-black text-emerald-400 mt-1">0</p>
+            </div>
+            <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
+                <p class="text-xs text-blue-400 uppercase font-bold">Usados (Activos)</p>
+                <p id="total-usados" class="text-2xl font-black text-blue-400 mt-1">0</p>
+            </div>
+        </div>
+
+        <!-- Tabla de Códigos -->
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-xl overflow-hidden">
+            <div class="p-4 sm:p-6 border-b border-slate-700 flex justify-between items-center">
+                <h2 class="text-base font-bold text-white">Listado de Códigos en Firebase</h2>
+                <button onclick="cargarCodigos()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-2 rounded-lg font-semibold transition">
+                    🔄 Actualizar Lista
+                </button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-slate-900/60 text-slate-400 text-xs uppercase border-b border-slate-700">
+                            <th class="p-4">Código</th>
+                            <th class="p-4">Estado</th>
+                            <th class="p-4">Docente</th>
+                            <th class="p-4">Dispositivo (ID)</th>
+                            <th class="p-4">Vencimiento</th>
+                            <th class="p-4 text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-cuerpo" class="divide-y divide-slate-700/50">
+                        <tr>
+                            <td colspan="6" class="p-6 text-center text-slate-400">Cargando códigos desde Firebase...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script de Firebase y lógica del panel -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCw6yFNbF8hahrjFSlRzflzkOwmqVr0JUY",
+            authDomain: "el-profe-nica-505.firebaseapp.com",
+            databaseURL: "https://el-profe-nica-505-default-rtdb.firebaseio.com",
+            projectId: "el-profe-nica-505",
+            storageBucket: "el-profe-nica-505.firebasestorage.app",
+            messagingSenderId: "834224420925",
+            appId: "1:834224420925:web:90e1eced789cc5ea0dd254"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function cargarCodigos() {
+            const tbody = document.getElementById("tabla-cuerpo");
+            tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Buscando registros...</td></tr>`;
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "codigos"));
+                let total = 0;
+                let disponibles = 0;
+                let usados = 0;
+                let filasHTML = "";
+
+                querySnapshot.forEach((docSnap) => {
+                    total++;
+                    const data = docSnap.data();
+                    const codigoId = docSnap.id;
+                    const estaUsado = data.usado === true;
+
+                    if (estaUsado) {
+                        usados++;
+                    } else {
+                        disponibles++;
+                    }
+
+                    const estadoBadge = estaUsado 
+                        ? `<span class="bg-blue-950 text-blue-400 border border-blue-800 px-2.5 py-1 rounded-full text-xs font-bold">Usado</span>`
+                        : `<span class="bg-emerald-950 text-emerald-400 border border-emerald-800 px-2.5 py-1 rounded-full text-xs font-bold">Disponible</span>`;
+
+                    const nombreDocente = data.nombreDocente ? data.nombreDocente : `<span class="text-slate-500 italic">Sin asignar</span>`;
+                    const deviceId = data.deviceId ? `<span class="text-xs text-slate-400 font-mono">${data.deviceId}</span>` : `<span class="text-slate-500 italic">-</span>`;
+                    const fechaFin = data.fechaFin ? data.fechaFin : `<span class="text-slate-500 italic">-</span>`;
+
+                    filasHTML += `
+                        <tr class="hover:bg-slate-700/30 transition">
+                            <td class="p-4 font-mono font-bold text-white">${codigoId}</td>
+                            <td class="p-4">${estadoBadge}</td>
+                            <td class="p-4 text-slate-200 font-medium">${nombreDocente}</td>
+                            <td class="p-4">${deviceId}</td>
+                            <td class="p-4 text-slate-300">${fechaFin}</td>
+                            <td class="p-4 text-center">
+                                <button onclick="copiarAlPortapapeles('${codigoId}', this)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs px-3 py-1.5 rounded-lg font-medium transition">
+                                    Copiar
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById("total-codigos").textContent = total;
+                document.getElementById("total-disponibles").textContent = disponibles;
+                document.getElementById("total-usados").textContent = usados;
+                tbody.innerHTML = filasHTML || `<tr><td colspan="6" class="p-6 text-center text-slate-400">No se encontraron códigos en la base de datos.</td></tr>`;
+
+            } catch (error) {
+                console.error("Error al cargar códigos:", error);
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-red-400">Error al cargar los datos de Firebase.</td></tr>`;
+            }
+        }
+
+        window.copiarAlPortapapeles = function(codigo, boton) {
+            navigator.clipboard.writeText(codigo).then(() => {
+                const textoOriginal = boton.textContent;
+                boton.textContent = "¡Copiado!";
+                boton.classList.remove("bg-slate-700");
+                boton.classList.add("bg-emerald-600", "text-white");
+                setTimeout(() => {
+                    boton.textContent = textoOriginal;
+                    boton.classList.remove("bg-emerald-600", "text-white");
+                    boton.classList.add("bg-slate-700");
+                }, 2000);
+            });
+        }
+
+        window.cargarCodigos = cargarCodigos;
+        cargarCodes(); // Cargar al abrir
+        // Corrección de nombre de función en ejecución automática:
+        cargarCodigos();
+    </script>
+</body>
+</html>
