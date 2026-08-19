@@ -23,10 +23,15 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Método no permitido." });
 
   try {
-    const { codigo, deviceId } = req.body || {};
+    // 1. Recibimos también el nombre del docente desde el frontend
+    const { codigo, deviceId, nombreDocente } = req.body || {};
 
     if (!codigo || !deviceId) {
       return res.status(400).json({ error: "Falta el código o el identificador de dispositivo." });
+    }
+
+    if (!nombreDocente || nombreDocente.trim() === "") {
+      return res.status(400).json({ error: "Por favor, ingresa el nombre del docente." });
     }
 
     const codigoNormalizado = String(codigo).trim().toUpperCase();
@@ -42,7 +47,7 @@ export default async function handler(req, res) {
 
     // Caso 1: el código ya fue activado antes
     if (data.usado) {
-      // Si es el mismo dispositivo, solo devolvemos el estado actual (permite reingresar)
+      // Si es el mismo dispositivo, permitimos el reingreso
       if (data.deviceId === deviceId) {
         const fechaFin = data.fechaFin.toDate();
         const diasRestantes = Math.ceil((fechaFin - ahora) / (1000 * 60 * 60 * 24));
@@ -52,19 +57,20 @@ export default async function handler(req, res) {
           fechaFin: fechaFin.toISOString(),
         });
       }
-      // Si es otro dispositivo, se bloquea (evita piratería)
+      // Si intenta usarlo otro dispositivo diferente con el mismo código
       return res.status(403).json({ error: "Este código ya está activado en otro dispositivo." });
     }
 
-    // Caso 2: primera activación de este código
+    // Caso 2: primera activación (guardamos nombre, dispositivo y fechas)
     const fechaInicio = ahora;
     const fechaFin = new Date(ahora.getTime() + DIAS_MEMBRESIA * 24 * 60 * 60 * 1000);
 
     await ref.update({
       usado: true,
-      deviceId,
-      fechaInicio,
-      fechaFin,
+      deviceId: deviceId,
+      nombreDocente: nombreDocente.trim(), // <--- Etiquetado exacto del profesor
+      fechaInicio: fechaInicio,
+      fechaFin: fechaFin,
     });
 
     return res.status(200).json({
