@@ -142,11 +142,11 @@
                 document.getElementById("total-codigos").textContent = total;
                 document.getElementById("total-disponibles").textContent = disponibles;
                 document.getElementById("total-usados").textContent = usados;
-                tbody.innerHTML = filasHTML || `<tr><td colspan="6" class="p-6 text-center text-slate-400">No se encontraron códigos en la base de datos.</td></tr>`;
+                tbody.innerHTML = filasHTML || `<tr><td colspan="6" class="p-6 text-center text-slate-400">No se encontraron códigos.</td></tr>`;
 
             } catch (error) {
                 console.error("Error al cargar códigos:", error);
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-red-400">Error al cargar los datos de Firebase.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-red-400">Error al conectar con Firebase.</td></tr>`;
             }
         }
 
@@ -165,8 +165,6 @@
         }
 
         window.cargarCodigos = cargarCodigos;
-        cargarCodes(); // Cargar al abrir
-        // Corrección de nombre de función en ejecución automática:
         cargarCodigos();
     </script>
 </body>
