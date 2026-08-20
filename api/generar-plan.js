@@ -65,8 +65,8 @@ INSTRUCCIONES OBLIGATORIAS
    - Actividad 3...
 4. Si el usuario no dio indicador o criterios, genéralos tú de forma coherente.
 5. Mantén coherencia total entre indicador, criterios, actividades e instrumento de evaluación.
-6. Al final del plan, genera el **Instrumento de Evaluación** solicitado (${instrumento}) en formato de tabla Markdown ordenada.
-7. En el instrumento incluye **exactamente 3 evidencias de aprendizaje** por cada criterio (Conceptual, Procedimental y Actitudinal).
+6. Al final del plan, genera el **Instrumento de Evaluación** solicitado (${instrumento}) en formato de tabla Markdown, corto y práctico.
+7. El instrumento debe usar **solo los 3 criterios principales** (Conceptual, Procedimental y Actitudinal), una sola fila por cada uno. NO crees múltiples filas por criterio.
 8. Responde ÚNICAMENTE con el plan + instrumento. No agregues texto fuera de la estructura.
 
 ====================
@@ -122,17 +122,27 @@ ${adecuacion}
 
 ## 7. Instrumento de Evaluación: ${instrumento}
 
-(Genera aquí el instrumento completo en formato de tabla Markdown.
+(Genera el instrumento de forma **corta, clara y práctica**.
 
-Debe incluir:
-- Título del instrumento
-- Datos del estudiante / fecha (espacio para llenar)
-- Tabla con las 3 evidencias por cada criterio (Conceptual, Procedimental, Actitudinal)
-- Escala o columnas según el tipo de instrumento:
-  - Si es Lista de cotejo: columnas Sí / No / Observaciones
-  - Si es Rúbrica: niveles (Excelente, Bueno, Regular, Debe mejorar) + descriptores
-  - Si es Escala de valoración: escala numérica o cualitativa + descriptores
-- Espacio para observaciones y firma del docente
+Reglas del instrumento:
+- Usa **solo 3 filas**: una para Conceptual, una para Procedimental y una para Actitudinal.
+- NO generes múltiples filas por criterio.
+- Mantén el enfoque en el tema y los criterios de esta clase.
+- Incluye: nombre del instrumento, espacio para estudiante y fecha, tabla, observaciones y firma del docente.
+
+Según el tipo:
+
+**Si es Rúbrica:**
+Usa exactamente 3 niveles: Excelente (3 pts) | Aceptable (2 pts) | Debe mejorar (1 pt)
+Una sola fila por cada criterio.
+
+**Si es Lista de cotejo:**
+Columnas: Criterio / Sí / No / Observaciones
+Solo 3 filas (una por cada criterio).
+
+**Si es Escala de valoración:**
+Usa escala: Logrado (3) | En proceso (2) | No logrado (1)
+Una sola fila por cada criterio.
 )
 
 ====================
