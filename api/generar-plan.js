@@ -128,7 +128,7 @@ REGLAS DE FORMATO
 - Sé concreto, profesional y útil para el docente.
 `;
 
-    const modelo = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+    const modelo = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`;
 
     const geminiResponse = await fetch(url, {
