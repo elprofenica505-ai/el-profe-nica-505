@@ -276,6 +276,9 @@
       <div>
        <label class="block text-xs font-bold text-slate-300 uppercase mb-1"> Adecuación curricular: </label> <input type="text" id="adecuacion" value="Ninguna" class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
       </div>
+      <div>
+       <label class="block text-xs font-bold text-slate-300 uppercase mb-1"> Instrumento de Evaluación: * </label> <select id="instrumento" required class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"> <option value="">Selecciona el instrumento...</option> <option value="Lista de cotejo">Lista de cotejo</option> <option value="Rúbrica">Rúbrica</option> <option value="Escala de valoración">Escala de valoración</option> </select>
+      </div>
       <button type="submit" id="btn-generar" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3.5 rounded-xl text-sm transition shadow-lg">✨ Generar Plan Diario</button>
      </form>
     </section>
@@ -686,6 +689,7 @@
             const procedimental = $("crit-procedimental").value.trim();
             const actitudinal = $("crit-actitudinal").value.trim();
             const adecuacion = $("adecuacion").value.trim() || "Ninguna";
+            const instrumento = $("instrumento").value;
 
             try {
                 const respuesta = await fetch("/api/generar-plan", {
@@ -705,7 +709,8 @@
                         conceptual,
                         procedimental,
                         actitudinal,
-                        adecuacion
+                        adecuacion,
+                        instrumento
                     })
                 });
 
@@ -874,6 +879,7 @@
             $("crit-procedimental").value = "";
             $("crit-actitudinal").value = "";
             $("adecuacion").value = "Ninguna";
+            $("instrumento").value = "";
             $("contenedor-resultados").innerHTML = "";
 
             colocarFechaActual();
