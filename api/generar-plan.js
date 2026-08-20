@@ -12,9 +12,11 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "GEMINI_API_KEY no está configurada en Vercel." });
     }
 
-    const { asignatura, grado, unidad, contenido, indicador, conceptual, procedimental, actitudinal, adecuacion } = req.body || {};
+    const { modalidad, asignatura, grado, unidad, contenido, indicador, conceptual, procedimental, actitudinal, adecuacion } = req.body || {};
     
-    const prompt = `Actúa como asesor pedagógico del MINED Nicaragua. Genera un plan diario de primaria (4 momentos: Exploración, Construcción, Aplicación, Valoración). Asignatura: ${asignatura}, Grado: ${grado}, Contenido: ${contenido}. Indicador: ${indicador}. Criterios: ${conceptual}, ${procedimental}, ${actitudinal}. Adecuación: ${adecuacion}. Responde en HTML limpio.`;
+    const nivel = modalidad || "Primaria";
+    
+    const prompt = `Actúa como asesor pedagógico del MINED Nicaragua. Genera un plan diario de ${nivel} (4 momentos: Exploración, Construcción, Aplicación, Valoración). Asignatura: ${asignatura}, Grado: ${grado}, Contenido: ${contenido}. Indicador: ${indicador}. Criterios: ${conceptual}, ${procedimental}, ${actitudinal}. Adecuación: ${adecuacion}. Responde en HTML limpio.`;
 
     const modelo = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`;
