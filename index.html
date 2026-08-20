@@ -160,7 +160,7 @@
   <div id="vista-landing" class="min-h-screen flex flex-col justify-between p-4 sm:p-6 bg-gradient-to-br from-blue-950 via-slate-900 to-slate-950">
    <header class="max-w-5xl mx-auto w-full flex justify-between items-center py-4">
     <h1 class="text-lg sm:text-xl font-black tracking-wider text-blue-400 flex items-center gap-2"><span>🇳🇮</span> EL PROFE NICA 505</h1>
-    <button type="button" onclick="mostrarVista('vista-auth')" class="text-xs sm:text-sm bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl font-semibold transition shadow-lg shadow-blue-600/20">Iniciar Sesión</button>
+    <button type="button" onclick="mostrarVista('vista-suscripcion')" class="text-xs sm:text-sm bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl font-semibold transition shadow-lg shadow-blue-600/20">Iniciar Sesión</button>
    </header>
    <main class="max-w-5xl mx-auto w-full my-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
     <div class="lg:col-span-7 text-center lg:text-left space-y-6">
@@ -170,7 +170,7 @@
      <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">Menos estrés con los papeles, <span class="text-blue-400">más tiempo para ti y tu familia.</span></h2>
      <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl mx-auto lg:mx-0">Genera planes diarios organizados, claros y profesionales para apoyar tu trabajo docente.</p>
      <div class="pt-2 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-      <button type="button" onclick="mostrarVista('vista-auth')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-base px-8 py-4 rounded-xl shadow-xl shadow-blue-600/30 transition flex items-center justify-center gap-2"><span>🚀</span> Probar Gratis</button>
+      <button type="button" onclick="mostrarVista('vista-suscripcion')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-base px-8 py-4 rounded-xl shadow-xl shadow-blue-600/30 transition flex items-center justify-center gap-2"><span>🚀</span> Probar Gratis</button>
       <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica,%20deseo%20saber%20más%20información." target="_blank" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-base px-6 py-4 rounded-xl border border-slate-700 transition flex items-center justify-center gap-2"> <span>💬</span> Contactar por WhatsApp </a>
      </div>
     </div>
@@ -192,27 +192,6 @@
     </div>
    </main>
    <footer class="text-center text-xs text-slate-500 py-4 border-t border-slate-800/60 max-w-5xl mx-auto w-full">El Profe Nica 505 © Plataforma para el Docente de Nicaragua.</footer>
-  </div>
-  <!-- ================= VISTA LOGIN ================= -->
-  <div id="vista-auth" class="min-h-screen flex items-center justify-center p-4 hidden">
-   <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl shadow-xl max-w-md w-full">
-    <div class="text-center mb-6">
-     <h3 class="text-2xl font-bold text-white">Acceso de Docentes</h3>
-     <p class="text-xs text-slate-400 mt-1">Ingresa para continuar</p>
-    </div>
-    <form id="form-auth" class="space-y-4">
-     <div>
-      <label class="block text-xs font-bold text-slate-300 uppercase mb-1"> Correo electrónico: </label> <input type="email" id="auth-email" placeholder="profe@correo.com" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
-     </div>
-     <div>
-      <label class="block text-xs font-bold text-slate-300 uppercase mb-1"> Contraseña: </label> <input type="password" id="auth-password" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-700 p-3 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
-     </div>
-     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3 rounded-lg text-sm transition">Ingresar</button>
-    </form>
-    <div class="text-center mt-4">
-     <button type="button" onclick="mostrarVista('vista-landing')" class="text-xs text-slate-400 hover:text-white transition">← Volver al inicio</button>
-    </div>
-   </div>
   </div>
   <!-- ================= VISTA SUSCRIPCIÓN ================= -->
   <div id="vista-suscripcion" class="min-h-screen flex items-center justify-center p-4 hidden">
@@ -241,6 +220,9 @@
     </div>
     <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica,%20deseo%20adquirir%20la%20Suscripción%20Mensual." target="_blank" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-medium p-3 rounded-xl text-sm transition flex justify-between items-center px-4 shadow-md"> <span>💬 Solicitar Plan Mensual</span> <span class="text-xs bg-emerald-800 px-2 py-1 rounded font-bold"> WhatsApp </span> </a>
     <button id="btn-prueba-gratis" type="button" class="w-full mt-4 bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium py-2.5 rounded-xl text-xs transition border border-slate-600">🚀 Usar Prueba Gratis - 8 planes</button>
+    <div class="text-center mt-5">
+     <button type="button" onclick="mostrarVista('vista-landing')" class="text-xs text-slate-400 hover:text-white transition">← Volver al inicio</button>
+    </div>
    </div>
   </div>
   <!-- ================= VISTA GENERADOR ================= -->
@@ -380,7 +362,6 @@
         window.mostrarVista = function(idVista) {
             const vistas = [
                 "vista-landing",
-                "vista-auth",
                 "vista-suscripcion",
                 "vista-generador"
             ];
@@ -503,19 +484,6 @@
                 ALLOW_UNKNOWN_PROTOCOLS: false
             });
         }
-
-        $("form-auth").addEventListener("submit", function(evento) {
-            evento.preventDefault();
-            const email = $("auth-email").value.trim();
-            const password = $("auth-password").value.trim();
-
-            if (!email || !password) {
-                alert("Completa tu correo y contraseña.");
-                return;
-            }
-
-            window.mostrarVista("vista-suscripcion");
-        });
 
         /*
          * ACTIVAR LICENCIA CONECTADA A LA API DE FIREBASE.
