@@ -23,6 +23,7 @@ export default async function handler(req, res) {
       procedimental = "",
       actitudinal = "",
       adecuacion = "Ninguna",
+      instrumento = "Lista de cotejo",
       tiempo = "90 minutos",
       fecha = ""
     } = req.body || {};
@@ -46,25 +47,30 @@ DATOS DEL PLAN
 - Criterio Procedimental: ${procedimental || "Genera un criterio procedimental claro y alineado al indicador."}
 - Criterio Actitudinal: ${actitudinal || "Genera un criterio actitudinal claro y alineado al indicador."}
 - Adecuación Curricular: ${adecuacion}
+- Instrumento de Evaluación solicitado: ${instrumento}
 - Tiempo estimado: ${tiempo}
 - Fecha: ${fecha || "No especificada"}
 
 ====================
 INSTRUCCIONES OBLIGATORIAS
 ====================
-1. Actúa siempre como un docente nicaragüense real del MINED. Usa lenguaje profesional, claro, preciso y cercano al docente de aula.
-2. El plan debe ser **aterrizado y útil**. Evita generalidades, frases vacías o actividades genéricas que no se puedan aplicar realmente en un aula de Nicaragua.
-3. Respeta la estructura oficial del Plan Didáctico Diario del MINED (tres momentos de la acción didáctica + verificación del aprendizaje en cada momento).
-4. Las actividades deben ser concretas, secuenciadas, con tiempo aproximado y adecuadas a la edad y nivel cognitivo del grado.
-5. Incluye estrategias de evaluación formativa en cada momento (preguntas, observación, evidencias, realimentación).
-6. Si el usuario no proporcionó el indicador o los criterios, genéralos tú de forma coherente con la malla curricular del grado y asignatura.
-7. Mantén coherencia total entre: Competencia → Indicador de Logro → Criterios de Evaluación → Actividades → Evaluación.
-8. Usa enfoques actuales del MINED: aprendizaje centrado en el estudiante, inclusión, valores, identidad nicaragüense, pensamiento crítico y aprendizaje significativo.
-9. No inventes leyes, decretos ni documentos oficiales inexistentes.
-10. Responde ÚNICAMENTE con el plan en formato Markdown limpio. No agregues introducciones, explicaciones ni comentarios fuera del plan.
+1. Actúa siempre como un docente nicaragüense real del MINED. Usa lenguaje profesional, claro y útil.
+2. El plan debe ser aterrizado y aplicable en un aula real de Nicaragua.
+3. **MUY IMPORTANTE – FORMATO DE ACTIVIDADES:**  
+   Cada actividad debe ir en una línea separada, empezando con un guion y espacio ("- ").  
+   Nunca escribas varias actividades juntas en un solo párrafo.  
+   Ejemplo correcto:
+   - Actividad 1...
+   - Actividad 2...
+   - Actividad 3...
+4. Si el usuario no dio indicador o criterios, genéralos tú de forma coherente.
+5. Mantén coherencia total entre indicador, criterios, actividades e instrumento de evaluación.
+6. Al final del plan, genera el **Instrumento de Evaluación** solicitado (${instrumento}) en formato de tabla Markdown ordenada.
+7. En el instrumento incluye **exactamente 3 evidencias de aprendizaje** por cada criterio (Conceptual, Procedimental y Actitudinal).
+8. Responde ÚNICAMENTE con el plan + instrumento. No agregues texto fuera de la estructura.
 
 ====================
-ESTRUCTURA OBLIGATORIA DEL PLAN (usa exactamente estos títulos)
+ESTRUCTURA OBLIGATORIA (usa exactamente estos títulos)
 ====================
 
 # PLAN DIDÁCTICO DIARIO
@@ -78,54 +84,65 @@ ESTRUCTURA OBLIGATORIA DEL PLAN (usa exactamente estos títulos)
 **Tema / Contenido:** ${tema}
 
 ## 1. Indicador de Logro
-(Escribe el indicador de forma clara, observable y medible)
+(Escribe el indicador claro, observable y medible)
 
 ## 2. Criterios de Evaluación
 
-| Tipo              | Criterio |
-|-------------------|----------|
-| Conceptual        | ...      |
-| Procedimental     | ...      |
-| Actitudinal       | ...      |
+| Tipo | Criterio |
+|------|----------|
+| Conceptual | ... |
+| Procedimental | ... |
+| Actitudinal | ... |
 
 ## 3. Momentos de la Acción Didáctica
 
 ### 3.1 Inicio (Exploración)
-- Actividades concretas de motivación, activación de conocimientos previos y presentación del indicador.
-- Tiempo aproximado.
-- Verificación del aprendizaje y realimentación en este momento.
+- (cada actividad en su propia línea con guion)
+- Tiempo aproximado: ...
+- Verificación del aprendizaje: ...
 
 ### 3.2 Desarrollo (Construcción y Aplicación)
-- Secuencia clara de actividades de mediación docente y participación activa de los estudiantes.
-- Estrategias diferenciadas si es necesario.
-- Ejemplos, preguntas de comprensión, trabajo individual, en parejas o equipos.
-- Tiempo aproximado.
-- Verificación del aprendizaje y realimentación en este momento.
+- (cada actividad en su propia línea con guion)
+- Tiempo aproximado: ...
+- Verificación del aprendizaje: ...
 
 ### 3.3 Culminación (Valoración)
-- Actividades de consolidación, conclusiones y evaluación formativa.
-- Evidencias de aprendizaje.
-- Instrumento o técnica de evaluación sugerida.
-- Tiempo aproximado.
-- Verificación del aprendizaje y realimentación en este momento.
+- (cada actividad en su propia línea con guion)
+- Tiempo aproximado: ...
+- Verificación del aprendizaje: ...
 
 ## 4. Tarea para el Hogar
-(Una tarea clara, realista y directamente relacionada con el indicador de logro)
+(Una tarea clara y relacionada con el indicador)
 
 ## 5. Adecuación Curricular
 ${adecuacion}
 
 ## 6. Recursos y Materiales
-(Lista breve y realista de materiales que realmente se usan en las aulas nicaragüenses)
+- (lista breve con guiones)
+
+## 7. Instrumento de Evaluación: ${instrumento}
+
+(Genera aquí el instrumento completo en formato de tabla Markdown.
+
+Debe incluir:
+- Título del instrumento
+- Datos del estudiante / fecha (espacio para llenar)
+- Tabla con las 3 evidencias por cada criterio (Conceptual, Procedimental, Actitudinal)
+- Escala o columnas según el tipo de instrumento:
+  - Si es Lista de cotejo: columnas Sí / No / Observaciones
+  - Si es Rúbrica: niveles (Excelente, Bueno, Regular, Debe mejorar) + descriptores
+  - Si es Escala de valoración: escala numérica o cualitativa + descriptores
+- Espacio para observaciones y firma del docente
+)
 
 ====================
-REGLAS DE FORMATO
+REGLAS DE FORMATO FINALES
 ====================
-- Usa únicamente Markdown limpio.
-- No uses etiquetas HTML.
-- No uses bloques de código.
-- No escribas nada antes ni después del plan.
-- Sé concreto, profesional y útil para el docente.
+- Cada actividad DEBE empezar en una línea nueva con "- ".
+- Nunca juntes varias actividades en un solo párrafo.
+- Usa solo Markdown limpio.
+- No uses HTML.
+- No escribas nada fuera de la estructura.
 `;
 
     const modelo = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
