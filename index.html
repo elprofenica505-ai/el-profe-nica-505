@@ -687,99 +687,6 @@
             const actitudinal = $("crit-actitudinal").value.trim();
             const adecuacion = $("adecuacion").value.trim() || "Ninguna";
 
-            const contenido = `
-Actúa como especialista en planificación didáctica de educación ${modalidad.toLowerCase()} de Nicaragua (MINED).
-
-Genera un plan diario completo, profesional, claro y útil para el docente de ${modalidad}.
-
-Datos:
-
-Modalidad: ${modalidad}
-Asignatura: ${asignatura}
-Grado: ${grado}
-Fecha: ${fecha}
-Tiempo: ${tiempo}
-Unidad: ${unidad}
-Tema: ${tema}
-Indicador: ${indicador || "Generarlo de acuerdo con el tema"}
-Criterio conceptual: ${conceptual || "Generarlo de acuerdo con el tema"}
-Criterio procedimental: ${procedimental || "Generarlo de acuerdo con el tema"}
-Criterio actitudinal: ${actitudinal || "Generarlo de acuerdo con el tema"}
-Adecuación curricular: ${adecuacion}
-
-Utiliza exactamente esta estructura:
-
-# PLAN DIARIO
-
-**Asignatura:** ${asignatura}  
-**Fecha:** ${fecha}  
-**Tiempo:** ${tiempo}  
-**Grado:** ${grado}  
-**Nombre y número de unidad:** ${unidad}  
-**Contenido:** ${tema}  
-**Indicador de logro:** Escribe un indicador observable y relacionado con el tema.
-
-## I. CRITERIOS DE EVALUACIÓN
-
-| Tipo | Criterio |
-|---|---|
-| Conceptual | Escribe el criterio conceptual |
-| Procedimental | Escribe el criterio procedimental |
-| Actitudinal | Escribe el criterio actitudinal |
-
-## II. ACTIVIDADES DE INICIO
-
-Incluye de 3 a 5 actividades ordenadas:
-- Motivación.
-- Exploración de conocimientos previos.
-- Presentación del tema.
-- Presentación del indicador de logro.
-
-## III. ACTIVIDADES DE DESARROLLO
-
-Describe paso a paso:
-- La mediación docente.
-- La participación de los estudiantes.
-- Ejemplos relacionados con el tema.
-- Preguntas de comprensión.
-- Trabajo individual, en parejas o en equipos cuando sea pertinente.
-
-## IV. ACTIVIDADES DE CULMINACIÓN Y EVALUACIÓN
-
-Incluye:
-- Consolidación.
-- Conclusiones.
-- Estrategia de evaluación.
-- Evidencias de aprendizaje.
-- Instrumento de evaluación sugerido.
-
-## V. TAREA PARA EL HOGAR
-
-Escribe una tarea clara y relacionada con el contenido.
-
-## VI. ADECUACIÓN CURRICULAR
-
-${adecuacion}
-
-## VII. RECURSOS
-
-Escribe una lista breve de materiales.
-
-Reglas obligatorias:
-
-- Devuelve únicamente el plan.
-- Devuelve Markdown limpio.
-- No utilices etiquetas HTML.
-- No escribas <ul>, <li>, <strong>, <table>, <tr>, <td>, <div> ni <br>.
-- No utilices bloques de código.
-- No agregues explicaciones antes o después.
-- Usa títulos con # y ##.
-- Usa viñetas con guiones.
-- Usa la tabla Markdown indicada.
-- Escribe en español claro y profesional.
-- No inventes leyes ni citas oficiales.
-`;
-
             try {
                 const respuesta = await fetch("/api/generar-plan", {
                     method: "POST",
@@ -794,7 +701,6 @@ Reglas obligatorias:
                         tiempo,
                         unidad,
                         tema,
-                        contenido,
                         indicador,
                         conceptual,
                         procedimental,
