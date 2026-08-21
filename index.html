@@ -11,6 +11,8 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
   <!-- Limpiar HTML seguro -->
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <!-- Generar archivo .docx real -->
+  <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
   <style>
         .plan-document {
             background: #ffffff;
@@ -310,7 +312,6 @@
         let planesDisponibles = MAX_PLANES_GRATIS;
         let licenciaActiva = false;
 
-        // Obtener o crear un identificador de dispositivo único guardado en el navegador
         function obtenerDeviceId() {
             let deviceId = localStorage.getItem("profe_nica_device_id");
             if (!deviceId) {
@@ -320,7 +321,6 @@
             return deviceId;
         }
 
-        // Guardar y recuperar cuántos planes gratis ya se usaron en este dispositivo
         function obtenerPlanesUsados() {
             const usados = parseInt(localStorage.getItem("profe_nica_planes_usados") || "0", 10);
             return isNaN(usados) ? 0 : Math.max(0, usados);
@@ -341,7 +341,6 @@
             if (badge && !licenciaActiva) {
                 badge.innerHTML = `Prueba Gratis: <span id="contador-planes">\( {planesDisponibles}</span>/ \){MAX_PLANES_GRATIS} planes`;
             }
-            // Actualizar el botón de prueba gratis
             const btnGratis = document.getElementById("btn-prueba-gratis");
             if (btnGratis) {
                 if (planesDisponibles <= 0) {
@@ -390,7 +389,6 @@
             vistaElegida.classList.remove("hidden");
             window.scrollTo(0, 0);
 
-            // Si se muestra la pantalla de suscripción, actualizar el estado del botón de prueba gratis
             if (idVista === "vista-suscripcion") {
                 actualizarContadorGratis();
             }
@@ -410,7 +408,6 @@
             }
         }
 
-        // Datos de grados y asignaturas según modalidad
         const datosModalidad = {
             Primaria: {
                 grados: [
@@ -464,7 +461,6 @@
             const selectGrado = $("grado");
             const selectAsignatura = $("asignatura");
 
-            // Limpiar opciones actuales
             selectGrado.innerHTML = '<option value="">Selecciona el grado...</option>';
             selectAsignatura.innerHTML = '<option value="">Selecciona asignatura...</option>';
 
@@ -472,7 +468,6 @@
                 return;
             }
 
-            // Llenar grados
             datosModalidad[modalidad].grados.forEach(function(grado) {
                 const option = document.createElement("option");
                 option.value = grado;
@@ -480,7 +475,6 @@
                 selectGrado.appendChild(option);
             });
 
-            // Llenar asignaturas
             datosModalidad[modalidad].asignaturas.forEach(function(asig) {
                 const option = document.createElement("option");
                 option.value = asig;
@@ -489,7 +483,6 @@
             });
         }
 
-        // Cuando cambie la modalidad, actualizar los otros selectores
         const selectModalidad = $("modalidad");
         if (selectModalidad) {
             selectModalidad.addEventListener("change", actualizarGradosYAsignaturas);
@@ -578,9 +571,6 @@
             });
         }
 
-        /*
-         * ACTIVAR LICENCIA CONECTADA A LA API DE FIREBASE.
-         */
         $("btn-activar").addEventListener("click", async function(evento) {
             evento.preventDefault();
 
@@ -623,7 +613,7 @@
                 }
 
                 licenciaActiva = true;
-                planesDisponibles = 9999; // Licencia mensual ilimitada o activa
+                planesDisponibles = 9999;
 
                 $("badge-estado").innerHTML =
                     `Licencia Activa (\( {escaparHTML(nombreDocente)}): <span id="contador-planes"> \){data.diasRestantes}</span> días restantes`;
@@ -657,9 +647,6 @@
             window.mostrarVista("vista-generador");
         });
 
-        /*
-         * GENERAR PLAN.
-         */
         $("form-plan").addEventListener("submit", async function(evento) {
             evento.preventDefault();
 
@@ -764,7 +751,7 @@
                             <button type="button"
                                     onclick="descargarWord(this)"
                                     class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">
-                                Word (.doc)
+                                Word (.docx)
                             </button>
 
                             <button type="button"
@@ -823,7 +810,7 @@
                 });
         };
 
-        /* ========== FUNCIÓN WORD CORREGIDA ========== */
+        /* ========== FUNCIÓN WORD REAL (.docx) ========== */
         window.descargarWord = function(boton) {
             const resultado = document.getElementById("cuerpo-plan-resultado");
             if (!resultado) {
@@ -831,24 +818,12 @@
                 return;
             }
 
-            const documento = `
-<html xmlns:o="urn:schemas-microsoft-com:office:office"
-      xmlns:w="urn:schemas-microsoft-com:office:word"
-      xmlns="http://www.w3.org/TR/REC-html40">
+            const htmlCompleto = `
+<!DOCTYPE html>
+<html>
 <head>
 <meta charset="utf-8">
-<meta name="ProgId" content="Word.Document">
-<meta name="Generator" content="Microsoft Word">
-<!--[if gte mso 9]>
-<xml>
-  <w:WordDocument>
-    <w:View>Print</w:View>
-    <w:Zoom>100</w:Zoom>
-  </w:WordDocument>
-</xml>
-<![endif]-->
 <style>
-  @page { size: A4; margin: 2cm; }
   body { font-family: Arial, sans-serif; font-size: 11pt; color: #1e293b; line-height: 1.5; }
   h1 { color: #075985; text-align: center; font-size: 16pt; margin-bottom: 16px; }
   h2 { color: #075985; background: #e0f2fe; padding: 8px 12px; border-left: 5px solid #0284c7; font-size: 13pt; margin: 18px 0 10px; }
@@ -865,24 +840,26 @@ ${resultado.innerHTML}
 </body>
 </html>`;
 
-            // BOM + MIME correcto → mucho más compatible con Word y WPS en Android
-            const blob = new Blob(["\ufeff", documento], {
-                type: "application/msword;charset=utf-8"
-            });
+            try {
+                const blob = htmlDocx.asBlob(htmlCompleto);
 
-            const url = URL.createObjectURL(blob);
-            const enlace = document.createElement("a");
-            enlace.href = url;
-            enlace.download = "Plan_Diario_Profe_Nica_505.doc";
-            document.body.appendChild(enlace);
-            enlace.click();
-            document.body.removeChild(enlace);
-            URL.revokeObjectURL(url);
+                const url = URL.createObjectURL(blob);
+                const enlace = document.createElement("a");
+                enlace.href = url;
+                enlace.download = "Plan_Diario_Profe_Nica_505.docx";
+                document.body.appendChild(enlace);
+                enlace.click();
+                document.body.removeChild(enlace);
+                URL.revokeObjectURL(url);
 
-            boton.textContent = "¡Descargado!";
-            setTimeout(function() {
-                boton.textContent = "Word (.doc)";
-            }, 2000);
+                boton.textContent = "¡Descargado!";
+                setTimeout(function() {
+                    boton.textContent = "Word (.docx)";
+                }, 2000);
+            } catch (error) {
+                console.error(error);
+                alert("Error al generar el archivo Word. Intenta de nuevo.");
+            }
         };
 
         window.descargarPDF = function() {
@@ -909,8 +886,6 @@ ${resultado.innerHTML}
         };
 
         colocarFechaActual();
-
-        // Al cargar la página, sincronizar el contador de planes gratis
         actualizarContadorGratis();
 
     </script>
