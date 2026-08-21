@@ -11,8 +11,6 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
   <!-- Limpiar HTML seguro -->
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
-  <!-- Generar archivo .docx real -->
-  <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
   <style>
         .plan-document {
             background: #ffffff;
@@ -241,7 +239,6 @@
      <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2"><span>📝</span> Plan Diario</h2>
      <p class="text-xs text-slate-400 mb-6">Completa los datos y genera un plan bien estructurado.</p>
      <form id="form-plan" class="space-y-4">
-      <!-- Modalidad -->
       <div>
        <label class="block text-xs font-bold text-slate-300 uppercase mb-1"> Modalidad: * </label> <select id="modalidad" required class="w-full bg-slate-900 border border-slate-700 p-2.5 rounded-lg text-sm text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"> <option value="">Selecciona la modalidad...</option> <option value="Primaria">Primaria</option> <option value="Secundaria">Secundaria</option> </select>
       </div>
@@ -811,37 +808,101 @@
         };
 
         /* ========== FUNCIÓN WORD REAL (.docx) ========== */
-        window.descargarWord = function(boton) {
+        window.descargarWord = async function(boton) {
             const resultado = document.getElementById("cuerpo-plan-resultado");
             if (!resultado) {
                 alert("No hay ningún plan para descargar.");
                 return;
             }
 
-            const htmlCompleto = `
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<style>
-  body { font-family: Arial, sans-serif; font-size: 11pt; color: #1e293b; line-height: 1.5; }
-  h1 { color: #075985; text-align: center; font-size: 16pt; margin-bottom: 16px; }
-  h2 { color: #075985; background: #e0f2fe; padding: 8px 12px; border-left: 5px solid #0284c7; font-size: 13pt; margin: 18px 0 10px; }
-  h3 { color: #0369a1; font-size: 12pt; margin: 14px 0 6px; }
-  p { margin: 6px 0; }
-  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
-  th { background: #075985; color: white; padding: 8px; border: 1px solid #999; text-align: left; }
-  td { padding: 8px; border: 1px solid #999; vertical-align: top; }
-  ul, ol { margin: 8px 0 12px 22px; }
-</style>
-</head>
-<body>
-${resultado.innerHTML}
-</body>
-</html>`;
+            boton.disabled = true;
+            boton.textContent = "Generando...";
 
             try {
-                const blob = htmlDocx.asBlob(htmlCompleto);
+                const { Document, Packer, Paragraph, HeadingLevel, AlignmentType } = await import("https://cdn.jsdelivr.net/npm/docx@8.5.0/+esm");
+
+                const children = [];
+
+                // Título principal
+                children.push(
+                    new Paragraph({
+                        text: "Plan Diario - El Profe Nica 505",
+                        heading: HeadingLevel.HEADING_1,
+                        alignment: AlignmentType.CENTER,
+                        spacing: { after: 300 }
+                    })
+                );
+
+                // Procesar elementos del plan
+                const elementos = resultado.querySelectorAll("h1, h2, h3, p, li");
+                
+                if (elementos.length > 0) {
+                    elementos.forEach((el) => {
+                        const texto = el.innerText.trim();
+                        if (!texto) return;
+
+                        if (el.tagName === "H1") {
+                            children.push(
+                                new Paragraph({
+                                    text: texto,
+                                    heading: HeadingLevel.HEADING_1,
+                                    alignment: AlignmentType.CENTER,
+                                    spacing: { before: 200, after: 200 }
+                                })
+                            );
+                        } else if (el.tagName === "H2") {
+                            children.push(
+                                new Paragraph({
+                                    text: texto,
+                                    heading: HeadingLevel.HEADING_2,
+                                    spacing: { before: 250, after: 120 }
+                                })
+                            );
+                        } else if (el.tagName === "H3") {
+                            children.push(
+                                new Paragraph({
+                                    text: texto,
+                                    heading: HeadingLevel.HEADING_3,
+                                    spacing: { before: 180, after: 100 }
+                                })
+                            );
+                        } else if (el.tagName === "LI") {
+                            children.push(
+                                new Paragraph({
+                                    text: "•  " + texto,
+                                    spacing: { after: 60 }
+                                })
+                            );
+                        } else {
+                            children.push(
+                                new Paragraph({
+                                    text: texto,
+                                    spacing: { after: 100 }
+                                })
+                            );
+                        }
+                    });
+                } else {
+                    // Fallback: usar todo el texto
+                    const lineas = resultado.innerText.split("\n").filter(l => l.trim());
+                    lineas.forEach(linea => {
+                        children.push(
+                            new Paragraph({
+                                text: linea.trim(),
+                                spacing: { after: 80 }
+                            })
+                        );
+                    });
+                }
+
+                const doc = new Document({
+                    sections: [{
+                        properties: {},
+                        children: children
+                    }]
+                });
+
+                const blob = await Packer.toBlob(doc);
 
                 const url = URL.createObjectURL(blob);
                 const enlace = document.createElement("a");
@@ -855,10 +916,14 @@ ${resultado.innerHTML}
                 boton.textContent = "¡Descargado!";
                 setTimeout(function() {
                     boton.textContent = "Word (.docx)";
+                    boton.disabled = false;
                 }, 2000);
+
             } catch (error) {
                 console.error(error);
                 alert("Error al generar el archivo Word. Intenta de nuevo.");
+                boton.textContent = "Word (.docx)";
+                boton.disabled = false;
             }
         };
 
