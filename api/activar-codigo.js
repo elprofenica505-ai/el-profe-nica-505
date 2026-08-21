@@ -43,8 +43,8 @@ export default async function handler(req, res) {
     const data = doc.data();
     const ahora = new Date();
 
-    // Determinamos los días de vigencia: si el campo 'dias' existe en Firestore, lo usamos; si no, 30.
-    const diasValidez = data.dias || 30;
+    // Lógica mejorada: leemos los días del documento o usamos 30 por defecto
+    const diasDeVigencia = typeof data.dias === 'number' ? data.dias : 30;
 
     // Caso 1: el código ya fue activado antes
     if (data.usado) {
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
 
     // Caso 2: primera activación
     const fechaInicio = ahora;
-    const fechaFin = new Date(ahora.getTime() + diasValidez * 24 * 60 * 60 * 1000);
+    const fechaFin = new Date(ahora.getTime() + (diasDeVigencia * 24 * 60 * 60 * 1000));
 
     await ref.update({
       usado: true,
@@ -70,13 +70,11 @@ export default async function handler(req, res) {
       nombreDocente: nombreDocente.trim(),
       fechaInicio: fechaInicio,
       fechaFin: fechaFin,
-      // Opcional: guardamos los días usados para referencia futura
-      dias: diasValidez 
     });
 
     return res.status(200).json({
       activo: true,
-      diasRestantes: diasValidez,
+      diasRestantes: diasDeVigencia,
       fechaFin: fechaFin.toISOString(),
     });
 
