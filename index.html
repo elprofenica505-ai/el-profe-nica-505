@@ -339,7 +339,7 @@
             }
             const badge = document.getElementById("badge-estado");
             if (badge && !licenciaActiva) {
-                badge.innerHTML = `Prueba Gratis: <span id="contador-planes">${planesDisponibles}</span>/${MAX_PLANES_GRATIS} planes`;
+                badge.innerHTML = `Prueba Gratis: <span id="contador-planes">\( {planesDisponibles}</span>/ \){MAX_PLANES_GRATIS} planes`;
             }
             // Actualizar el botón de prueba gratis
             const btnGratis = document.getElementById("btn-prueba-gratis");
@@ -626,7 +626,7 @@
                 planesDisponibles = 9999; // Licencia mensual ilimitada o activa
 
                 $("badge-estado").innerHTML =
-                    `Licencia Activa (${escaparHTML(nombreDocente)}): <span id="contador-planes">${data.diasRestantes}</span> días restantes`;
+                    `Licencia Activa (\( {escaparHTML(nombreDocente)}): <span id="contador-planes"> \){data.diasRestantes}</span> días restantes`;
 
                 window.mostrarVista("vista-generador");
 
@@ -652,7 +652,7 @@
             licenciaActiva = false;
 
             $("badge-estado").innerHTML =
-                `Prueba Gratis: <span id="contador-planes">${planesDisponibles}</span>/${MAX_PLANES_GRATIS} planes`;
+                `Prueba Gratis: <span id="contador-planes">\( {planesDisponibles}</span>/ \){MAX_PLANES_GRATIS} planes`;
 
             window.mostrarVista("vista-generador");
         });
@@ -823,43 +823,60 @@
                 });
         };
 
+        /* ========== FUNCIÓN WORD CORREGIDA ========== */
         window.descargarWord = function(boton) {
-            const resultado = $("cuerpo-plan-resultado");
+            const resultado = document.getElementById("cuerpo-plan-resultado");
             if (!resultado) {
                 alert("No hay ningún plan para descargar.");
                 return;
             }
 
             const documento = `
-                <html>
-                <head>
-                    <meta charset="utf-8">
-                    <style>
-                        body { font-family: Arial, sans-serif; color: #1e293b; font-size: 11pt; line-height: 1.5; }
-                        h1 { color: #075985; text-align: center; }
-                        h2 { color: #075985; background: #e0f2fe; padding: 8px; border-left: 5px solid #0284c7; }
-                        table { width: 100%; border-collapse: collapse; }
-                        th { background: #075985; color: white; padding: 8px; border: 1px solid #999; }
-                        td { padding: 8px; border: 1px solid #999; }
-                    </style>
-                </head>
-                <body>
-                    ${resultado.innerHTML}
-                </body>
-                </html>
-            `;
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<meta name="ProgId" content="Word.Document">
+<meta name="Generator" content="Microsoft Word">
+<!--[if gte mso 9]>
+<xml>
+  <w:WordDocument>
+    <w:View>Print</w:View>
+    <w:Zoom>100</w:Zoom>
+  </w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+  @page { size: A4; margin: 2cm; }
+  body { font-family: Arial, sans-serif; font-size: 11pt; color: #1e293b; line-height: 1.5; }
+  h1 { color: #075985; text-align: center; font-size: 16pt; margin-bottom: 16px; }
+  h2 { color: #075985; background: #e0f2fe; padding: 8px 12px; border-left: 5px solid #0284c7; font-size: 13pt; margin: 18px 0 10px; }
+  h3 { color: #0369a1; font-size: 12pt; margin: 14px 0 6px; }
+  p { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  th { background: #075985; color: white; padding: 8px; border: 1px solid #999; text-align: left; }
+  td { padding: 8px; border: 1px solid #999; vertical-align: top; }
+  ul, ol { margin: 8px 0 12px 22px; }
+</style>
+</head>
+<body>
+${resultado.innerHTML}
+</body>
+</html>`;
 
-            const blob = new Blob(["" + documento], { type: "application/msword" });
+            // BOM + MIME correcto → mucho más compatible con Word y WPS en Android
+            const blob = new Blob(["\ufeff", documento], {
+                type: "application/msword;charset=utf-8"
+            });
+
             const url = URL.createObjectURL(blob);
             const enlace = document.createElement("a");
-
             enlace.href = url;
             enlace.download = "Plan_Diario_Profe_Nica_505.doc";
-
             document.body.appendChild(enlace);
             enlace.click();
             document.body.removeChild(enlace);
-
             URL.revokeObjectURL(url);
 
             boton.textContent = "¡Descargado!";
