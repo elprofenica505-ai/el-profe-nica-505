@@ -22,6 +22,7 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Método no permitido." });
 
   try {
+    // 1. Recibimos también el nombre del docente desde el frontend
     const { codigo, deviceId, nombreDocente } = req.body || {};
 
     if (!codigo || !deviceId) {
@@ -43,11 +44,12 @@ export default async function handler(req, res) {
     const data = doc.data();
     const ahora = new Date();
 
-    // Lógica mejorada: leemos los días del documento o usamos 30 por defecto
-    const diasDeVigencia = typeof data.dias === 'number' ? data.dias : 30;
+    // Determinamos los días de vigencia (usamos 30 si no existe el campo)
+    const diasValidez = data.dias || 30;
 
     // Caso 1: el código ya fue activado antes
     if (data.usado) {
+      // Si es el mismo dispositivo, permitimos el reingreso
       if (data.deviceId === deviceId) {
         const fechaFin = data.fechaFin.toDate();
         const diasRestantes = Math.ceil((fechaFin - ahora) / (1000 * 60 * 60 * 24));
@@ -57,12 +59,13 @@ export default async function handler(req, res) {
           fechaFin: fechaFin.toISOString(),
         });
       }
+      // Si intenta usarlo otro dispositivo diferente con el mismo código
       return res.status(403).json({ error: "Este código ya está activado en otro dispositivo." });
     }
 
     // Caso 2: primera activación
     const fechaInicio = ahora;
-    const fechaFin = new Date(ahora.getTime() + (diasDeVigencia * 24 * 60 * 60 * 1000));
+    const fechaFin = new Date(ahora.getTime() + (diasValidez * 24 * 60 * 60 * 1000));
 
     await ref.update({
       usado: true,
@@ -70,11 +73,12 @@ export default async function handler(req, res) {
       nombreDocente: nombreDocente.trim(),
       fechaInicio: fechaInicio,
       fechaFin: fechaFin,
+      // No modificamos el campo "dias" original del documento
     });
 
     return res.status(200).json({
       activo: true,
-      diasRestantes: diasDeVigencia,
+      diasRestantes: diasValidez,
       fechaFin: fechaFin.toISOString(),
     });
 
