@@ -2,20 +2,17 @@ import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
 if (!getApps().length) {
-  // Tomamos la llave y aseguramos que los saltos de línea funcionen sí o sí
-  let rawKey = process.env.FIREBASE_PRIVATE_KEY || "";
-  const formattedKey = rawKey.includes("\\n") ? rawKey.replace(/\\n/g, "\n") : rawKey;
-
   initializeApp({
     credential: cert({
       projectId: process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: formattedKey,
+      privateKey: (process.env.FIREBASE_PRIVATE_KEY || "").replace(/\\n/g, "\n"),
     }),
   });
 }
 
 const db = getFirestore();
+const DIAS_MEMBRESIA = 30;
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -48,9 +45,6 @@ export default async function handler(req, res) {
     const data = doc.data();
     const ahora = new Date();
 
-    // Determinamos los días de vigencia (usamos 30 si no existe el campo)
-    const diasValidez = data.dias || 30;
-
     // Caso 1: el código ya fue activado antes
     if (data.usado) {
       // Si es el mismo dispositivo, permitimos el reingreso
@@ -67,22 +61,21 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: "Este código ya está activado en otro dispositivo." });
     }
 
-    // Caso 2: primera activación
+    // Caso 2: primera activación (guardamos nombre, dispositivo y fechas)
     const fechaInicio = ahora;
-    const fechaFin = new Date(ahora.getTime() + (diasValidez * 24 * 60 * 60 * 1000));
+    const fechaFin = new Date(ahora.getTime() + DIAS_MEMBRESIA * 24 * 60 * 60 * 1000);
 
     await ref.update({
       usado: true,
       deviceId: deviceId,
-      nombreDocente: nombreDocente.trim(),
+      nombreDocente: nombreDocente.trim(), // <--- Etiquetado exacto del profesor
       fechaInicio: fechaInicio,
       fechaFin: fechaFin,
-      // No modificamos el campo "dias" original del documento
     });
 
     return res.status(200).json({
       activo: true,
-      diasRestantes: diasValidez,
+      diasRestantes: DIAS_MEMBRESIA,
       fechaFin: fechaFin.toISOString(),
     });
 
