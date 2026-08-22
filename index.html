@@ -121,6 +121,10 @@
    </header>
    <main class="max-w-6xl mx-auto w-full my-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center z-10">
     <div class="lg:col-span-7 text-center lg:text-left space-y-6">
+     <!-- Logo principal -->
+     <div class="flex justify-center lg:justify-start">
+      <img src="logo-profe-nica-505.jpg" alt="El Profe Nica 505 - Carlos Sequeira" class="w-40 sm:w-48 md:w-56 h-auto drop-shadow-xl select-none" loading="eager">
+     </div>
      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full text-blue-400 text-xs font-extrabold uppercase tracking-widest shadow-inner">
       <span class="animate-pulse">⚡</span> Plataforma Exclusiva para Docentes
      </div>
@@ -360,6 +364,11 @@
     }
 
     window.mostrarVista = function (idVista) {
+      // Si ya tiene licencia activa y quiere ir a suscripción, mandarlo al generador
+      if (idVista === "vista-suscripcion" && licenciaActiva) {
+        idVista = "vista-generador";
+      }
+
       const vistas = ["vista-landing", "vista-suscripcion", "vista-generador"];
       vistas.forEach((id) => {
         const vista = $(id);
@@ -598,8 +607,14 @@
         licenciaActiva = true;
         planesDisponibles = 9999;
 
-        $("badge-estado").innerHTML =
-          `Licencia Activa (${escaparHTML(nombreDocente)}): <span id="contador-planes">${data.diasRestantes}</span> días restantes`;
+        // Guardar en el dispositivo para no pedir el código otra vez
+        localStorage.setItem("profe_nica_licencia", "activa");
+        localStorage.setItem("profe_nica_nombre", nombreDocente);
+        if (data.diasRestantes != null) {
+          localStorage.setItem("profe_nica_dias", String(data.diasRestantes));
+        }
+
+        aplicarBadgeLicencia(nombreDocente, data.diasRestantes);
 
         window.mostrarVista("vista-generador");
 
@@ -916,9 +931,81 @@
       });
     };
 
-    // Inicialización
+    // ========== BADGE DE LICENCIA ==========
+    function aplicarBadgeLicencia(nombre, diasRestantes) {
+      const badge = $("badge-estado");
+      if (!badge) return;
+      const nombreSeguro = escaparHTML(nombre || localStorage.getItem("profe_nica_nombre") || "Docente");
+      const dias = diasRestantes != null ? diasRestantes : (localStorage.getItem("profe_nica_dias") || "?");
+      badge.className = "text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-3 py-1 rounded-full font-medium";
+      badge.innerHTML = `✅ Licencia Activa (${nombreSeguro}): <span id="contador-planes">${dias}</span> días restantes`;
+    }
+
+    // ========== VERIFICAR MEMBRESÍA AL CARGAR ==========
+    async function verificarMembresiaAlCargar() {
+      const deviceId = obtenerDeviceId();
+
+      try {
+        const response = await fetch("/api/verificar-membresia", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ deviceId })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.activo) {
+          licenciaActiva = true;
+          planesDisponibles = 9999;
+          localStorage.setItem("profe_nica_licencia", "activa");
+          if (data.diasRestantes != null) {
+            localStorage.setItem("profe_nica_dias", String(data.diasRestantes));
+          }
+          aplicarBadgeLicencia(localStorage.getItem("profe_nica_nombre"), data.diasRestantes);
+          return true;
+        }
+
+        // Sin membresía activa en este dispositivo
+        licenciaActiva = false;
+        localStorage.removeItem("profe_nica_licencia");
+        actualizarContadorGratis();
+        return false;
+
+      } catch (error) {
+        console.warn("No se pudo verificar membresía:", error);
+        // Fallback: usar lo guardado en localStorage si existe
+        if (localStorage.getItem("profe_nica_licencia") === "activa") {
+          licenciaActiva = true;
+          planesDisponibles = 9999;
+          aplicarBadgeLicencia(
+            localStorage.getItem("profe_nica_nombre"),
+            localStorage.getItem("profe_nica_dias")
+          );
+          return true;
+        }
+        actualizarContadorGratis();
+        return false;
+      }
+    }
+
+    // Si ya tiene licencia y toca "Iniciar Sesión" o "Probar Gratis", entrar directo
+    const botonesEntrada = document.querySelectorAll(
+      'button[onclick*="vista-suscripcion"]'
+    );
+    botonesEntrada.forEach((btn) => {
+      btn.addEventListener("click", async function (e) {
+        if (licenciaActiva) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.mostrarVista("vista-generador");
+        }
+      }, true);
+    });
+
+    // ========== INICIALIZACIÓN ==========
     colocarFechaActual();
     actualizarContadorGratis();
+    verificarMembresiaAlCargar();
   </script>
  </body>
 </html>
