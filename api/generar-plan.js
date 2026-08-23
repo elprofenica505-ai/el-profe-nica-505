@@ -28,6 +28,52 @@ export default async function handler(req, res) {
       fecha = ""
     } = req.body || {};
 
+    // Detectar si es Primer o Segundo Grado de Lengua y Literatura
+    const esPrimerOSegundoGradoLengua = 
+      (String(grado).toLowerCase().includes("1") || String(grado).toLowerCase().includes("2")) && 
+      (asignatura.toLowerCase().includes("lengua") || asignatura.toLowerCase().includes("literatura"));
+
+    // Bloque especial del Método FAS (solo se inyecta cuando corresponde)
+    const bloqueFAS = esPrimerOSegundoGradoLengua ? `
+====================
+INSTRUCCIÓN ESPECIAL – MÉTODO FAS (OBLIGATORIO)
+====================
+Este plan es de PRIMER o SEGUNDO GRADO de Lengua y Literatura. 
+Debes actuar EXCLUSIVAMENTE como un docente de primer o segundo grado de educación primaria de Nicaragua que aplica el Método Fónico-Analítico-Sintético (FAS) oficial del MINED.
+
+Reglas obligatorias del Método FAS:
+
+1. Enfoque: Fónico (sonido), Analítico (descomposición de palabras y oraciones en sílabas y fonemas) y Sintético (formación de sílabas, palabras y oraciones a partir de los sonidos y letras).
+
+2. Etapas del método (adapta según el grado y el momento del año):
+   - Aprestamiento
+   - Adquisición
+   - Afianzamiento (más fuerte en segundo grado)
+
+3. Estructura de la clase siguiendo los pasos del FAS:
+   - Presentación del fonema (sonido) con ejemplos orales y láminas.
+   - Presentación del grafema (letra) – mayúscula y minúscula, cursiva preferentemente.
+   - Formación y lectura de sílabas, palabras y oraciones (usando componedor colectivo e individual cuando sea posible).
+   - Lectura en el libro de texto o material impreso (lectura modelada, silenciosa, oral y coral).
+   - Escritura: dictado, copia y producción de palabras/oraciones con el esquema gráfico y trazado correcto de la letra cursiva.
+
+4. Recursos típicos del FAS que debes incluir:
+   - Láminas o imágenes que inicien con el sonido/letra trabajado
+   - Componedor colectivo e individual
+   - Esquema gráfico de las palabras
+   - Pautado para escritura cursiva
+   - Canciones, juegos verbales y conversaciones a partir de imágenes
+
+5. Prioridades según el grado:
+   - Primer grado: énfasis en Aprestamiento y Adquisición (reconocimiento de sonidos, letras, sílabas y palabras simples).
+   - Segundo grado: énfasis en Afianzamiento (fluidez, comprensión lectora básica, escritura de oraciones y textos cortos, corrección de silabeo).
+
+6. Lenguaje del plan:
+   - Usa un tono claro, motivador y cercano al niño de 6-8 años.
+   - Incluye actividades concretas, secuenciadas y con tiempo estimado.
+   - Siempre indica cómo se trabaja el sonido → letra → sílaba → palabra → oración.
+` : "";
+
     // Prompt maestro profesional orientado al MINED Nicaragua
     const prompt = `
 Eres un docente experto y asesor pedagógico del Ministerio de Educación de Nicaragua (MINED), con más de 15 años de experiencia en aula y en elaboración de planes didácticos diarios para Educación Primaria y Educación Secundaria Regular.
@@ -50,6 +96,8 @@ DATOS DEL PLAN
 - Instrumento de Evaluación solicitado: ${instrumento}
 - Tiempo estimado: ${tiempo}
 - Fecha: ${fecha || "No especificada"}
+
+${bloqueFAS}
 
 ====================
 INSTRUCCIONES OBLIGATORIAS
@@ -156,7 +204,7 @@ REGLAS DE FORMATO FINALES
 `;
 
     const modelo = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/\( {modelo}:generateContent?key= \){apiKey}`;
 
     const geminiResponse = await fetch(url, {
       method: "POST",
