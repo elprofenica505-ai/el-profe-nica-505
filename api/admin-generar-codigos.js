@@ -27,7 +27,7 @@ function generarCodigo() {
     numero += numeros[Math.floor(Math.random() * numeros.length)];
   }
 
-  return `PNI-${parte}-${numero}`;
+  return `PNI-\( {parte}- \){numero}`;
 }
 
 export default async function handler(req, res) {
@@ -58,7 +58,7 @@ export default async function handler(req, res) {
       batch.set(ref, {
         usado: false,
         deviceId: null,
-        fechaInicio: null,
+        fechaIni: null,        // ← Corregido
         fechaFin: null,
         creado: new Date(),
       });
