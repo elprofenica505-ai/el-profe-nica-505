@@ -331,183 +331,164 @@
         </div>
       </div>
 
-     <!-- MATRIZ DE 5 BLOQUES ALINEADOS Y BOTÓN DE ACCIÓN -->
-      <div class="bg-slate-950 border border-slate-800 p-3 sm:p-4 rounded-xl space-y-4 text-xs
+<div class="bg-slate-950 border border-slate-800 p-3 sm:p-4 rounded-xl space-y-4 text-xs">
 
-        <!-- Contenedor general para sincronizar scroll -->
-        <div class="overflow-x-auto pb-3 scrollbar-thin scrollbar-thumb-slate-700">
-          <div class="grid grid-cols-5 gap-3 min-w-[1300px]">
-            
-            <!-- Bloque 1 (Alineado con Bloque 2 inferior) -->
-            <div class="bg-blue-950/30 border border-blue-900/50 p-3 rounded-lg space-y-2">
-              <h4 class="font-bold text-blue-400 text-center border-b border-blue-900 pb-1">Bloque 1</h4>
-              <div>
-                <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 1...">
-              </div>
-              <div>
-                <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 1">
-              </div>
-              <div>
-                <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 1">
-              </div>
-              <div>
-                <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 1">
-              </div>
-            </div>
+  <div id="scroll-bloques" class="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-700">
+    <div class="flex gap-3 min-w-[1550px] items-start">
+      
+      <div class="w-[260px] flex-shrink-0 hidden sm:block"></div>
 
-            <!-- Bloque 2 (Alineado con Bloque 3 inferior) -->
-            <div class="bg-emerald-950/30 border border-emerald-900/50 p-3 rounded-lg space-y-2">
-              <h4 class="font-bold text-emerald-400 text-center border-b border-emerald-900 pb-1">Bloque 2</h4>
-              <div>
-                <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 2...">
-              </div>
-              <div>
-                <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 2">
-              </div>
-              <div>
-                <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 2">
-              </div>
-              <div>
-                <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 2">
-              </div>
-            </div>
-
-            <!-- Bloque 3 (Alineado con Bloque 4 inferior) -->
-            <div class="bg-yellow-950/30 border border-yellow-900/50 p-3 rounded-lg space-y-2">
-              <h4 class="font-bold text-yellow-400 text-center border-b border-yellow-900 pb-1">Bloque 3</h4>
-              <div>
-                <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 3...">
-              </div>
-              <div>
-                <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 3">
-              </div>
-              <div>
-                <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 3">
-              </div>
-              <div>
-                <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 3">
-              </div>
-            </div>
-
-            <!-- Bloque 4 (Alineado con Bloque 5 inferior) -->
-            <div class="bg-purple-950/30 border border-purple-900/50 p-3 rounded-lg space-y-2">
-              <h4 class="font-bold text-purple-400 text-center border-b border-purple-900 pb-1">Bloque 4</h4>
-              <div>
-                <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 4...">
-              </div>
-              <div>
-                <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 4">
-              </div>
-              <div>
-                <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 4">
-              </div>
-              <div>
-                <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 4">
-              </div>
-            </div>
-
-            <!-- Bloque 5 (Alineado con Bloque 6 inferior) -->
-            <div class="bg-rose-950/30 border border-rose-900/50 p-3 rounded-lg space-y-2">
-              <h4 class="font-bold text-rose-400 text-center border-b border-rose-900 pb-1">Bloque 5</h4>
-              <div>
-                <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 5...">
-              </div>
-              <div>
-                <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 5">
-              </div>
-              <div>
-                <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 5">
-              </div>
-              <div>
-                <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
-                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 5">
-              </div>
-            </div>
-
+      <div class="grid grid-cols-5 gap-3 flex-grow">
+        
+        <div class="bg-blue-950/30 border border-blue-900/50 p-3 rounded-lg space-y-2">
+          <h4 class="font-bold text-blue-400 text-center border-b border-blue-900 pb-1">Bloque 1</h4>
+          <div>
+            <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 1...">
+          </div>
+          <div>
+            <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 1">
+          </div>
+          <div>
+            <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 1">
+          </div>
+          <div>
+            <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 1">
           </div>
         </div>
-     <!-- Botón para agregar estudiante -->
-        <div class="flex justify-end border-b border-slate-800 pb-3">
-          <button type="button" onclick="agregarFilaEstudiante()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-lg shadow text-xs transition">
-            + Agregar Estudiante
-          </button>
+
+        <div class="bg-emerald-950/30 border border-emerald-900/50 p-3 rounded-lg space-y-2">
+          <h4 class="font-bold text-emerald-400 text-center border-b border-emerald-900 pb-1">Bloque 2</h4>
+          <div>
+            <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 2...">
+          </div>
+          <div>
+            <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 2">
+          </div>
+          <div>
+            <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 2">
+          </div>
+          <div>
+            <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 2">
+          </div>
         </div>
 
-        <!-- Botón de compartir -->
-        <div class="flex justify-center pt-3 border-t border-slate-800">
-          <button type="button" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg shadow text-xs transition flex items-center justify-center gap-2">
-            <span>💾</span> Compartir / Guardar (Word, PDF, Excel)
-          </button>
+        <div class="bg-yellow-950/30 border border-yellow-900/50 p-3 rounded-lg space-y-2">
+          <h4 class="font-bold text-yellow-400 text-center border-b border-yellow-900 pb-1">Bloque 3</h4>
+          <div>
+            <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 3...">
+          </div>
+          <div>
+            <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 3">
+          </div>
+          <div>
+            <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 3">
+          </div>
+          <div>
+            <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 3">
+          </div>
         </div>
-      </div>
 
-      <!-- BARRA DE ACCIÓN DE LA TABLA -->
-      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-        <h2 class="text-sm font-bold text-white flex items-center gap-2"><span>📊</span> Registro de Evidencias Alineadas por Bloques</h2>
-        <button type="button" onclick="agregarFilaEstudiante()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-lg shadow text-xs transition">
-          + Agregar Estudiante
-        </button>
-      </div>
+        <div class="bg-purple-950/30 border border-purple-900/50 p-3 rounded-lg space-y-2">
+          <h4 class="font-bold text-purple-400 text-center border-b border-purple-900 pb-1">Bloque 4</h4>
+          <div>
+            <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 4...">
+          </div>
+          <div>
+            <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 4">
+          </div>
+          <div>
+            <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 4">
+          </div>
+          <div>
+            <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 4">
+          </div>
+        </div>
 
-      <!-- TABLA DETALLADA DE ESTUDIANTES Y 5 BLOQUES DE EVIDENCIAS -->
-      <div class="overflow-x-auto rounded-xl border border-slate-700">
-        <table class="min-w-full border-collapse text-xs text-center whitespace-nowrap" id="tabla-registro">
-          <thead class="text-slate-300">
-            <tr>
-              <th rowspan="2" class="border-b border-r border-slate-700 bg-slate-800 p-2">No.</th>
-              <th rowspan="2" class="border-b border-r border-slate-700 bg-slate-800 p-2 min-w-[200px] text-left">Nombres y Apellidos</th>
-              <th colspan="5" class="border-b border-r border-slate-700 bg-blue-900/30 p-2 text-blue-300">Bloque 1 (20 pts)</th>
-              <th colspan="5" class="border-b border-r border-slate-700 bg-emerald-900/30 p-2 text-emerald-300">Bloque 2 (20 pts)</th>
-              <th colspan="5" class="border-b border-r border-slate-700 bg-yellow-900/30 p-2 text-yellow-300">Bloque 3 (20 pts)</th>
-              <th colspan="5" class="border-b border-r border-slate-700 bg-purple-900/30 p-2 text-purple-300">Bloque 4 (20 pts)</th>
-              <th colspan="5" class="border-b border-r border-slate-700 bg-rose-900/30 p-2 text-rose-300">Bloque 5 (20 pts)</th>
-              <th rowspan="2" class="border-b border-r border-slate-700 bg-slate-800 p-2 font-bold text-white">Nota Total</th>
-              <th rowspan="2" class="border-b border-slate-700 bg-slate-800 p-2 font-bold text-white">Cualitativa</th>
-            </tr>
-            <tr class="text-[10px] bg-slate-800/50">
-              <script>
-                const coloresBloques = ['blue', 'emerald', 'yellow', 'purple', 'rose'];
-                coloresBloquesforEach(color => {}); // dummy
-                for(let b=0; b<5; b++) {
-                  const col = ['blue', 'emerald', 'yellow', 'purple', 'rose'][b];
-                  document.write(`
-                    <th class="border-b border-r border-slate-700 p-1">Ev #1</th>
-                    <th class="border-b border-r border-slate-700 p-1">Ev #2</th>
-                    <th class="border-b border-r border-slate-700 p-1">Ev #3</th>
-                    <th class="border-b border-r border-slate-700 p-1">Ev #4</th>
-                    <th class="border-b border-r border-slate-700 p-1 font-bold text-${col}-300 bg-${col}-900/20">Total</th>
-                  `);
-                }
-              </script>
-            </tr>
-          </thead>
-          <tbody id="registro-body" class="text-slate-300">
-            <!-- Las filas se inyectan automáticamente -->
-          </tbody>
+        <div class="bg-rose-950/30 border border-rose-900/50 p-3 rounded-lg space-y-2">
+          <h4 class="font-bold text-rose-400 text-center border-b border-rose-900 pb-1">Bloque 5</h4>
+          <div>
+            <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 5...">
+          </div>
+          <div>
+            <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 5">
+          </div>
+          <div>
+            <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 5">
+          </div>
+          <div>
+            <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 5">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="space-y-3 pt-2 border-t border-slate-800">
+    <div class="flex justify-between items-center px-1">
+      <h3 class="font-bold text-slate-200 text-xs">Registro de Evidencias Alineadas por Bloques</h3>
+      <button type="button" onclick="agregarFilaEstudiante()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-lg shadow text-xs transition">
+        + Agregar Estudiante
+      </button>
+    </div>
+
+    <div id="scroll-tabla" class="overflow-x-auto rounded-xl border border-slate-800 scrollbar-thin scrollbar-thumb-slate-700">
+      <table class="w-full border-collapse text-xs text-center whitespace-nowrap min-w-[1550px]" id="tabla-registro">
         </table>
-      </div>
-    </section>
+    </div>
+  </div>
 
+  <div class="flex justify-center pt-3 border-t border-slate-800">
+    <button type="button" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg shadow text-xs transition flex items-center justify-center gap-2">
+      <span>💾</span> Compartir / Guardar (Word, PDF, Excel)
+    </button>
+  </div>
 
+</div>
+
+<script>
+  const scrollBloques = document.getElementById('scroll-bloques');
+  const scrollTabla = document.getElementById('scroll-tabla');
+  let isScrolling = false;
+
+  if (scrollBloques && scrollTabla) {
+    scrollBloques.addEventListener('scroll', () => {
+      if (!isScrolling) {
+        isScrolling = true;
+        scrollTabla.scrollLeft = scrollBloques.scrollLeft;
+      }
+      setTimeout(() => { isScrolling = false; }, 10);
+    });
+
+    scrollTabla.addEventListener('scroll', () => {
+      if (!isScrolling) {
+        isScrolling = true;
+        scrollBloques.scrollLeft = scrollTabla.scrollLeft;
+      }
+      setTimeout(() => { isScrolling = false; }, 10);
+    });
+  }
+</script>
 
     <div id="contenedor-resultados" class="space-y-4"></div>
 </main>
