@@ -541,8 +541,84 @@
                 <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 3">
               </div>
             </div>
+<!-- MATRIZ DE 5 BLOQUES ALINEADOS Y BOTÓN DE ACCIÓN -->
+      <div class="bg-slate-950 border border-slate-800 p-3 sm:p-4 rounded-xl space-y-4 text-xs">
+        
+        <!-- Botón para agregar estudiante -->
+        <div class="flex justify-end border-b border-slate-800 pb-3">
+          <button type="button" onclick="agregarFilaEstudiante()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-lg shadow text-xs transition">
+            + Agregar Estudiante
+          </button>
+        </div>
 
-            <!-- Bloque 4 (Alineado con Bloque 4 de abajo) -->
+        <!-- Contenedor general para sincronizar scroll -->
+        <div class="overflow-x-auto pb-3 scrollbar-thin scrollbar-thumb-slate-700">
+          <div class="grid grid-cols-5 gap-3 min-w-[1300px]">
+            
+            <!-- Bloque 1 (Alineado con Bloque 1 inferior) -->
+            <div class="bg-blue-950/30 border border-blue-900/50 p-3 rounded-lg space-y-2">
+              <h4 class="font-bold text-blue-400 text-center border-b border-blue-900 pb-1">Bloque 1</h4>
+              <div>
+                <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 1...">
+              </div>
+              <div>
+                <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 1">
+              </div>
+              <div>
+                <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 1">
+              </div>
+              <div>
+                <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 1">
+              </div>
+            </div>
+
+            <!-- Bloque 2 (Alineado con Bloque 2 inferior) -->
+            <div class="bg-emerald-950/30 border border-emerald-900/50 p-3 rounded-lg space-y-2">
+              <h4 class="font-bold text-emerald-400 text-center border-b border-emerald-900 pb-1">Bloque 2</h4>
+              <div>
+                <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 2...">
+              </div>
+              <div>
+                <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 2">
+              </div>
+              <div>
+                <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 2">
+              </div>
+              <div>
+                <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 2">
+              </div>
+            </div>
+
+            <!-- Bloque 3 (Alineado con Bloque 3 inferior) -->
+            <div class="bg-yellow-950/30 border border-yellow-900/50 p-3 rounded-lg space-y-2">
+              <h4 class="font-bold text-yellow-400 text-center border-b border-yellow-900 pb-1">Bloque 3</h4>
+              <div>
+                <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 3...">
+              </div>
+              <div>
+                <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 3">
+              </div>
+              <div>
+                <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 3">
+              </div>
+              <div>
+                <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
+                <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 3">
+              </div>
+            </div>
+
+            <!-- Bloque 4 (Alineado con Bloque 4 inferior) -->
             <div class="bg-purple-950/30 border border-purple-900/50 p-3 rounded-lg space-y-2">
               <h4 class="font-bold text-purple-400 text-center border-b border-purple-900 pb-1">Bloque 4</h4>
               <div>
@@ -563,7 +639,7 @@
               </div>
             </div>
 
-            <!-- Bloque 5 (Alineado con Bloque 5 de abajo) -->
+            <!-- Bloque 5 (Alineado con Bloque 5 inferior) -->
             <div class="bg-rose-950/30 border border-rose-900/50 p-3 rounded-lg space-y-2">
               <h4 class="font-bold text-rose-400 text-center border-b border-rose-900 pb-1">Bloque 5</h4>
               <div>
@@ -585,6 +661,13 @@
             </div>
 
           </div>
+        </div>
+
+        <!-- Botón de compartir -->
+        <div class="flex justify-center pt-3 border-t border-slate-800">
+          <button type="button" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg shadow text-xs transition flex items-center justify-center gap-2">
+            <span>💾</span> Compartir / Guardar (Word, PDF, Excel)
+          </button>
         </div>
       </div>
 
