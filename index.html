@@ -23,10 +23,15 @@
       #vista-generador header, #vista-generador footer, #form-plan, #contenedor-resultados button { display:none !important; }
     }
     .auto-textarea {
-      min-height: 32px;
+      min-height: 28px;
       resize: none;
-      overflow: hidden;
-      field-sizing: content;
+      overflow-y: hidden;
+      line-height: 1.3;
+    }
+    .ev-label {
+      max-width: 62px;          /* ≈ 18 caracteres */
+      min-width: 62px;
+      width: 62px;
     }
     .scrollbar-thin::-webkit-scrollbar { height: 8px; }
     .scrollbar-thin::-webkit-scrollbar-track { background: #1e293b; }
@@ -42,27 +47,16 @@
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 flex items-center justify-center text-lg">🇳🇮</div>
         <span class="font-black tracking-wider text-white text-base sm:text-lg">EL PROFE NICA <span class="text-blue-400">505</span></span>
       </div>
-      <button type="button" onclick="mostrarVista('vista-suscripcion')" class="text-xs sm:text-sm bg-slate-800 hover:bg-slate-700 text-blue-400 border border-blue-500/30 px-5 py-2.5 rounded-xl font-bold transition">
-        🔑 Iniciar Sesión
-      </button>
+      <button type="button" onclick="mostrarVista('vista-suscripcion')" class="text-xs sm:text-sm bg-slate-800 hover:bg-slate-700 text-blue-400 border border-blue-500/30 px-5 py-2.5 rounded-xl font-bold transition">🔑 Iniciar Sesión</button>
     </header>
     <main class="max-w-6xl mx-auto w-full my-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center z-10">
       <div class="lg:col-span-7 text-center lg:text-left space-y-6">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full text-blue-400 text-xs font-extrabold uppercase tracking-widest">
-          ⚡ Plataforma Exclusiva para Docentes
-        </div>
-        <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-[1.1]">
-          Menos estrés con los papeles,<br class="hidden sm:inline">
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-300">más tiempo para ti y tu familia.</span>
-        </h1>
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full text-blue-400 text-xs font-extrabold uppercase tracking-widest">⚡ Plataforma Exclusiva para Docentes</div>
+        <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-[1.1]">Menos estrés con los papeles,<br class="hidden sm:inline"><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-300">más tiempo para ti y tu familia.</span></h1>
         <p class="text-base sm:text-lg text-slate-300 max-w-xl mx-auto lg:mx-0">Genera planes diarios organizados y profesionales adaptados al MINED en segundos.</p>
         <div class="pt-2 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-          <button type="button" onclick="mostrarVista('vista-suscripcion')" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold text-base px-8 py-4 rounded-xl shadow-xl transition">
-            🚀 Probar Gratis Ahora
-          </button>
-          <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica" target="_blank" class="bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-semibold text-base px-6 py-4 rounded-xl border border-slate-700/80 transition">
-            💬 Contactar por WhatsApp
-          </a>
+          <button type="button" onclick="mostrarVista('vista-suscripcion')" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold text-base px-8 py-4 rounded-xl shadow-xl transition">🚀 Probar Gratis Ahora</button>
+          <a href="https://wa.me/50588276908?text=Hola%20Profe%20Nica" target="_blank" class="bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-semibold text-base px-6 py-4 rounded-xl border border-slate-700/80 transition">💬 Contactar por WhatsApp</a>
         </div>
       </div>
       <div class="lg:col-span-5">
@@ -99,9 +93,7 @@
         <span>💬 Solicitar Plan Mensual</span>
         <span class="text-xs bg-emerald-800 px-2 py-1 rounded font-bold">WhatsApp</span>
       </a>
-      <button id="btn-prueba-gratis" type="button" class="w-full mt-4 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2.5 rounded-xl text-xs border border-slate-700">
-        🚀 Usar Prueba Gratis - 8 planes
-      </button>
+      <button id="btn-prueba-gratis" type="button" class="w-full mt-4 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium py-2.5 rounded-xl text-xs border border-slate-700">🚀 Usar Prueba Gratis - 8 planes</button>
       <div class="text-center mt-5">
         <button type="button" onclick="mostrarVista('vista-landing')" class="text-xs text-slate-400 hover:text-white">← Volver al inicio</button>
       </div>
@@ -195,10 +187,10 @@
         </form>
       </section>
 
-      <!-- ================= REGISTRO DE CALIFICACIONES ================= -->
+      <!-- ================= REGISTRO ================= -->
       <section id="registro-view" class="hidden bg-slate-900 border border-slate-800 p-4 sm:p-6 rounded-2xl shadow-lg space-y-5">
         
-        <!-- ENCABEZADO (VACÍO PARA QUE CADA PROFE PONGA SUS DATOS) -->
+        <!-- ENCABEZADO VACÍO -->
         <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
           <div class="text-center border-b border-slate-800 pb-3">
             <h2 class="text-base font-bold text-blue-400">SISTEMA DE EVALUACIÓN POR UNIDAD DE APRENDIZAJE</h2>
@@ -232,9 +224,8 @@
           </div>
         </div>
 
-        <!-- CONTENEDOR PRINCIPAL -->
+        <!-- CONTENEDOR -->
         <div class="bg-slate-950 border border-slate-800 p-3 sm:p-4 rounded-xl space-y-4 text-xs">
-          
           <div class="flex flex-wrap justify-between items-center gap-2">
             <h3 class="font-bold text-slate-200 text-xs">Registro de Evidencias Alineadas por Bloques</h3>
             <div class="flex flex-wrap gap-2">
@@ -256,124 +247,67 @@
 
           <!-- SCROLL ÚNICO -->
           <div id="scroll-unico" class="overflow-x-auto rounded-xl border border-slate-800 scrollbar-thin">
-            <div class="min-w-[1700px]">
+            <div style="min-width: 1680px;">
 
-              <!-- ========== BLOQUES SUPERIORES ========== -->
+              <!-- ========== BLOQUES SUPERIORES (ancha fija) ========== -->
               <div class="flex border-b border-slate-800">
-                <!-- Espaciador izquierdo (No. + Nombre) -->
+                <!-- Espaciador (No. + Nombre) -->
                 <div class="w-[220px] flex-shrink-0 bg-slate-900/60 border-r border-slate-800"></div>
-                
-                <!-- Los 5 bloques con el mismo ancho -->
-                <div class="flex flex-1">
-                  <!-- Bloque 1 -->
-                  <div class="bloque-superior w-[296px] flex-shrink-0 bg-blue-950/40 border-r border-blue-900/40 p-3 space-y-2" data-bloque="1">
-                    <h4 class="font-bold text-blue-400 text-center border-b border-blue-900 pb-1">Bloque 1</h4>
-                    <div>
-                      <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
-                      <textarea id="b1-indicador" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 1..." rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
-                      <textarea id="b1-conceptual" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 1" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
-                      <textarea id="b1-procedimental" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 1" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
-                      <textarea id="b1-actitudinal" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 1" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                  </div>
 
-                  <!-- Bloque 2 -->
-                  <div class="bloque-superior w-[296px] flex-shrink-0 bg-emerald-950/40 border-r border-emerald-900/40 p-3 space-y-2" data-bloque="2">
-                    <h4 class="font-bold text-emerald-400 text-center border-b border-emerald-900 pb-1">Bloque 2</h4>
-                    <div>
-                      <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
-                      <textarea id="b2-indicador" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 2..." rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
-                      <textarea id="b2-conceptual" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 2" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
-                      <textarea id="b2-procedimental" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 2" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
-                      <textarea id="b2-actitudinal" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 2" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                  </div>
+                <!-- Bloque 1 -->
+                <div class="w-[280px] flex-shrink-0 bg-blue-950/40 border-r border-blue-900/40 p-2.5 space-y-1.5">
+                  <h4 class="font-bold text-blue-400 text-center border-b border-blue-900 pb-1 text-xs">Bloque 1</h4>
+                  <div><label class="block text-[10px] text-slate-400">Indicador:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Indicador 1..."></textarea></div>
+                  <div><label class="block text-[10px] text-blue-300">Conceptual:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Conceptual 1"></textarea></div>
+                  <div><label class="block text-[10px] text-emerald-300">Procedimental:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Procedimental 1"></textarea></div>
+                  <div><label class="block text-[10px] text-yellow-300">Actitudinal:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Actitudinal 1"></textarea></div>
+                </div>
 
-                  <!-- Bloque 3 -->
-                  <div class="bloque-superior w-[296px] flex-shrink-0 bg-yellow-950/40 border-r border-yellow-900/40 p-3 space-y-2" data-bloque="3">
-                    <h4 class="font-bold text-yellow-400 text-center border-b border-yellow-900 pb-1">Bloque 3</h4>
-                    <div>
-                      <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
-                      <textarea id="b3-indicador" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 3..." rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
-                      <textarea id="b3-conceptual" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 3" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
-                      <textarea id="b3-procedimental" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 3" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
-                      <textarea id="b3-actitudinal" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 3" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                  </div>
+                <!-- Bloque 2 -->
+                <div class="w-[280px] flex-shrink-0 bg-emerald-950/40 border-r border-emerald-900/40 p-2.5 space-y-1.5">
+                  <h4 class="font-bold text-emerald-400 text-center border-b border-emerald-900 pb-1 text-xs">Bloque 2</h4>
+                  <div><label class="block text-[10px] text-slate-400">Indicador:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Indicador 2..."></textarea></div>
+                  <div><label class="block text-[10px] text-blue-300">Conceptual:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Conceptual 2"></textarea></div>
+                  <div><label class="block text-[10px] text-emerald-300">Procedimental:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Procedimental 2"></textarea></div>
+                  <div><label class="block text-[10px] text-yellow-300">Actitudinal:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Actitudinal 2"></textarea></div>
+                </div>
 
-                  <!-- Bloque 4 -->
-                  <div class="bloque-superior w-[296px] flex-shrink-0 bg-purple-950/40 border-r border-purple-900/40 p-3 space-y-2" data-bloque="4">
-                    <h4 class="font-bold text-purple-400 text-center border-b border-purple-900 pb-1">Bloque 4</h4>
-                    <div>
-                      <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
-                      <textarea id="b4-indicador" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 4..." rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
-                      <textarea id="b4-conceptual" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 4" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
-                      <textarea id="b4-procedimental" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 4" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
-                      <textarea id="b4-actitudinal" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 4" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                  </div>
+                <!-- Bloque 3 -->
+                <div class="w-[280px] flex-shrink-0 bg-yellow-950/40 border-r border-yellow-900/40 p-2.5 space-y-1.5">
+                  <h4 class="font-bold text-yellow-400 text-center border-b border-yellow-900 pb-1 text-xs">Bloque 3</h4>
+                  <div><label class="block text-[10px] text-slate-400">Indicador:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Indicador 3..."></textarea></div>
+                  <div><label class="block text-[10px] text-blue-300">Conceptual:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Conceptual 3"></textarea></div>
+                  <div><label class="block text-[10px] text-emerald-300">Procedimental:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Procedimental 3"></textarea></div>
+                  <div><label class="block text-[10px] text-yellow-300">Actitudinal:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Actitudinal 3"></textarea></div>
+                </div>
 
-                  <!-- Bloque 5 -->
-                  <div class="bloque-superior w-[296px] flex-shrink-0 bg-rose-950/40 p-3 space-y-2" data-bloque="5">
-                    <h4 class="font-bold text-rose-400 text-center border-b border-rose-900 pb-1">Bloque 5</h4>
-                    <div>
-                      <label class="block text-[10px] text-slate-400 font-semibold">Indicador:</label>
-                      <textarea id="b5-indicador" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Indicador 5..." rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-blue-300 font-semibold">Conceptual:</label>
-                      <textarea id="b5-conceptual" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Conceptual 5" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-emerald-300 font-semibold">Procedimental:</label>
-                      <textarea id="b5-procedimental" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Procedimental 5" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                    <div>
-                      <label class="block text-[10px] text-yellow-300 font-semibold">Actitudinal:</label>
-                      <textarea id="b5-actitudinal" class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white text-xs" placeholder="Actitudinal 5" rows="1" oninput="autoResize(this)"></textarea>
-                    </div>
-                  </div>
+                <!-- Bloque 4 -->
+                <div class="w-[280px] flex-shrink-0 bg-purple-950/40 border-r border-purple-900/40 p-2.5 space-y-1.5">
+                  <h4 class="font-bold text-purple-400 text-center border-b border-purple-900 pb-1 text-xs">Bloque 4</h4>
+                  <div><label class="block text-[10px] text-slate-400">Indicador:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Indicador 4..."></textarea></div>
+                  <div><label class="block text-[10px] text-blue-300">Conceptual:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Conceptual 4"></textarea></div>
+                  <div><label class="block text-[10px] text-emerald-300">Procedimental:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Procedimental 4"></textarea></div>
+                  <div><label class="block text-[10px] text-yellow-300">Actitudinal:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Actitudinal 4"></textarea></div>
+                </div>
+
+                <!-- Bloque 5 -->
+                <div class="w-[280px] flex-shrink-0 bg-rose-950/40 border-r border-rose-900/40 p-2.5 space-y-1.5">
+                  <h4 class="font-bold text-rose-400 text-center border-b border-rose-900 pb-1 text-xs">Bloque 5</h4>
+                  <div><label class="block text-[10px] text-slate-400">Indicador:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Indicador 5..."></textarea></div>
+                  <div><label class="block text-[10px] text-blue-300">Conceptual:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Conceptual 5"></textarea></div>
+                  <div><label class="block text-[10px] text-emerald-300">Procedimental:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Procedimental 5"></textarea></div>
+                  <div><label class="block text-[10px] text-yellow-300">Actitudinal:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Actitudinal 5"></textarea></div>
+                </div>
+
+                <!-- BLOQUE CALIFICACIÓN TOTAL (nuevo) -->
+                <div class="w-[140px] flex-shrink-0 bg-slate-800/80 p-2.5 flex flex-col justify-center items-center">
+                  <h4 class="font-bold text-cyan-300 text-center text-xs leading-tight">Calificación<br>Total</h4>
+                  <p class="text-[10px] text-slate-400 mt-2 text-center">Suma de todos<br>los bloques</p>
                 </div>
               </div>
 
               <!-- ========== TABLA ========== -->
-              <table class="w-full border-collapse text-xs text-center" id="tabla-registro">
+              <table class="w-full border-collapse text-xs text-center">
                 <thead>
                   <tr class="text-slate-300">
                     <th class="border-b border-r border-slate-700 bg-slate-800 p-2 w-[40px]">No.</th>
@@ -383,14 +317,14 @@
                     <th colspan="5" class="border-b border-r border-slate-700 bg-yellow-900/60 p-2 text-yellow-300">Bloque 3 (20 pts)</th>
                     <th colspan="5" class="border-b border-r border-slate-700 bg-purple-900/60 p-2 text-purple-300">Bloque 4 (20 pts)</th>
                     <th colspan="5" class="border-b border-r border-slate-700 bg-rose-900/60 p-2 text-rose-300">Bloque 5 (20 pts)</th>
-                    <th class="border-b border-slate-700 bg-slate-800 p-2 font-bold w-[55px]">Total</th>
+                    <th class="border-b border-r border-slate-700 bg-slate-800 p-2 font-bold w-[55px]">Total</th>
                     <th class="border-b border-slate-700 bg-slate-800 p-2 font-bold w-[60px]">Cualit.</th>
                   </tr>
-                  <!-- Fila de evidencias editables -->
+                  <!-- Fila de evidencias (ancho limitado) -->
                   <tr class="text-[10px] bg-slate-900/80" id="fila-evidencias">
                     <th class="border-b border-r border-slate-700 bg-slate-800"></th>
                     <th class="border-b border-r border-slate-700 bg-slate-800"></th>
-                    <!-- Se genera con JS -->
+                    <!-- se llena con JS -->
                   </tr>
                 </thead>
                 <tbody id="tabla-estudiantes-cuerpo" class="divide-y divide-slate-800"></tbody>
@@ -402,22 +336,17 @@
 
       <div id="contenedor-resultados" class="space-y-4"></div>
     </main>
-
     <footer class="text-center py-4 text-xs text-slate-500 border-t border-slate-800 mt-8">El Profe Nica 505 ©</footer>
   </div>
 
   <script>
-    // ========== NAVEGACIÓN ==========
     function mostrarVista(id) {
       ["vista-landing","vista-suscripcion","vista-generador"].forEach(v => {
         const el = document.getElementById(v);
         if (el) el.classList.add("hidden");
       });
       const vista = document.getElementById(id);
-      if (vista) {
-        vista.classList.remove("hidden");
-        window.scrollTo(0,0);
-      }
+      if (vista) { vista.classList.remove("hidden"); window.scrollTo(0,0); }
       if (id === "vista-generador") colocarFechaActual();
     }
 
@@ -436,13 +365,11 @@
       }
     }
 
-    // ========== AUTO RESIZE DE TEXTAREAS ==========
     function autoResize(el) {
       el.style.height = "auto";
-      el.style.height = (el.scrollHeight) + "px";
+      el.style.height = el.scrollHeight + "px";
     }
 
-    // ========== REGISTRO ==========
     function inicializarRegistro() {
       const fila = document.getElementById("fila-evidencias");
       if (fila && fila.children.length <= 2) {
@@ -450,14 +377,13 @@
         let html = "";
         colores.forEach((color, idx) => {
           for (let i = 1; i <= 4; i++) {
-            html += `<th class="border-b border-r border-slate-700 p-1 bg-${color}-950/30">
-              <textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-[10px] text-center evid-label" 
-                data-bloque="\( {idx+1}" data-ev=" \){i}" placeholder="Ev #${i}" rows="1" oninput="autoResize(this)"></textarea>
+            html += `<th class="border-b border-r border-slate-700 p-0.5 bg-${color}-950/30">
+              <textarea class="auto-textarea ev-label bg-slate-900 border border-slate-700 rounded p-0.5 text-white text-[9px] text-center" 
+                placeholder="Ev#${i}" rows="1" oninput="autoResize(this)"></textarea>
             </th>`;
           }
-          html += `<th class="border-b border-r border-slate-700 p-1 font-bold text-\( {color}-300 bg- \){color}-950/50">Total</th>`;
+          html += `<th class="border-b border-r border-slate-700 p-1 font-bold text-\( {color}-300 bg- \){color}-950/50 w-[40px]">Total</th>`;
         });
-        // Agregar las dos columnas vacías del inicio que ya existen
         fila.innerHTML = `<th class="border-b border-r border-slate-700 bg-slate-800"></th>
                           <th class="border-b border-r border-slate-700 bg-slate-800"></th>` + html;
       }
@@ -504,18 +430,20 @@
 
     function calcularNotas(input) {
       const row = input.closest("tr");
-      let suma = 0;
+      let sumaTotal = 0;
       for (let b = 1; b <= 5; b++) {
-        let total = 0;
-        row.querySelectorAll(`.b${b}`).forEach(i => total += Number(i.value) || 0);
-        row.querySelector(`.total-b${b}`).textContent = total;
-        suma += total;
+        let totalBloque = 0;
+        row.querySelectorAll(`.b${b}`).forEach(i => totalBloque += Number(i.value) || 0);
+        row.querySelector(`.total-b${b}`).textContent = totalBloque;
+        sumaTotal += totalBloque;
       }
-      row.querySelector(".nota-cuantitativa").textContent = suma;
+      row.querySelector(".nota-cuantitativa").textContent = sumaTotal;
+
       let cual = "AI", color = "text-rose-400";
-      if (suma >= 90) { cual = "AA"; color = "text-emerald-400"; }
-      else if (suma >= 75) { cual = "AS"; color = "text-blue-400"; }
-      else if (suma >= 60) { cual = "AF"; color = "text-yellow-400"; }
+      if (sumaTotal >= 90) { cual = "AA"; color = "text-emerald-400"; }
+      else if (sumaTotal >= 75) { cual = "AS"; color = "text-blue-400"; }
+      else if (sumaTotal >= 60) { cual = "AF"; color = "text-yellow-400"; }
+
       const cel = row.querySelector(".nota-cualitativa");
       cel.textContent = cual;
       cel.className = `border-b border-slate-700 p-1 font-bold text-center nota-cualitativa bg-slate-800/80 ${color}`;
@@ -533,15 +461,13 @@
       }
     });
 
-    // ========== EXPORTAR ==========
+    // ========== EXPORTAR (simplificado) ==========
     async function exportarRegistro(tipo) {
       document.getElementById("menu-guardar").classList.add("hidden");
       const colegio = document.getElementById("reg-colegio")?.value || "";
       const docente = document.getElementById("reg-docente")?.value || "";
       const grado = document.getElementById("reg-grado")?.value || "";
       const fecha = document.getElementById("reg-fecha")?.value || "";
-      const competencia = document.getElementById("reg-competencia")?.value || "";
-      const unidad = document.getElementById("reg-unidad")?.value || "";
 
       const filas = [];
       document.querySelectorAll("#tabla-estudiantes-cuerpo tr").forEach((tr, idx) => {
@@ -560,7 +486,7 @@
       });
 
       if (tipo === "copiar") {
-        let t = `SISTEMA DE EVALUACIÓN POR UNIDAD\nColegio: ${colegio}\nDocente: ${docente}\nGrado: ${grado}\nFecha: ${fecha}\nCompetencia: ${competencia}\nUnidad: ${unidad}\n\n`;
+        let t = `SISTEMA DE EVALUACIÓN\nColegio: ${colegio}\nDocente: ${docente}\nGrado: ${grado}\nFecha: ${fecha}\n\n`;
         filas.forEach(f => t += `${f.no}. ${f.nombre} → \( {f.totalGral} ( \){f.cualitativa})\n`);
         await navigator.clipboard.writeText(t);
         alert("¡Copiado!");
@@ -575,15 +501,7 @@
           document.head.appendChild(s);
           await new Promise(r => s.onload = r);
         }
-        const data = [
-          ["SISTEMA DE EVALUACIÓN POR UNIDAD DE APRENDIZAJE"],
-          ["Colegio:", colegio, "", "Fecha:", fecha],
-          ["Docente:", docente, "", "Grado:", grado],
-          ["Competencia:", competencia],
-          ["Unidad:", unidad],
-          [],
-          ["No.","Nombres y Apellidos","B1E1","B1E2","B1E3","B1E4","B1Tot","B2E1","B2E2","B2E3","B2E4","B2Tot","B3E1","B3E2","B3E3","B3E4","B3Tot","B4E1","B4E2","B4E3","B4E4","B4Tot","B5E1","B5E2","B5E3","B5E4","B5Tot","Total","Cualitativa"]
-        ];
+        const data = [["No.","Nombres","B1E1","B1E2","B1E3","B1E4","B1Tot","B2E1","B2E2","B2E3","B2E4","B2Tot","B3E1","B3E2","B3E3","B3E4","B3Tot","B4E1","B4E2","B4E3","B4E4","B4Tot","B5E1","B5E2","B5E3","B5E4","B5Tot","Total","Cualitativa"]];
         filas.forEach(f => {
           const row = [f.no, f.nombre];
           f.notas.forEach(n => { row.push(...n.evidencias, n.total); });
@@ -593,60 +511,11 @@
         const ws = XLSX.utils.aoa_to_sheet(data);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Registro");
-        XLSX.writeFile(wb, `Instrumento_${grado.replace(/\s/g,"_") || "Evaluacion"}.xlsx`);
-      }
-
-      if (tipo === "word") {
-        try {
-          const { Document, Packer, Paragraph, Table, TableRow, TableCell, WidthType, AlignmentType, BorderStyle } = await import("https://cdn.jsdelivr.net/npm/docx@8.5.0/+esm");
-          const border = { style: BorderStyle.SINGLE, size: 1, color: "94a3b8" };
-          const borders = { top: border, bottom: border, left: border, right: border };
-          const header = [
-            new TableCell({ borders, children: [new Paragraph({ text: "No.", alignment: AlignmentType.CENTER })] }),
-            new TableCell({ borders, children: [new Paragraph("Nombres")] })
-          ];
-          for (let b=1; b<=5; b++) {
-            for (let e=1; e<=4; e++) header.push(new TableCell({ borders, children: [new Paragraph({ text: `B\( {b}E \){e}`, alignment: AlignmentType.CENTER })] }));
-            header.push(new TableCell({ borders, children: [new Paragraph({ text: `B${b}T`, alignment: AlignmentType.CENTER })] }));
-          }
-          header.push(new TableCell({ borders, children: [new Paragraph({ text: "Tot", alignment: AlignmentType.CENTER })] }));
-          header.push(new TableCell({ borders, children: [new Paragraph({ text: "Cual", alignment: AlignmentType.CENTER })] }));
-          const rows = [new TableRow({ children: header })];
-          filas.forEach(f => {
-            const cells = [
-              new TableCell({ borders, children: [new Paragraph({ text: String(f.no), alignment: AlignmentType.CENTER })] }),
-              new TableCell({ borders, children: [new Paragraph(f.nombre)] })
-            ];
-            f.notas.forEach(n => {
-              n.evidencias.forEach(v => cells.push(new TableCell({ borders, children: [new Paragraph({ text: String(v), alignment: AlignmentType.CENTER })] })));
-              cells.push(new TableCell({ borders, children: [new Paragraph({ text: String(n.total), alignment: AlignmentType.CENTER })] }));
-            });
-            cells.push(new TableCell({ borders, children: [new Paragraph({ text: String(f.totalGral), alignment: AlignmentType.CENTER })] }));
-            cells.push(new TableCell({ borders, children: [new Paragraph({ text: f.cualitativa, alignment: AlignmentType.CENTER })] }));
-            rows.push(new TableRow({ children: cells }));
-          });
-          const doc = new Document({
-            sections: [{
-              children: [
-                new Paragraph({ text: "SISTEMA DE EVALUACIÓN POR UNIDAD DE APRENDIZAJE", heading: "Heading1", alignment: AlignmentType.CENTER }),
-                new Paragraph({ text: `Colegio: ${colegio} | Docente: ${docente}` }),
-                new Paragraph({ text: `Grado: ${grado} | Fecha: ${fecha}` }),
-                new Paragraph({ text: `Competencia: ${competencia}` }),
-                new Paragraph({ text: `Unidad: ${unidad}`, spacing: { after: 200 } }),
-                new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE } })
-              ]
-            }]
-          });
-          const blob = await Packer.toBlob(doc);
-          const a = document.createElement("a");
-          a.href = URL.createObjectURL(blob);
-          a.download = `Instrumento_${grado.replace(/\s/g,"_") || "Evaluacion"}.docx`;
-          a.click();
-        } catch(e) { alert("Error al generar Word"); }
+        XLSX.writeFile(wb, `Instrumento_${grado.replace(/\s/g,"_")||"Eval"}.xlsx`);
       }
     }
 
-    // ========== DATOS MODALIDAD ==========
+    // Datos modalidad + licencia + generar plan (igual que antes)
     const datosModalidad = {
       Primaria: { grados: ["Primero","Segundo","Tercero","Cuarto","Quinto","Sexto"], asignaturas: ["Lengua y Literatura","Matemáticas","Ciencias Sociales","Ciencias Naturales","Derecho y Dignidad de la Mujer","Creciendo en Valores","Taller de Arte y Cultura","Aprender Emprender y Prosperar","Educación Física"] },
       Secundaria: { grados: ["Séptimo","Octavo","Noveno","Décimo","Undécimo"], asignaturas: ["Lengua y Literatura","Matemáticas","Ciencias Sociales","Geografía","Historia","Ciencias Naturales","Química","Biología","Física","Educación Física","Derecho y Dignidad de la Mujer","Creciendo en Valores","Taller de Arte y Cultura"] }
@@ -663,7 +532,6 @@
       datosModalidad[m].asignaturas.forEach(x => { const o=document.createElement("option"); o.value=x; o.textContent=x; a.appendChild(o); });
     });
 
-    // ========== LICENCIA / PRUEBA ==========
     const MAX = 8;
     let planes = MAX;
     let licencia = false;
@@ -677,15 +545,8 @@
       if (badge && !licencia) badge.innerHTML = `Prueba Gratis: <span id="contador-planes">\( {planes}</span>/ \){MAX} planes`;
       const btn = document.getElementById("btn-prueba-gratis");
       if (btn) {
-        if (planes <= 0) {
-          btn.disabled = true;
-          btn.classList.add("opacity-50");
-          btn.innerHTML = "🔒 Prueba gratis agotada";
-        } else {
-          btn.disabled = false;
-          btn.classList.remove("opacity-50");
-          btn.innerHTML = `🚀 Usar Prueba Gratis - ${planes} planes restantes`;
-        }
+        if (planes <= 0) { btn.disabled = true; btn.classList.add("opacity-50"); btn.innerHTML = "🔒 Prueba gratis agotada"; }
+        else { btn.disabled = false; btn.classList.remove("opacity-50"); btn.innerHTML = `🚀 Usar Prueba Gratis - ${planes} planes restantes`; }
       }
     }
 
@@ -698,7 +559,7 @@
       mostrarVista("vista-generador");
     });
 
-    document.getElementById("btn-activar")?.addEventListener("click", async function(e) {
+    document.getElementById("btn-activar")?.addEventListener("click", function(e) {
       e.preventDefault();
       const codigo = document.getElementById("input-codigo").value.trim();
       const nombre = document.getElementById("input-nombre-docente").value.trim();
@@ -706,35 +567,21 @@
       if (!nombre) { msg.textContent = "Escribe tu nombre"; msg.classList.remove("hidden"); return; }
       if (codigo.length < 3) { msg.textContent = "Código inválido"; msg.classList.remove("hidden"); return; }
       msg.classList.add("hidden");
-      this.disabled = true; this.textContent = "Verificando...";
-      try {
-        // Simulación local (en producción llama a /api)
-        licencia = true;
-        planes = 9999;
-        localStorage.setItem("profe_nica_licencia","activa");
-        localStorage.setItem("profe_nica_nombre", nombre);
-        const badge = document.getElementById("badge-estado");
-        badge.className = "text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-3 py-1 rounded-full font-medium";
-        badge.innerHTML = `✅ Licencia Activa (${nombre})`;
-        mostrarVista("vista-generador");
-      } catch(err) {
-        msg.textContent = err.message;
-        msg.classList.remove("hidden");
-      } finally {
-        this.disabled = false; this.textContent = "Activar";
-      }
+      licencia = true;
+      planes = 9999;
+      localStorage.setItem("profe_nica_licencia","activa");
+      localStorage.setItem("profe_nica_nombre", nombre);
+      const badge = document.getElementById("badge-estado");
+      badge.className = "text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-3 py-1 rounded-full font-medium";
+      badge.innerHTML = `✅ Licencia Activa (${nombre})`;
+      mostrarVista("vista-generador");
     });
 
-    // ========== GENERAR PLAN ==========
     document.getElementById("form-plan")?.addEventListener("submit", async function(e) {
       e.preventDefault();
       if (!licencia) {
         actualizarContador();
-        if (planes <= 0) {
-          alert("Ya no tienes planes de prueba.");
-          mostrarVista("vista-suscripcion");
-          return;
-        }
+        if (planes <= 0) { alert("Ya no tienes planes de prueba."); mostrarVista("vista-suscripcion"); return; }
       }
       const btn = document.getElementById("btn-generar");
       const orig = btn.innerHTML;
@@ -755,9 +602,7 @@
           adecuacion: document.getElementById("adecuacion").value || "Ninguna",
           instrumento: document.getElementById("instrumento").value
         };
-        // En producción llama a /api/generar-plan
-        // Aquí simulamos respuesta
-        const html = `<h1>Plan Diario</h1><p><strong>Asignatura:</strong> ${body.asignatura}</p><p><strong>Grado:</strong> ${body.grado}</p><p><strong>Tema:</strong> \( {body.tema}</p><h2>Indicador</h2><p> \){body.indicador || "No especificado"}</p>`;
+        const html = `<h1>Plan Diario</h1><p><strong>Asignatura:</strong> ${body.asignatura}</p><p><strong>Grado:</strong> ${body.grado}</p><p><strong>Tema:</strong> ${body.tema}</p>`;
         if (!licencia) {
           const u = parseInt(localStorage.getItem("profe_nica_planes_usados")||"0")||0;
           localStorage.setItem("profe_nica_planes_usados", String(u+1));
@@ -775,14 +620,10 @@
             <div id="cuerpo-plan-resultado" class="plan-document">${html}</div>
           </div>`;
         window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-      } catch(err) {
-        alert("Error: " + err.message);
-      } finally {
-        btn.disabled = false; btn.innerHTML = orig;
-      }
+      } catch(err) { alert("Error: " + err.message); }
+      finally { btn.disabled = false; btn.innerHTML = orig; }
     });
 
-    // Inicializar
     actualizarContador();
     colocarFechaActual();
   </script>
