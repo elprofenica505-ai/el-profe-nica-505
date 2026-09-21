@@ -331,15 +331,20 @@
         </div>
       </div>
 
+    <!-- SECCIÓN UNIFICADA DE BLOQUES Y TABLA DE CALIFICACIONES CON SCROLL SINCRONIZADO -->
 <div class="bg-slate-950 border border-slate-800 p-3 sm:p-4 rounded-xl space-y-4 text-xs">
 
+  <!-- CONTENEDOR 1: BLOQUES SUPERIORES CON ESPACIADOR IZQUIERDO -->
   <div id="scroll-bloques" class="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-700">
     <div class="flex gap-3 min-w-[1550px] items-start">
       
+      <!-- Espaciador izquierdo exacto para alinear con las columnas "No." y "Nombres y Apellidos" -->
       <div class="w-[260px] flex-shrink-0 hidden sm:block"></div>
 
+      <!-- Los 5 Bloques Horizontales -->
       <div class="grid grid-cols-5 gap-3 flex-grow">
         
+        <!-- Bloque 1 -->
         <div class="bg-blue-950/30 border border-blue-900/50 p-3 rounded-lg space-y-2">
           <h4 class="font-bold text-blue-400 text-center border-b border-blue-900 pb-1">Bloque 1</h4>
           <div>
@@ -360,6 +365,7 @@
           </div>
         </div>
 
+        <!-- Bloque 2 -->
         <div class="bg-emerald-950/30 border border-emerald-900/50 p-3 rounded-lg space-y-2">
           <h4 class="font-bold text-emerald-400 text-center border-b border-emerald-900 pb-1">Bloque 2</h4>
           <div>
@@ -380,6 +386,7 @@
           </div>
         </div>
 
+        <!-- Bloque 3 -->
         <div class="bg-yellow-950/30 border border-yellow-900/50 p-3 rounded-lg space-y-2">
           <h4 class="font-bold text-yellow-400 text-center border-b border-yellow-900 pb-1">Bloque 3</h4>
           <div>
@@ -400,6 +407,7 @@
           </div>
         </div>
 
+        <!-- Bloque 4 -->
         <div class="bg-purple-950/30 border border-purple-900/50 p-3 rounded-lg space-y-2">
           <h4 class="font-bold text-purple-400 text-center border-b border-purple-900 pb-1">Bloque 4</h4>
           <div>
@@ -420,6 +428,7 @@
           </div>
         </div>
 
+        <!-- Bloque 5 -->
         <div class="bg-rose-950/30 border border-rose-900/50 p-3 rounded-lg space-y-2">
           <h4 class="font-bold text-rose-400 text-center border-b border-rose-900 pb-1">Bloque 5</h4>
           <div>
@@ -444,6 +453,7 @@
     </div>
   </div>
 
+  <!-- CONTENEDOR 2: BARRA DE ACCIÓN Y TABLA DETALLADA INFERIOR -->
   <div class="space-y-3 pt-2 border-t border-slate-800">
     <div class="flex justify-between items-center px-1">
       <h3 class="font-bold text-slate-200 text-xs">Registro de Evidencias Alineadas por Bloques</h3>
@@ -452,12 +462,41 @@
       </button>
     </div>
 
+    <!-- Tabla Detallada con su estructura original recuperada -->
     <div id="scroll-tabla" class="overflow-x-auto rounded-xl border border-slate-800 scrollbar-thin scrollbar-thumb-slate-700">
       <table class="w-full border-collapse text-xs text-center whitespace-nowrap min-w-[1550px]" id="tabla-registro">
-        </table>
+        <thead class="text-slate-300">
+          <tr>
+            <th rowspan="2" class="border-b border-r border-slate-700 bg-slate-800 p-2 min-w-[40px]">No.</th>
+            <th rowspan="2" class="border-b border-r border-slate-700 bg-slate-800 p-2 min-w-[200px] text-left">Nombres y Apellidos</th>
+            <th colspan="5" class="border-b border-r border-slate-700 bg-blue-900/50 p-2 text-blue-300">Bloque 1 (20 pts)</th>
+            <th colspan="5" class="border-b border-r border-slate-700 bg-emerald-900/50 p-2 text-emerald-300">Bloque 2 (20 pts)</th>
+            <th colspan="5" class="border-b border-r border-slate-700 bg-yellow-900/50 p-2 text-yellow-300">Bloque 3 (20 pts)</th>
+            <th colspan="5" class="border-b border-r border-slate-700 bg-purple-900/50 p-2 text-purple-300">Bloque 4 (20 pts)</th>
+            <th colspan="5" class="border-b border-r border-slate-700 bg-rose-900/50 p-2 text-rose-300">Bloque 5 (20 pts)</th>
+            <th rowspan="2" class="border-b border-slate-700 bg-slate-800 p-2 font-bold min-w-[60px]">Nota Total</th>
+            <th rowspan="2" class="border-b border-slate-700 bg-slate-800 p-2 font-bold min-w-[80px]">Cualitativa</th>
+          </tr>
+          <tr class="text-[10px] bg-slate-900/50">
+            <script>
+              const coloresBloques = ['blue', 'emerald', 'yellow', 'purple', 'rose'];
+              coloresBloques.forEach(color => {
+                for (let i = 1; i <= 4; i++) {
+                  document.write(`<th class="border-b border-r border-slate-700 p-1 text-${color}-300 bg-${color}-950/20">Ev #${i}</th>`);
+                }
+                document.write(`<th class="border-b border-r border-slate-700 p-1 font-bold text-${color}-300 bg-${color}-950/40">Total</th>`);
+              });
+            </script>
+          </tr>
+        </thead>
+        <tbody id="tabla-estudiantes-cuerpo" class="divide-y divide-slate-800 text-xs">
+          <!-- Las filas se inyectan automáticamente -->
+        </tbody>
+      </table>
     </div>
   </div>
 
+  <!-- 3. BOTÓN INFERIOR DE COMPARTIR / GUARDAR -->
   <div class="flex justify-center pt-3 border-t border-slate-800">
     <button type="button" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg shadow text-xs transition flex items-center justify-center gap-2">
       <span>💾</span> Compartir / Guardar (Word, PDF, Excel)
@@ -466,6 +505,7 @@
 
 </div>
 
+<!-- SCRIPT DE SINCRONIZACIÓN DE SCROLL -->
 <script>
   const scrollBloques = document.getElementById('scroll-bloques');
   const scrollTabla = document.getElementById('scroll-tabla');
@@ -489,6 +529,7 @@
     });
   }
 </script>
+ 
 
     <div id="contenedor-resultados" class="space-y-4"></div>
 </main>
