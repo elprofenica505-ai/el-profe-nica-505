@@ -233,8 +233,20 @@
      <span id="badge-estado" class="text-xs bg-blue-950 text-blue-300 border border-blue-800 px-3 py-1 rounded-full font-medium"> Prueba Gratis: <span id="contador-planes">8</span>/8 planes </span>
     </div>
    </header>
-   <main class="max-w-4xl mx-auto p-4 sm:p-6 w-full flex-grow space-y-6">
-    <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
+      <main class="max-w-4xl mx-auto p-4 sm:p-6 w-full flex-grow space-y-6">
+
+    <!-- MENÚ SUPERIOR DE HERRAMIENTAS -->
+    <div class="flex gap-3 mb-6 overflow-x-auto pb-2">
+      <button type="button" onclick="mostrarVistaInterna('plan-view')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-xl shadow-lg transition whitespace-nowrap flex items-center gap-2">
+        📝 Generador de Planes
+      </button>
+      <button type="button" onclick="mostrarVistaInterna('registro-view')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold py-2 px-4 rounded-xl shadow-lg transition whitespace-nowrap flex items-center gap-2">
+        📊 Registro 6to C
+      </button>
+    </div>
+
+    <section id="plan-view" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
+
      <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-2"><span>📝</span> Plan Diario</h2>
      <p class="text-xs text-slate-400 mb-6">Completa los datos y genera un plan bien estructurado.</p>
      <form id="form-plan" class="space-y-4">
@@ -281,10 +293,139 @@
       <button type="submit" id="btn-generar" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3.5 rounded-xl text-sm transition shadow-lg">✨ Generar Plan Diario</button>
      </form>
     </section>
+           <!-- VISTA DEL REGISTRO DE CALIFICACIONES (Oculta por defecto) -->
+    <section id="registro-view" class="hidden bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
+      <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2"><span>📊</span> Instrumento de Evaluación - 6to C</h2>
+        <button type="button" onclick="agregarFilaEstudiante()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-lg shadow text-xs transition">
+          + Agregar Estudiante
+        </button>
+      </div>
+
+      <div class="overflow-x-auto rounded-xl border border-slate-700">
+        <table class="min-w-full border-collapse text-xs text-center whitespace-nowrap" id="tabla-registro">
+          <thead class="text-slate-300">
+            <tr>
+              <th rowspan="2" class="border-b border-r border-slate-700 bg-slate-800 p-2">No.</th>
+              <th rowspan="2" class="border-b border-r border-slate-700 bg-slate-800 p-2 min-w-[200px] text-left">Nombres y Apellidos</th>
+              <th colspan="5" class="border-b border-r border-slate-700 bg-blue-900/30 p-2 text-blue-300">Bloque 1 (20)</th>
+              <th colspan="5" class="border-b border-r border-slate-700 bg-emerald-900/30 p-2 text-emerald-300">Bloque 2 (20)</th>
+              <th colspan="5" class="border-b border-r border-slate-700 bg-yellow-900/30 p-2 text-yellow-300">Bloque 3 (20)</th>
+              <th colspan="5" class="border-b border-r border-slate-700 bg-purple-900/30 p-2 text-purple-300">Bloque 4 (20)</th>
+              <th colspan="5" class="border-b border-r border-slate-700 bg-rose-900/30 p-2 text-rose-300">Bloque 5 (20)</th>
+              <th rowspan="2" class="border-b border-r border-slate-700 bg-slate-800 p-2 font-bold text-white">Nota Total</th>
+              <th rowspan="2" class="border-b border-slate-700 bg-slate-800 p-2 font-bold text-white">Cualitativa</th>
+            </tr>
+            <tr class="text-[10px] bg-slate-800/50">
+              <!-- Criterios generados por JS para no saturar el HTML -->
+              <script>
+                const headers = ['blue', 'emerald', 'yellow', 'purple', 'rose'];
+                headers.forEach((color, i) => {
+                  document.write(`
+                    <th class="border-b border-r border-slate-700 p-1">C1</th>
+                    <th class="border-b border-r border-slate-700 p-1">C2</th>
+                    <th class="border-b border-r border-slate-700 p-1">C3</th>
+                    <th class="border-b border-r border-slate-700 p-1">C4</th>
+                    <th class="border-b border-r border-slate-700 p-1 font-bold text-${color}-300 bg-${color}-900/20">T${i+1}</th>
+                  `);
+                });
+              </script>
+            </tr>
+          </thead>
+          <tbody id="registro-body" class="text-slate-300">
+            <!-- Las filas se inyectan automáticamente -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <div id="contenedor-resultados" class="space-y-4"></div>
-   </main>
-   <footer class="text-center py-4 text-xs text-slate-500 border-t border-slate-800 mt-12">El Profe Nica 505 © 2026.</footer>
-  </div>
+</main>
+<footer class="text-center py-4 text-xs text-slate-500 border-t border-slate-800 mt-12">
+
+    <!-- ================= LÓGICA DEL REGISTRO DE CALIFICACIONES ================= -->
+  <script>
+    // Alternar entre el formulario de plan y el registro
+    function mostrarVistaInterna(idVista) {
+      document.getElementById('plan-view').classList.add('hidden');
+      document.getElementById('registro-view').classList.add('hidden');
+      document.getElementById(idVista).classList.remove('hidden');
+    }
+
+    // Iniciar con la primera fila cuando cargue la página
+    document.addEventListener("DOMContentLoaded", () => {
+      // Retrasar un poquito para asegurar que el DOM cargó
+      setTimeout(agregarFilaEstudiante, 100);
+    });
+
+    // Crear fila dinámica de estudiante
+    function agregarFilaEstudiante() {
+      const tbody = document.getElementById('registro-body');
+      if (!tbody) return; // Seguridad extra
+      const numFilas = tbody.querySelectorAll('tr.student-row').length + 1;
+      const tr = document.createElement('tr');
+      tr.className = 'student-row hover:bg-slate-800/50 transition';
+      
+      let html = `<td class="border-b border-r border-slate-700 p-1 text-center">${numFilas}</td>
+                  <td class="border-b border-r border-slate-700 p-1"><input type="text" class="w-full p-1 bg-transparent border-0 text-white focus:ring-0 text-left text-xs" placeholder="Nombre del estudiante"></td>`;
+      
+      const colores = ['blue', 'emerald', 'yellow', 'purple', 'rose'];
+      
+      // Generar las 20 celdas de criterios y 5 de totales
+      for(let b=1; b<=5; b++) {
+        for(let c=1; c<=4; c++) {
+          html += `<td class="border-b border-r border-slate-700 p-1"><input type="number" min="0" max="5" class="w-10 p-1 text-center bg-slate-950 border border-slate-700 rounded text-xs text-white focus:ring-1 focus:ring-blue-500 b${b}" oninput="calcularNotas(this)"></td>`;
+        }
+        html += `<td class="border-b border-r border-slate-700 p-1 font-bold bg-slate-800/50 text-${colores[b-1]}-400 total-b${b} text-center">0</td>`;
+      }
+      
+      html += `<td class="border-b border-r border-slate-700 p-1 font-bold text-white text-base text-center nota-cuantitativa bg-slate-800/80">0</td>
+               <td class="border-b border-slate-700 p-1 font-bold text-center nota-cualitativa text-rose-400 bg-slate-800/80">AI</td>`;
+      
+      tr.innerHTML = html;
+      tbody.appendChild(tr);
+    }
+
+    // Emular las fórmulas del Excel de MINED
+    function calcularNotas(input) {
+      const row = input.closest('tr');
+      let sumaTotal = 0;
+
+      // Sumar por bloques
+      for (let b = 1; b <= 5; b++) {
+        let inputsBloque = row.querySelectorAll(`.b${b}`);
+        let totalBloque = 0;
+        inputsBloque.forEach(inp => {
+          totalBloque += Number(inp.value) || 0;
+        });
+        row.querySelector(`.total-b${b}`).innerText = totalBloque;
+        sumaTotal += totalBloque;
+      }
+
+      // Cuantitativa
+      row.querySelector('.nota-cuantitativa').innerText = sumaTotal;
+
+      // Cualitativa (AI, AF, AS, AA)
+      let cualitativa = "AI";
+      let colorClass = "text-rose-400"; // Rojo para AI
+
+      if (sumaTotal >= 90) { 
+        cualitativa = "AA"; 
+        colorClass = "text-emerald-400"; // Verde
+      } else if (sumaTotal >= 75) { 
+        cualitativa = "AS"; 
+        colorClass = "text-blue-400"; // Azul
+      } else if (sumaTotal >= 60) { 
+        cualitativa = "AF"; 
+        colorClass = "text-yellow-400"; // Amarillo
+      }
+
+      const celdaCualitativa = row.querySelector('.nota-cualitativa');
+      celdaCualitativa.innerText = cualitativa;
+      celdaCualitativa.className = `border-b border-slate-700 p-1 font-bold text-center nota-cualitativa bg-slate-800/80 ${colorClass}`;
+    }
+  </script>
+
   <!-- ================= JAVASCRIPT (LÓGICA COMPLETA + CORREGIDA) ================= -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
