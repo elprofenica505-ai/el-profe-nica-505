@@ -293,15 +293,80 @@
       <button type="submit" id="btn-generar" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold p-3.5 rounded-xl text-sm transition shadow-lg">✨ Generar Plan Diario</button>
      </form>
     </section>
-           <!-- VISTA DEL REGISTRO DE CALIFICACIONES (Oculta por defecto) -->
-    <section id="registro-view" class="hidden bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg">
-      <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2"><span>📊</span> Instrumento de Evaluación - 6to C</h2>
-        <button type="button" onclick="agregarFilaEstudiante()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-lg shadow text-xs transition">
+               <!-- VISTA DEL REGISTRO DE CALIFICACIONES COMPLETA (Estilo Oficial MINED) -->
+    <section id="registro-view" class="hidden bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-lg space-y-6">
+      
+      <!-- ENCABEZADO OFICIAL INSTITUCIONAL -->
+      <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl shadow-inner space-y-3">
+        <div class="text-center border-b border-slate-800 pb-3">
+          <h2 class="text-base font-bold text-blue-400 tracking-wide">SISTEMA DE EVALUACIÓN POR UNIDAD DE APRENDIZAJE</h2>
+          <p class="text-xs text-slate-400">Instrumento Oficial de Evaluación - 6to Grado C</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-300 w-36">Nombre del Colegio:</span>
+            <input type="text" id="reg-colegio" value="Escuela Primaria de Villa El Carmen" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white">
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-300 w-36">Fecha:</span>
+            <input type="date" id="reg-fecha" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white">
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-300 w-36">Nombre del Docente:</span>
+            <input type="text" id="reg-docente" value="Carlos Adan Sequeira Baltodano" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white">
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-300 w-36">Grado y Sección:</span>
+            <input type="text" id="reg-grado" value="6to Grado C" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white">
+          </div>
+          <div class="flex items-center gap-2 md:col-span-2">
+            <span class="font-bold text-slate-300 w-36">Competencia:</span>
+            <input type="text" id="reg-competencia" placeholder="Escribe la competencia del bloque..." class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white">
+          </div>
+          <div class="flex items-center gap-2 md:col-span-2">
+            <span class="font-bold text-slate-300 w-36">Unidad (N° y Nombre):</span>
+            <input type="text" id="reg-unidad" placeholder="Ej: Unidad I - ..." class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white">
+          </div>
+        </div>
+      </div>
+
+      <!-- MATRIZ DE CRITERIOS PEDAGÓGICOS -->
+      <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3 text-xs">
+        <h3 class="font-bold text-white border-b border-slate-800 pb-2 flex items-center gap-2">
+          <span>📋</span> Matriz de Indicadores y Criterios Curriculares
+        </h3>
+        <div class="space-y-2">
+          <div>
+            <label class="block font-semibold text-slate-400 mb-1">Indicadores:</label>
+            <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-white" placeholder="Indicador de logro principal...">
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <div>
+              <label class="block font-semibold text-blue-400 mb-1">Criterios Conceptuales:</label>
+              <textarea rows="2" class="w-full bg-slate-900 border border-slate-700 rounded p-1 text-white resize-none" placeholder="Conceptual..."></textarea>
+            </div>
+            <div>
+              <label class="block font-semibold text-emerald-400 mb-1">Criterios Procedimentales:</label>
+              <textarea rows="2" class="w-full bg-slate-900 border border-slate-700 rounded p-1 text-white resize-none" placeholder="Procedimental..."></textarea>
+            </div>
+            <div>
+              <label class="block font-semibold text-yellow-400 mb-1">Criterios Actitudinales:</label>
+              <textarea rows="2" class="w-full bg-slate-900 border border-slate-700 rounded p-1 text-white resize-none" placeholder="Actitudinal..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BARRA DE ACCIÓN DE LA TABLA -->
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h2 class="text-sm font-bold text-white flex items-center gap-2"><span>📊</span> Registro de Evidencias y Calificaciones</h2>
+        <button type="button" onclick="agregarFilaEstudiante()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-1.5 px-3 rounded-lg shadow text-xs transition">
           + Agregar Estudiante
         </button>
       </div>
 
+      <!-- TABLA DETALLADA DE ESTUDIANTES Y EVIDENCIAS -->
       <div class="overflow-x-auto rounded-xl border border-slate-700">
         <table class="min-w-full border-collapse text-xs text-center whitespace-nowrap" id="tabla-registro">
           <thead class="text-slate-300">
@@ -317,16 +382,15 @@
               <th rowspan="2" class="border-b border-slate-700 bg-slate-800 p-2 font-bold text-white">Cualitativa</th>
             </tr>
             <tr class="text-[10px] bg-slate-800/50">
-              <!-- Criterios generados por JS para no saturar el HTML -->
               <script>
                 const headers = ['blue', 'emerald', 'yellow', 'purple', 'rose'];
                 headers.forEach((color, i) => {
                   document.write(`
-                    <th class="border-b border-r border-slate-700 p-1">C1</th>
-                    <th class="border-b border-r border-slate-700 p-1">C2</th>
-                    <th class="border-b border-r border-slate-700 p-1">C3</th>
-                    <th class="border-b border-r border-slate-700 p-1">C4</th>
-                    <th class="border-b border-r border-slate-700 p-1 font-bold text-${color}-300 bg-${color}-900/20">T${i+1}</th>
+                    <th class="border-b border-r border-slate-700 p-1">Ev #1</th>
+                    <th class="border-b border-r border-slate-700 p-1">Ev #2</th>
+                    <th class="border-b border-r border-slate-700 p-1">Ev #3</th>
+                    <th class="border-b border-r border-slate-700 p-1">Ev #4</th>
+                    <th class="border-b border-r border-slate-700 p-1 font-bold text-${color}-300 bg-${color}-900/20">Total</th>
                   `);
                 });
               </script>
@@ -338,6 +402,7 @@
         </table>
       </div>
     </section>
+
 
     <div id="contenedor-resultados" class="space-y-4"></div>
 </main>
