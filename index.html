@@ -412,7 +412,7 @@
               <textarea class="auto-textarea ev-label bg-slate-900 border border-slate-700 rounded p-0.5 text-white text-[9px] text-center" placeholder="Ev#${i}" rows="1" oninput="autoResize(this)"></textarea>
             </th>`;
           }
-          html += `<th class="border-b border-r border-slate-700 p-1 font-bold text-\( {color}-300 bg- \){color}-950/50" style="width:40px">Total</th>`;
+          html += `<th class="border-b border-r border-slate-700 p-1 font-bold text-${color}-300 bg-${color}-950/50" style="width:40px">Total</th>`;
         });
         fila.innerHTML = `<th class="border-b border-r border-slate-700 bg-slate-800"></th><th class="border-b border-r border-slate-700 bg-slate-800"></th>${html}`;
       }
@@ -451,7 +451,7 @@
             <input type="number" min="0" max="5" class="w-full p-1 text-center bg-slate-950 border border-slate-700 rounded text-xs text-white score-b${b}" oninput="calcularNotas(this)">
           </td>`;
         }
-        html += `<td class="border-b border-r border-slate-700 p-1 font-bold bg-slate-800/60 text-\( {colores[b-1]}-400 total-b \){b}">0</td>`;
+        html += `<td class="border-b border-r border-slate-700 p-1 font-bold bg-slate-800/60 text-${colores[b-1]}-400 total-b${b}">0</td>`;
       }
 
       html += `
@@ -520,7 +520,7 @@
 
       if (tipo === "copiar") {
         let t = `SISTEMA DE EVALUACIÓN\nColegio: ${colegio}\nDocente: ${docente}\nGrado: ${grado}\nFecha: ${fecha}\n\n`;
-        filas.forEach(f => t += `${f.no}. ${f.nombre} → \( {f.totalGral} ( \){f.cualitativa})\n`);
+        filas.forEach(f => t += `${f.no}. ${f.nombre} → ${f.totalGral} (${f.cualitativa})\n`);
         await navigator.clipboard.writeText(t);
         alert("¡Copiado!");
         return;
@@ -597,7 +597,7 @@
       if (c) c.textContent = planes;
       const badge = document.getElementById("badge-estado");
       if (badge && !licencia) {
-        badge.innerHTML = `Prueba Gratis: <span id="contador-planes">\( {planes}</span>/ \){MAX} planes`;
+        badge.innerHTML = `Prueba Gratis: <span id="contador-planes">${planes}</span>/${MAX} planes`;
       }
       const btn = document.getElementById("btn-prueba-gratis");
       if (btn) {
@@ -618,7 +618,7 @@
       actualizarContador();
       if (planes <= 0) return alert("Ya usaste los 8 planes de prueba.");
       licencia = false;
-      document.getElementById("badge-estado").innerHTML = `Prueba Gratis: <span id="contador-planes">\( {planes}</span>/ \){MAX} planes`;
+      document.getElementById("badge-estado").innerHTML = `Prueba Gratis: <span id="contador-planes">${planes}</span>/${MAX} planes`;
       mostrarVista("vista-generador");
     });
 
@@ -679,7 +679,7 @@
           adecuacion: document.getElementById("adecuacion").value || "Ninguna",
           instrumento: document.getElementById("instrumento").value
         };
-        const html = `<h1>Plan Diario</h1><p><strong>Asignatura:</strong> ${body.asignatura}</p><p><strong>Grado:</strong> ${body.grado}</p><p><strong>Tema:</strong> \( {body.tema}</p><h2>Indicador</h2><p> \){body.indicador || "No especificado"}</p>`;
+        const html = `<h1>Plan Diario</h1><p><strong>Asignatura:</strong> ${body.asignatura}</p><p><strong>Grado:</strong> ${body.grado}</p><p><strong>Tema:</strong> ${body.tema}</p><h2>Indicador</h2><p>${body.indicador || "No especificado"}</p>`;
         if (!licencia) {
           const u = parseInt(localStorage.getItem("profe_nica_planes_usados") || "0") || 0;
           localStorage.setItem("profe_nica_planes_usados", String(u + 1));
