@@ -59,9 +59,9 @@
       line-height: 1.3;
     }
     .ev-label {
-      width: 58px;
-      max-width: 58px;
-      min-width: 58px;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
     }
     .scrollbar-thin::-webkit-scrollbar { height: 8px; }
     .scrollbar-thin::-webkit-scrollbar-track { background: #1e293b; }
@@ -289,10 +289,10 @@
           </div>
 
           <div id="scroll-unico" class="overflow-x-auto rounded-xl border border-slate-800 scrollbar-thin">
-            <div style="min-width: 1780px;">
+            <div style="min-width: 1820px;">
               <!-- BLOQUES SUPERIORES -->
               <div class="flex border-b border-slate-800">
-                <div class="w-[280px] flex-shrink-0 bg-slate-900/60 border-r border-slate-800"></div>
+                <div class="w-[300px] flex-shrink-0 bg-slate-900/60 border-r border-slate-800"></div>
                 <div class="w-[280px] flex-shrink-0 bg-blue-950/40 border-r border-blue-900/40 p-2.5 space-y-1.5">
                   <h4 class="font-bold text-blue-400 text-center border-b border-blue-900 pb-1 text-xs">Bloque 1</h4>
                   <div><label class="block text-[10px] text-slate-400">Indicador:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Indicador 1..."></textarea></div>
@@ -328,24 +328,35 @@
                   <div><label class="block text-[10px] text-emerald-300">Procedimental:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Procedimental 5"></textarea></div>
                   <div><label class="block text-[10px] text-yellow-300">Actitudinal:</label><textarea class="auto-textarea w-full bg-slate-900 border border-slate-700 rounded p-1 text-white text-xs" rows="1" oninput="autoResize(this)" placeholder="Actitudinal 5"></textarea></div>
                 </div>
-                <div class="w-[140px] flex-shrink-0 bg-slate-800/80 p-2.5 flex flex-col justify-center items-center text-center">
+                <div class="w-[120px] flex-shrink-0 bg-slate-800/80 p-2.5 flex flex-col justify-center items-center text-center">
                   <h4 class="font-bold text-cyan-300 text-xs leading-tight">Calificación<br>Total</h4>
                   <p class="text-[10px] text-slate-400 mt-1">Suma de todos<br>los bloques</p>
                 </div>
               </div>
 
               <!-- TABLA -->
-              <table class="w-full border-collapse text-xs text-center">
+              <table class="table-fixed border-collapse text-xs text-center" style="width:1820px">
+                <colgroup>
+                  <col style="width:40px">
+                  <col style="width:260px">
+                  <col style="width:60px"><col style="width:60px"><col style="width:60px"><col style="width:60px"><col style="width:40px">
+                  <col style="width:60px"><col style="width:60px"><col style="width:60px"><col style="width:60px"><col style="width:40px">
+                  <col style="width:60px"><col style="width:60px"><col style="width:60px"><col style="width:60px"><col style="width:40px">
+                  <col style="width:60px"><col style="width:60px"><col style="width:60px"><col style="width:60px"><col style="width:40px">
+                  <col style="width:60px"><col style="width:60px"><col style="width:60px"><col style="width:60px"><col style="width:40px">
+                  <col style="width:60px">
+                  <col style="width:60px">
+                </colgroup>
                 <thead>
                   <tr class="text-slate-300">
                     <th class="border-b border-r border-slate-700 bg-slate-800 p-2" style="width:40px">No.</th>
-                    <th class="border-b border-r border-slate-700 bg-slate-800 p-2 text-left" style="width:240px">Nombres y Apellidos</th>
+                    <th class="border-b border-r border-slate-700 bg-slate-800 p-2 text-left" style="width:260px">Nombres y Apellidos</th>
                     <th colspan="5" class="border-b border-r border-slate-700 bg-blue-900/60 p-2 text-blue-300">Bloque 1 (20 pts)</th>
                     <th colspan="5" class="border-b border-r border-slate-700 bg-emerald-900/60 p-2 text-emerald-300">Bloque 2 (20 pts)</th>
                     <th colspan="5" class="border-b border-r border-slate-700 bg-yellow-900/60 p-2 text-yellow-300">Bloque 3 (20 pts)</th>
                     <th colspan="5" class="border-b border-r border-slate-700 bg-purple-900/60 p-2 text-purple-300">Bloque 4 (20 pts)</th>
                     <th colspan="5" class="border-b border-r border-slate-700 bg-rose-900/60 p-2 text-rose-300">Bloque 5 (20 pts)</th>
-                    <th class="border-b border-r border-slate-700 bg-slate-800 p-2 font-bold" style="width:55px">Total</th>
+<th class="border-b border-r border-slate-700 bg-slate-800 p-2 font-bold" style="width:60px">Total</th>
                     <th class="border-b border-slate-700 bg-slate-800 p-2 font-bold" style="width:60px">Cualit.</th>
                   </tr>
                   <tr class="text-[10px] bg-slate-900/80" id="fila-evidencias">
