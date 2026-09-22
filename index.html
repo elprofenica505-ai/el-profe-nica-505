@@ -631,12 +631,24 @@
         return;
       }
       if (tipo === "excel") {
-        if (!window.XLSX) {
+        // ---- Cargar ExcelJS (soporta estilos, bordes y formato de tabla) ----
+        if (!window.ExcelJS) {
           const s = document.createElement("script");
-          s.src = "https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js";
+          s.src = "https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js";
           document.head.appendChild(s);
           await new Promise(r => s.onload = r);
         }
+
+        // ---- Texto de las evidencias tal como lo edito el docente (fila Ev#) ----
+        const tasEv = document.querySelectorAll("#fila-evidencias textarea");
+        const etiquetasEv = [];
+        for (let b = 0; b < 5; b++) {
+          etiquetasEv.push([0, 1, 2, 3].map(i => {
+            const t = tasEv[b * 4 + i];
+            return (t?.value.trim() || t?.placeholder || `Evidencia #${i + 1}`).trim();
+          }));
+        }
+
         // ---- Indicadores y criterios desde las tarjetas superiores ----
         const datosBloques = [];
         const tarjetasSup = document.querySelectorAll("#scroll-unico .flex > div");
@@ -652,22 +664,36 @@
         const competencia = document.getElementById("reg-competencia")?.value || "";
         const unidadReg = document.getElementById("reg-unidad")?.value || "";
 
+        // ---- Construccion del libro con formato ----
         const NCOL = 29; // No(1) + Nombres(1) + (5 bloques x 5) + Total + Cualitativa
-        const ws = {};
-        const merges = [];
-        const celda = (r, c, v) => {
-          const ref = XLSX.utils.encode_cell({ r, c });
-          if (typeof v === "number") ws[ref] = { t: "n", v };
-          else ws[ref] = { t: "s", v: String(v ?? "") };
+        const letra = (n) => { let s = ""; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = (n - m - 1) / 26; } return s; };
+        const wb = new ExcelJS.Workbook();
+        wb.calcProperties = { fullCalcOnLoad: true }; // recalcular formulas al abrir
+        const ws = wb.addWorksheet("Evaluación");
+        const anchuras = [5, 38];
+        for (let b = 0; b < 5; b++) anchuras.push(12, 12, 12, 12, 8);
+        anchuras.push(9, 12);
+        anchuras.forEach((w, i) => { ws.getColumn(i + 1).width = w; });
+
+        const COL_AZUL = "FF1F4E79", COL_AZUL_L = "FF305496", COL_CAB = "FF334155", COL_CAB2 = "FF475569";
+        const COL_ZEBRA = "FFF1F5F9", COL_TOTAL = "FFE2E8F0", COL_TOTALG = "FFBFDBFE", COL_INFO = "FFF8FAFC";
+        const bordeFino = { style: "thin", color: { argb: "FF94A3B8" } };
+        const borde = { top: bordeFino, left: bordeFino, bottom: bordeFino, right: bordeFino };
+        const estilar = (celdaObj, o) => {
+          if (o.fill) celdaObj.fill = { type: "pattern", pattern: "solid", fgColor: { argb: o.fill } };
+          if (o.font) celdaObj.font = o.font;
+          if (o.align) celdaObj.alignment = o.align;
+          celdaObj.border = borde;
         };
-        const ponerFormula = (r, c, f, esTexto) => {
-          ws[XLSX.utils.encode_cell({ r, c })] = { t: esTexto ? "str" : "n", f };
-        };
-        const combinar = (r, c1, c2) => merges.push({ s: { r, c: c1 }, e: { r, c: c2 } });
+        const blancoNegrita = (sz) => ({ bold: true, size: sz || 10, color: { argb: "FFFFFFFF" } });
 
         // ---- Encabezado institucional ----
-        celda(0, 0, "SISTEMA DE EVALUACIÓN POR UNIDAD DE APRENDIZAJE");
-        combinar(0, 0, NCOL - 1);
+        ws.mergeCells(1, 1, 1, NCOL);
+        const t1 = ws.getCell(1, 1);
+        t1.value = "SISTEMA DE EVALUACIÓN POR UNIDAD DE APRENDIZAJE";
+        estilar(t1, { fill: COL_AZUL, font: blancoNegrita(13), align: { horizontal: "center", vertical: "middle" } });
+        ws.getRow(1).height = 24;
+
         const cab = [
           ["Nombre del Colegio:", colegio],
           ["Fecha:", fecha],
@@ -677,12 +703,18 @@
           ["Número y Nombre de la Unidad:", unidadReg]
         ];
         cab.forEach((par, i) => {
-          const r = i + 1;
-          celda(r, 0, par[0]); combinar(r, 0, 1);
-          celda(r, 2, par[1]); combinar(r, 2, NCOL - 1);
+          const r = i + 2;
+          ws.mergeCells(r, 1, r, 2);
+          ws.mergeCells(r, 3, r, NCOL);
+          const cl = ws.getCell(r, 1);
+          cl.value = par[0];
+          estilar(cl, { fill: COL_AZUL_L, font: blancoNegrita(), align: { vertical: "middle" } });
+          const cv = ws.getCell(r, 3);
+          cv.value = par[1];
+          estilar(cv, { fill: "FFFFFFFF", align: { vertical: "middle", wrapText: true } });
         });
 
-        // ---- Indicadores y criterios alineados a las columnas de cada bloque ----
+        // ---- Indicadores y criterios alineados a cada bloque ----
         const filasInfo = [
           ["Indicadores:", "indicador"],
           ["Criterios Conceptuales:", "conceptual"],
@@ -690,73 +722,100 @@
           ["Criterios Actitudinales:", "actitudinal"]
         ];
         filasInfo.forEach((fi, i) => {
-          const r = 8 + i;
-          celda(r, 0, fi[0]); combinar(r, 0, 1);
+          const r = 9 + i;
+          ws.mergeCells(r, 1, r, 2);
+          const cl = ws.getCell(r, 1);
+          cl.value = fi[0];
+          estilar(cl, { fill: COL_AZUL_L, font: blancoNegrita(), align: { vertical: "middle", wrapText: true } });
           for (let b = 0; b < 5; b++) {
-            const cIni = 2 + b * 5;
-            celda(r, cIni, datosBloques[b][fi[1]]); combinar(r, cIni, cIni + 4);
+            const cIni = 3 + b * 5;
+            ws.mergeCells(r, cIni, r, cIni + 4);
+            const cb = ws.getCell(r, cIni);
+            cb.value = datosBloques[b][fi[1]];
+            estilar(cb, { fill: COL_INFO, align: { vertical: "top", wrapText: true } });
+            for (let k = cIni; k <= cIni + 4; k++) ws.getCell(r, k).border = borde;
           }
+          ws.getRow(r).height = 30;
         });
-        celda(8, 27, "Cuantitativa");
-        celda(8, 28, "Cualitativa");
+        const cq = ws.getCell(9, 28); cq.value = "Cuantitativa";
+        estilar(cq, { fill: COL_AZUL, font: blancoNegrita(), align: { horizontal: "center", vertical: "middle", wrapText: true } });
+        const cc = ws.getCell(9, 29); cc.value = "Cualitativa";
+        estilar(cc, { fill: COL_AZUL, font: blancoNegrita(), align: { horizontal: "center", vertical: "middle", wrapText: true } });
 
-        // ---- Titulo de la tabla de evidencias ----
-        celda(13, 0, "Aspectos a Evaluar / Evidencias De Aprendizajes");
-        combinar(13, 0, NCOL - 1);
+        // ---- Titulo de la tabla ----
+        ws.mergeCells(14, 1, 14, NCOL);
+        const tg = ws.getCell(14, 1);
+        tg.value = "Aspectos a Evaluar / Evidencias De Aprendizajes";
+        estilar(tg, { fill: COL_AZUL, font: blancoNegrita(11), align: { horizontal: "center", vertical: "middle" } });
+        ws.getRow(14).height = 20;
 
-        // ---- Encabezados de columnas ----
-        const rCab = 14;
-        celda(rCab, 0, "No");
-        celda(rCab, 1, "Nombres y Apellidos");
+        // ---- Encabezados de columnas (con el texto EDITADO de cada evidencia) ----
+        const rCab = 15;
+        const cabZebra = { horizontal: "center", vertical: "middle", wrapText: true };
+        const ponerCab = (c, txt, fill) => {
+          const cel = ws.getCell(rCab, c);
+          cel.value = txt;
+          estilar(cel, { fill, font: blancoNegrita(9), align: cabZebra });
+        };
+        ponerCab(1, "No", COL_CAB);
+        ponerCab(2, "Nombres y Apellidos", COL_CAB);
         for (let b = 0; b < 5; b++) {
-          const cIni = 2 + b * 5;
-          for (let e = 0; e < 4; e++) celda(rCab, cIni + e, "Evidencia #" + (e + 1));
-          celda(rCab, cIni + 4, "total");
+          const cIni = 3 + b * 5;
+          for (let e = 0; e < 4; e++) ponerCab(cIni + e, etiquetasEv[b][e], COL_CAB);
+          ponerCab(cIni + 4, "total", COL_CAB2);
         }
-        celda(rCab, 27, "Total");
-        celda(rCab, 28, "Cualitativa");
+        ponerCab(28, "Total", COL_AZUL);
+        ponerCab(29, "Cualitativa", COL_AZUL);
+        ws.getRow(rCab).height = 28;
 
-        // ---- Filas de estudiantes con FORMULAS de auto-suma -----------------
-        // (si editas una evidencia dentro de Excel, los totales se recalculan)
-        const rIni = 15;
+        // ---- Filas de estudiantes con formato zebra + FORMULAS de auto-suma ----
+        const rIni = 16;
         const trs = document.querySelectorAll("#tabla-estudiantes-cuerpo tr");
         trs.forEach((tr, idx) => {
           const r = rIni + idx;
-          celda(r, 0, idx + 1);
-          celda(r, 1, tr.querySelector(".nombre-est")?.value || "");
+          const cebra = idx % 2 === 1 ? COL_ZEBRA : null;
+          const ponerBase = (c, v, extra = {}) => {
+            const cel = ws.getCell(r, c);
+            cel.value = v;
+            estilar(cel, { fill: extra.fill || cebra, font: extra.font, align: extra.align || { horizontal: "center", vertical: "middle" } });
+          };
+          ponerBase(1, idx + 1);
+          ponerBase(2, tr.querySelector(".nombre-est")?.value || "", { align: { horizontal: "left", vertical: "middle", wrapText: true } });
+
           const celdasTotales = [];
           for (let b = 0; b < 5; b++) {
-            const cIni = 2 + b * 5;
+            const cIni = 3 + b * 5;
             const entradas = tr.querySelectorAll(".score-b" + (b + 1));
             const valores = [];
             entradas.forEach(inp => valores.push(inp.value));
             for (let e = 0; e < 4; e++) {
               const v = valores[e] ?? "";
-              if (v !== "") celda(r, cIni + e, Number(v) || 0);
+              if (v !== "") ponerBase(cIni + e, Number(v) || 0);
+              else ws.getCell(r, cIni + e).border = borde, (cebra && (ws.getCell(r, cIni + e).fill = { type: "pattern", pattern: "solid", fgColor: { argb: cebra } }));
             }
-            const colIni = XLSX.utils.encode_col(cIni);
-            const colFin = XLSX.utils.encode_col(cIni + 3);
-            ponerFormula(r, cIni + 4, `SUM(${colIni}${r + 1}:${colFin}${r + 1})`);
-            celdasTotales.push(XLSX.utils.encode_col(cIni + 4) + (r + 1));
+            ws.getCell(r, cIni + 4).value = { formula: `SUM(${letra(cIni)}${r}:${letra(cIni + 3)}${r})` };
+            estilar(ws.getCell(r, cIni + 4), { fill: COL_TOTAL, font: { bold: true }, align: { horizontal: "center", vertical: "middle" } });
+            celdasTotales.push(letra(cIni + 4) + r);
           }
-          const refTotal = XLSX.utils.encode_col(27) + (r + 1);
-          ponerFormula(r, 27, `SUM(${celdasTotales.join(",")})`);
+          ws.getCell(r, 28).value = { formula: `SUM(${celdasTotales.join(",")})` };
+          estilar(ws.getCell(r, 28), { fill: COL_TOTALG, font: { bold: true }, align: { horizontal: "center", vertical: "middle" } });
           const cuali = tr.querySelector(".cualitativa")?.value.trim();
-          if (cuali) celda(r, 28, cuali.toUpperCase());
-          else ponerFormula(r, 28, `IF(${refTotal}>=90,"AA",IF(${refTotal}>=76,"AS","AI"))`, true);
+          const celC = ws.getCell(r, 29);
+          if (cuali) celC.value = cuali.toUpperCase();
+          else celC.value = { formula: `IF(${letra(28)}${r}>=90,"AA",IF(${letra(28)}${r}>=76,"AS","AI"))` };
+          estilar(celC, { fill: cebra, font: { bold: true }, align: { horizontal: "center", vertical: "middle" } });
         });
-        const rFin = rIni + Math.max(trs.length, 1) - 1;
 
-        ws["!ref"] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: Math.max(rFin, rCab), c: NCOL - 1 } });
-        ws["!merges"] = merges;
-        const anchos = [{ wch: 5 }, { wch: 38 }];
-        for (let b = 0; b < 5; b++) anchos.push({ wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 8 });
-        anchos.push({ wch: 9 }, { wch: 12 });
-        ws["!cols"] = anchos;
-
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Evaluación");
-        XLSX.writeFile(wb, `Instrumento_${grado.replace(/\s/g, "_") || "Eval"}.xlsx`);
+        // ---- Descargar ----
+        const buffer = await wb.xlsx.writeBuffer();
+        const urlBlob = URL.createObjectURL(new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }));
+        const enlace = document.createElement("a");
+        enlace.href = urlBlob;
+        enlace.download = `Instrumento_${grado.replace(/\s/g, "_") || "Eval"}.xlsx`;
+        document.body.appendChild(enlace);
+        enlace.click();
+        enlace.remove();
+        URL.revokeObjectURL(urlBlob);
       }
     }
 
