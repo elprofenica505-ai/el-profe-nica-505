@@ -637,18 +637,125 @@
           document.head.appendChild(s);
           await new Promise(r => s.onload = r);
         }
-        const data = [["No.", "Nombres", "B1E1", "B1E2", "B1E3", "B1E4", "B1Tot", "B2E1", "B2E2", "B2E3", "B2E4", "B2Tot", "B3E1", "B3E2", "B3E3", "B3E4", "B3Tot", "B4E1", "B4E2", "B4E3", "B4E4", "B4Tot", "B5E1", "B5E2", "B5E3", "B5E4", "B5Tot", "Total", "Cualitativa"]];
-        filas.forEach(f => {
-          const row = [f.no, f.nombre];
-          f.notas.forEach(n => {
-            row.push(...n.evidencias, n.total);
+        // ---- Indicadores y criterios desde las tarjetas superiores ----
+        const datosBloques = [];
+        const tarjetasSup = document.querySelectorAll("#scroll-unico .flex > div");
+        for (let b = 1; b <= 5; b++) {
+          const areas = tarjetasSup[b] ? tarjetasSup[b].querySelectorAll("textarea") : [];
+          datosBloques.push({
+            indicador: areas[0]?.value.trim() || "",
+            conceptual: areas[1]?.value.trim() || "",
+            procedimental: areas[2]?.value.trim() || "",
+            actitudinal: areas[3]?.value.trim() || ""
           });
-          row.push(f.totalGral, f.cualitativa);
-          data.push(row);
+        }
+        const competencia = document.getElementById("reg-competencia")?.value || "";
+        const unidadReg = document.getElementById("reg-unidad")?.value || "";
+
+        const NCOL = 29; // No(1) + Nombres(1) + (5 bloques x 5) + Total + Cualitativa
+        const ws = {};
+        const merges = [];
+        const celda = (r, c, v) => {
+          const ref = XLSX.utils.encode_cell({ r, c });
+          if (typeof v === "number") ws[ref] = { t: "n", v };
+          else ws[ref] = { t: "s", v: String(v ?? "") };
+        };
+        const ponerFormula = (r, c, f, esTexto) => {
+          ws[XLSX.utils.encode_cell({ r, c })] = { t: esTexto ? "str" : "n", f };
+        };
+        const combinar = (r, c1, c2) => merges.push({ s: { r, c: c1 }, e: { r, c: c2 } });
+
+        // ---- Encabezado institucional ----
+        celda(0, 0, "SISTEMA DE EVALUACIÓN POR UNIDAD DE APRENDIZAJE");
+        combinar(0, 0, NCOL - 1);
+        const cab = [
+          ["Nombre del Colegio:", colegio],
+          ["Fecha:", fecha],
+          ["Nombre del Docente:", docente],
+          ["Grado y Sección:", grado],
+          ["Competencia:", competencia],
+          ["Número y Nombre de la Unidad:", unidadReg]
+        ];
+        cab.forEach((par, i) => {
+          const r = i + 1;
+          celda(r, 0, par[0]); combinar(r, 0, 1);
+          celda(r, 2, par[1]); combinar(r, 2, NCOL - 1);
         });
-        const ws = XLSX.utils.aoa_to_sheet(data);
+
+        // ---- Indicadores y criterios alineados a las columnas de cada bloque ----
+        const filasInfo = [
+          ["Indicadores:", "indicador"],
+          ["Criterios Conceptuales:", "conceptual"],
+          ["Criterios Procedimentales:", "procedimental"],
+          ["Criterios Actitudinales:", "actitudinal"]
+        ];
+        filasInfo.forEach((fi, i) => {
+          const r = 8 + i;
+          celda(r, 0, fi[0]); combinar(r, 0, 1);
+          for (let b = 0; b < 5; b++) {
+            const cIni = 2 + b * 5;
+            celda(r, cIni, datosBloques[b][fi[1]]); combinar(r, cIni, cIni + 4);
+          }
+        });
+        celda(8, 27, "Cuantitativa");
+        celda(8, 28, "Cualitativa");
+
+        // ---- Titulo de la tabla de evidencias ----
+        celda(13, 0, "Aspectos a Evaluar / Evidencias De Aprendizajes");
+        combinar(13, 0, NCOL - 1);
+
+        // ---- Encabezados de columnas ----
+        const rCab = 14;
+        celda(rCab, 0, "No");
+        celda(rCab, 1, "Nombres y Apellidos");
+        for (let b = 0; b < 5; b++) {
+          const cIni = 2 + b * 5;
+          for (let e = 0; e < 4; e++) celda(rCab, cIni + e, "Evidencia #" + (e + 1));
+          celda(rCab, cIni + 4, "total");
+        }
+        celda(rCab, 27, "Total");
+        celda(rCab, 28, "Cualitativa");
+
+        // ---- Filas de estudiantes con FORMULAS de auto-suma -----------------
+        // (si editas una evidencia dentro de Excel, los totales se recalculan)
+        const rIni = 15;
+        const trs = document.querySelectorAll("#tabla-estudiantes-cuerpo tr");
+        trs.forEach((tr, idx) => {
+          const r = rIni + idx;
+          celda(r, 0, idx + 1);
+          celda(r, 1, tr.querySelector(".nombre-est")?.value || "");
+          const celdasTotales = [];
+          for (let b = 0; b < 5; b++) {
+            const cIni = 2 + b * 5;
+            const entradas = tr.querySelectorAll(".score-b" + (b + 1));
+            const valores = [];
+            entradas.forEach(inp => valores.push(inp.value));
+            for (let e = 0; e < 4; e++) {
+              const v = valores[e] ?? "";
+              if (v !== "") celda(r, cIni + e, Number(v) || 0);
+            }
+            const colIni = XLSX.utils.encode_col(cIni);
+            const colFin = XLSX.utils.encode_col(cIni + 3);
+            ponerFormula(r, cIni + 4, `SUM(${colIni}${r + 1}:${colFin}${r + 1})`);
+            celdasTotales.push(XLSX.utils.encode_col(cIni + 4) + (r + 1));
+          }
+          const refTotal = XLSX.utils.encode_col(27) + (r + 1);
+          ponerFormula(r, 27, `SUM(${celdasTotales.join(",")})`);
+          const cuali = tr.querySelector(".cualitativa")?.value.trim();
+          if (cuali) celda(r, 28, cuali.toUpperCase());
+          else ponerFormula(r, 28, `IF(${refTotal}>=90,"AA",IF(${refTotal}>=76,"AS","AI"))`, true);
+        });
+        const rFin = rIni + Math.max(trs.length, 1) - 1;
+
+        ws["!ref"] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: Math.max(rFin, rCab), c: NCOL - 1 } });
+        ws["!merges"] = merges;
+        const anchos = [{ wch: 5 }, { wch: 38 }];
+        for (let b = 0; b < 5; b++) anchos.push({ wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 8 });
+        anchos.push({ wch: 9 }, { wch: 12 });
+        ws["!cols"] = anchos;
+
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Registro");
+        XLSX.utils.book_append_sheet(wb, ws, "Evaluación");
         XLSX.writeFile(wb, `Instrumento_${grado.replace(/\s/g, "_") || "Eval"}.xlsx`);
       }
     }
