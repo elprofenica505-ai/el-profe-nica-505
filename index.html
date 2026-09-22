@@ -411,6 +411,96 @@
       }
     }
 
+    // ========== HELPERS GENERADOR IA ==========
+    const $ = (id) => document.getElementById(id);
+
+    function escaparHTML(texto) {
+      return String(texto || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function limpiarRespuestaIA(texto) {
+      let resultado = String(texto || "").trim();
+
+      resultado = resultado
+        .replace(/^```(?:html|markdown|md|text)?\s*/i, "")
+        .replace(/\s*```$/i, "")
+        .trim();
+
+      if (/&lt;\s*\/?\s*[a-z][^&]*&gt;/i.test(resultado)) {
+        const decoder = document.createElement("textarea");
+        decoder.innerHTML = resultado;
+        resultado = decoder.value.trim();
+      }
+
+      if (
+        /<!doctype\s+html/i.test(resultado) ||
+        /<html(?:\s[^>]*)?>/i.test(resultado)
+      ) {
+        const documento = new DOMParser().parseFromString(resultado, "text/html");
+        if (documento.body) {
+          resultado = documento.body.innerHTML;
+        }
+      }
+
+      resultado = resultado
+        .replace(/<h1[^>]*>([\s\S]*?)<\/h1>/gi, "\n# $1\n")
+        .replace(/<h2[^>]*>([\s\S]*?)<\/h2>/gi, "\n## $1\n")
+        .replace(/<h3[^>]*>([\s\S]*?)<\/h3>/gi, "\n### $1\n")
+        .replace(/<(strong|b)[^>]*>([\s\S]*?)<\/\1>/gi, "**$2**")
+        .replace(/<(em|i)[^>]*>([\s\S]*?)<\/\1>/gi, "*$2*")
+        .replace(/<br\s*\/?>/gi, "\n")
+        .replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, "$1\n\n")
+        .replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, "- $1\n")
+        .replace(/<\/?(ul|ol)[^>]*>/gi, "\n")
+        .replace(/<div[^>]*>/gi, "")
+        .replace(/<\/div>/gi, "\n")
+        .replace(/<span[^>]*>/gi, "")
+        .replace(/<\/span>/gi, "");
+
+      resultado = resultado.replace(/<\/?[a-z][^>]*>/gi, "");
+
+      const decoderFinal = document.createElement("textarea");
+      decoderFinal.innerHTML = resultado;
+      resultado = decoderFinal.value;
+
+      resultado = resultado
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .replace(/[ \t]+\n/g, "\n")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+
+      return resultado;
+    }
+
+    function convertirPlan(texto) {
+      const resultado = limpiarRespuestaIA(texto);
+      if (!resultado) {
+        return "<p>No se recibió contenido de la IA.</p>";
+      }
+
+      const html = marked.parse(resultado, {
+        gfm: true,
+        breaks: true
+      });
+
+      return DOMPurify.sanitize(html, {
+        USE_PROFILES: { html: true },
+        FORBID_TAGS: [
+          "script", "iframe", "object", "embed", "form", "input", "button", "textarea", "select", "style"
+        ],
+        FORBID_ATTR: [
+          "onclick", "onload", "onerror", "onmouseover", "onmouseenter", "onfocus", "onchange", "onsubmit", "style"
+        ],
+        ALLOW_UNKNOWN_PROTOCOLS: false
+      });
+    }
+
     // ========== REGISTRO ==========
     function inicializarRegistro() {
       const fila = document.getElementById("fila-evidencias");
@@ -659,62 +749,255 @@
       mostrarVista("vista-generador");
     });
 
-    // Generar plan
-    document.getElementById("form-plan")?.addEventListener("submit", async function (e) {
-      e.preventDefault();
+    // ========== GENERAR PLAN (IA via /api/generar-plan) ==========
+    document.getElementById("form-plan")?.addEventListener("submit", async function (evento) {
+      evento.preventDefault();
+
       if (!licencia) {
         actualizarContador();
         if (planes <= 0) {
-          alert("Ya no tienes planes de prueba.");
+          alert("Has consumido tus 8 planes de prueba gratis.\n\nPara seguir generando planes, activa un código de acceso o solicita el plan por WhatsApp.");
           mostrarVista("vista-suscripcion");
           return;
         }
       }
-      const btn = document.getElementById("btn-generar");
-      const orig = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = "⏳ Generando...";
+
+      const boton = $("btn-generar");
+      const textoOriginal = boton.innerHTML;
+
+      boton.disabled = true;
+      boton.innerHTML = "⏳ Generando plan...";
+
+      const body = {
+        modalidad: $("modalidad").value,
+        asignatura: $("asignatura").value,
+        grado: $("grado").value,
+        fecha: $("fecha").value,
+        tiempo: $("tiempo").value.trim(),
+        unidad: $("unidad").value.trim(),
+        tema: $("tema").value.trim(),
+        indicador: $("indicador").value.trim(),
+        conceptual: $("crit-conceptual").value.trim(),
+        procedimental: $("crit-procedimental").value.trim(),
+        actitudinal: $("crit-actitudinal").value.trim(),
+        adecuacion: $("adecuacion").value.trim() || "Ninguna",
+        instrumento: $("instrumento").value
+      };
+
       try {
-        const body = {
-          modalidad: document.getElementById("modalidad").value,
-          asignatura: document.getElementById("asignatura").value,
-          grado: document.getElementById("grado").value,
-          fecha: document.getElementById("fecha").value,
-          tiempo: document.getElementById("tiempo").value,
-          unidad: document.getElementById("unidad").value,
-          tema: document.getElementById("tema").value,
-          indicador: document.getElementById("indicador").value,
-          conceptual: document.getElementById("crit-conceptual").value,
-          procedimental: document.getElementById("crit-procedimental").value,
-          actitudinal: document.getElementById("crit-actitudinal").value,
-          adecuacion: document.getElementById("adecuacion").value || "Ninguna",
-          instrumento: document.getElementById("instrumento").value
-        };
-        const html = `<h1>Plan Diario</h1><p><strong>Asignatura:</strong> ${body.asignatura}</p><p><strong>Grado:</strong> ${body.grado}</p><p><strong>Tema:</strong> ${body.tema}</p><h2>Indicador</h2><p>${body.indicador || "No especificado"}</p>`;
+        const respuesta = await fetch("/api/generar-plan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+
+        const data = await respuesta.json();
+
+        if (!respuesta.ok) {
+          throw new Error(data.error || "No se pudo conectar con la IA.");
+        }
+
+        const textoLimpio = limpiarRespuestaIA(data.plan);
+        if (!textoLimpio) {
+          throw new Error("La IA devolvió un plan vacío.");
+        }
+
+        const htmlPlan = convertirPlan(textoLimpio);
+
         if (!licencia) {
-          const u = parseInt(localStorage.getItem("profe_nica_planes_usados") || "0") || 0;
-          localStorage.setItem("profe_nica_planes_usados", String(u + 1));
+          const usados = parseInt(localStorage.getItem("profe_nica_planes_usados") || "0") || 0;
+          localStorage.setItem("profe_nica_planes_usados", String(usados + 1));
           actualizarContador();
         }
-        document.getElementById("contenedor-resultados").innerHTML = `
-          <div class="bg-slate-900 border border-blue-500/50 p-4 sm:p-6 rounded-2xl space-y-4">
-            <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-700 pb-4 gap-3">
-              <span class="text-xs font-black text-blue-400">🇳🇮 Plan: ${body.asignatura} - ${body.grado}</span>
-              <div class="flex gap-2">
-                <button onclick="navigator.clipboard.writeText(document.getElementById('cuerpo-plan-resultado').innerText);alert('Copiado')" class="bg-slate-700 text-xs px-3 py-1.5 rounded-lg">Copiar</button>
-                <button onclick="window.print()" class="bg-indigo-600 text-white text-xs px-3 py-1.5 rounded-lg">Imprimir</button>
-              </div>
+
+        const contenedor = $("contenedor-resultados");
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "bg-slate-900 border border-blue-500/50 p-4 sm:p-6 rounded-2xl shadow-2xl space-y-4";
+        tarjeta.innerHTML = `
+          <div class="flex flex-col sm:flex-row justify-between items-center border-b border-slate-700 pb-4 gap-3">
+            <span class="text-xs font-black text-blue-400 uppercase tracking-wider text-center">
+              🇳🇮 Plan generado: ${escaparHTML(body.asignatura)} - ${escaparHTML(body.grado)}
+            </span>
+            <div class="flex flex-wrap justify-center gap-2">
+              <button type="button" onclick="copiarTexto(this)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs px-3 py-1.5 rounded-lg font-medium transition">Copiar</button>
+              <button type="button" onclick="descargarWord(this)" class="bg-blue-600 hover:bg-blue-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">Word (.docx)</button>
+              <button type="button" onclick="descargarPDF()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">Imprimir</button>
+              <button type="button" onclick="nuevoPlan()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">Nuevo</button>
             </div>
-            <div id="cuerpo-plan-resultado" class="plan-document">${html}</div>
-          </div>`;
+          </div>
+          <div id="cuerpo-plan-resultado" class="plan-document">
+            ${htmlPlan}
+          </div>
+        `;
+
+        contenedor.innerHTML = "";
+        contenedor.appendChild(tarjeta);
+
         window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-      } catch (err) {
-        alert("Error: " + err.message);
+
+      } catch (error) {
+        console.error(error);
+        alert("Error al generar el plan: " + error.message);
       } finally {
-        btn.disabled = false;
-        btn.innerHTML = orig;
+        boton.disabled = false;
+        boton.innerHTML = textoOriginal;
       }
     });
+
+    // ========== BOTONES DEL PLAN GENERADO ==========
+    window.copiarTexto = function (boton) {
+      const resultado = $("cuerpo-plan-resultado");
+      if (!resultado) {
+        alert("No hay ningún plan para copiar.");
+        return;
+      }
+
+      navigator.clipboard.writeText(resultado.innerText)
+        .then(function () {
+          boton.textContent = "¡Copiado!";
+          setTimeout(function () {
+            boton.textContent = "Copiar";
+          }, 2000);
+        })
+        .catch(function () {
+          alert("No se pudo copiar automáticamente.");
+        });
+    };
+
+    window.descargarWord = async function (boton) {
+      const resultado = document.getElementById("cuerpo-plan-resultado");
+      if (!resultado) {
+        alert("No hay ningún plan para descargar.");
+        return;
+      }
+
+      boton.disabled = true;
+      boton.textContent = "Generando...";
+
+      try {
+        const { Document, Packer, Paragraph, HeadingLevel, AlignmentType } = await import("https://cdn.jsdelivr.net/npm/docx@8.5.0/+esm");
+
+        const children = [];
+
+        children.push(
+          new Paragraph({
+            text: "Plan Diario - El Profe Nica 505",
+            heading: HeadingLevel.HEADING_1,
+            alignment: AlignmentType.CENTER,
+            spacing: { after: 300 }
+          })
+        );
+
+        const elementos = resultado.querySelectorAll("h1, h2, h3, p, li");
+
+        if (elementos.length > 0) {
+          elementos.forEach((el) => {
+            const texto = el.innerText.trim();
+            if (!texto) return;
+
+            if (el.tagName === "H1") {
+              children.push(
+                new Paragraph({
+                  text: texto,
+                  heading: HeadingLevel.HEADING_1,
+                  alignment: AlignmentType.CENTER,
+                  spacing: { before: 200, after: 200 }
+                })
+              );
+            } else if (el.tagName === "H2") {
+              children.push(
+                new Paragraph({
+                  text: texto,
+                  heading: HeadingLevel.HEADING_2,
+                  spacing: { before: 250, after: 120 }
+                })
+              );
+            } else if (el.tagName === "H3") {
+              children.push(
+                new Paragraph({
+                  text: texto,
+                  heading: HeadingLevel.HEADING_3,
+                  spacing: { before: 180, after: 100 }
+                })
+              );
+            } else if (el.tagName === "LI") {
+              children.push(
+                new Paragraph({
+                  text: "•  " + texto,
+                  spacing: { after: 60 }
+                })
+              );
+            } else {
+              children.push(
+                new Paragraph({
+                  text: texto,
+                  spacing: { after: 100 }
+                })
+              );
+            }
+          });
+        } else {
+          const lineas = resultado.innerText.split("\n").filter(l => l.trim());
+          lineas.forEach(linea => {
+            children.push(
+              new Paragraph({
+                text: linea.trim(),
+                spacing: { after: 80 }
+              })
+            );
+          });
+        }
+
+        const doc = new Document({
+          sections: [{
+            properties: {},
+            children: children
+          }]
+        });
+
+        const blob = await Packer.toBlob(doc);
+        const url = URL.createObjectURL(blob);
+        const enlace = document.createElement("a");
+        enlace.href = url;
+        enlace.download = "Plan_Diario_Profe_Nica_505.docx";
+        document.body.appendChild(enlace);
+        enlace.click();
+        document.body.removeChild(enlace);
+        URL.revokeObjectURL(url);
+
+        boton.textContent = "¡Descargado!";
+        setTimeout(function () {
+          boton.textContent = "Word (.docx)";
+          boton.disabled = false;
+        }, 2000);
+
+      } catch (error) {
+        console.error(error);
+        alert("Error al generar el archivo Word. Intenta de nuevo.");
+        boton.textContent = "Word (.docx)";
+        boton.disabled = false;
+      }
+    };
+
+    window.descargarPDF = function () {
+      window.print();
+    };
+
+    window.nuevoPlan = function () {
+      $("unidad").value = "";
+      $("tema").value = "";
+      $("indicador").value = "";
+      $("crit-conceptual").value = "";
+      $("crit-procedimental").value = "";
+      $("crit-actitudinal").value = "";
+      $("adecuacion").value = "Ninguna";
+      $("instrumento").value = "";
+      $("contenedor-resultados").innerHTML = "";
+
+      colocarFechaActual();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     actualizarContador();
     colocarFechaActual();
