@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>El Profe Nica 505 - Generador Inteligente de Planes de Clase</title>
   <meta name="description" content="Genera planes diarios para docentes en Nicaragua en segundos.">
+  <!-- ========== PWA: instalable como aplicación ========== -->
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/icon-192.png">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Profe Nica 505">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
@@ -161,6 +170,23 @@
       </div>
       <div class="p-4 flex flex-col sm:flex-row gap-3 justify-center">
         <button type="button" onclick="cerrarTutorial()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm px-6 py-3 rounded-xl border border-slate-700 transition">← Regresar a la página principal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= BANNER INSTALAR APP (PWA) ================= -->
+  <div id="banner-instalar" class="fixed bottom-4 inset-x-4 sm:left-auto sm:right-6 sm:max-w-sm z-[95] hidden">
+    <div class="bg-slate-900/95 backdrop-blur-md border border-cyan-500/40 rounded-2xl shadow-2xl shadow-black/60 p-4">
+      <div class="flex items-start gap-3">
+        <span class="text-3xl leading-none">📲</span>
+        <div class="flex-1">
+          <p class="text-white font-bold text-sm">Instalá El Profe Nica 505</p>
+          <p id="texto-banner-instalar" class="text-slate-300 text-xs mt-1 leading-relaxed">Agregala a tu pantalla de inicio y usala como una aplicación más de tu celular, con su propio ícono.</p>
+          <div class="flex items-center gap-2 mt-3">
+            <button id="btn-instalar-app" type="button" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg transition">📲 Instalar aplicación</button>
+            <button id="btn-cerrar-banner-instalar" type="button" class="text-slate-400 hover:text-slate-200 text-xs font-semibold px-3 py-2.5 rounded-xl hover:bg-slate-800 transition">Ahora no</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1251,6 +1277,70 @@
         window.cerrarTutorial();
       }
     });
+
+    // ========== PWA: INSTALAR COMO APLICACIÓN ==========
+    let deferredInstallPrompt = null;
+    const esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+
+    function esModoAppInstalada() {
+      return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
+    }
+
+    function ocultarBannerInstalar(dias) {
+      const banner = $("banner-instalar");
+      if (banner) banner.classList.add("hidden");
+      if (dias) localStorage.setItem("pn505_banner_hasta", String(Date.now() + dias * 864e5));
+    }
+
+    function mostrarBannerInstalar() {
+      const banner = $("banner-instalar");
+      if (!banner || esModoAppInstalada()) return;
+      const hasta = +(localStorage.getItem("pn505_banner_hasta") || 0);
+      if (Date.now() < hasta) return;
+      if (esIOS) {
+        const texto = $("texto-banner-instalar");
+        const btnInst = $("btn-instalar-app");
+        if (texto) texto.innerHTML = "En iPhone: tocá <b>Compartir</b> y luego <b>«Agregar a pantalla de inicio»</b> para tenerla como app.";
+        if (btnInst) btnInst.classList.add("hidden");
+      }
+      banner.classList.remove("hidden");
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      mostrarBannerInstalar();
+    });
+
+    const btnInstalarApp = $("btn-instalar-app");
+    if (btnInstalarApp) btnInstalarApp.addEventListener("click", async () => {
+      if (!deferredInstallPrompt) {
+        ocultarBannerInstalar(0);
+        return;
+      }
+      deferredInstallPrompt.prompt();
+      try { await deferredInstallPrompt.userChoice; } catch (err) { /* usuario cerró el diálogo */ }
+      deferredInstallPrompt = null;
+      ocultarBannerInstalar(0);
+    });
+
+    const btnCerrarBanner = $("btn-cerrar-banner-instalar");
+    if (btnCerrarBanner) btnCerrarBanner.addEventListener("click", () => ocultarBannerInstalar(7));
+
+    window.addEventListener("appinstalled", () => {
+      deferredInstallPrompt = null;
+      ocultarBannerInstalar(60);
+    });
+
+    // Registrar el service worker (solo en http/https; no estorba en pruebas locales)
+    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js").catch(() => {});
+      });
+    }
+
+    // En iPhone no hay prompt automático: mostramos las instrucciones una vez por visita
+    if (esIOS) setTimeout(mostrarBannerInstalar, 1500);
 
     actualizarContador();
     colocarFechaActual();
